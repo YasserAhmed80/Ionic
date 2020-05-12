@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AppThemeService } from '../services/app-theme.service';
 
 
 @Component({
@@ -7,7 +8,22 @@ import { Component } from '@angular/core';
   styleUrls: ['tab1.page.scss']
 })
 export class Tab1Page {
+  toggale: boolean = false;
+  currentTheme:string = "Normal";
 
-  constructor() {}
+  constructor(private appTheme:AppThemeService) {}
+
+  ngOnInit(): void {
+    this.toggaleTheme ();
+    
+  }
+ 
+  toggaleTheme(){
+   
+    this.currentTheme = this.toggale? "Drak" : "Normal"
+    this.appTheme.toggleDarkTheme(this.toggale)
+
+    this.toggale=!this.toggale
+  }
 
 }
