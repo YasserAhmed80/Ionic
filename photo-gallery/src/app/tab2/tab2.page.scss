@@ -1,0 +1,15 @@
+
+
+.images{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 3px;
+}
+
+@media only screen and (min-width: 600px) {
+    .images{
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-gap: 3px;
+    }
+}

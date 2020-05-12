@@ -1,0 +1,147 @@
+<ion-app>
+  <ion-split-pane when="sm" content-id="main-content">
+    <ion-menu content-id="main-content">
+      
+      <ion-header>
+        <ion-toolbar color="primary">
+          <ion-title>Menu</ion-title>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content>
+        <ion-list>
+          <ion-list-header>
+            Select Class
+          </ion-list-header>
+          <ion-menu-toggle auto-hide="false">
+            <ion-item button>
+              <ion-icon slot="start" name='home'></ion-icon>
+              <ion-label>
+                Men 1
+              </ion-label>
+
+              <ion-list>
+    
+                <ion-item button>
+                  <ion-icon slot="start" name='home'></ion-icon>
+                  <ion-label>
+                    Women 2
+                  </ion-label>
+                </ion-item>
+
+                
+                <ion-item button>
+                  <ion-icon slot="start" name='home'></ion-icon>
+                  <ion-label>
+                    Women3
+                  </ion-label>
+                </ion-item>
+
+               
+              </ion-list>
+            </ion-item>
+
+            <ion-item button>
+              <ion-icon slot="start" name='home'></ion-icon>
+              <ion-label>
+                Women 2
+              </ion-label>
+            </ion-item>
+
+            <ion-item button>
+              <ion-icon slot="start" name='home'></ion-icon>
+              <ion-label>
+                Child 3
+              </ion-label>
+            </ion-item>
+
+            <ion-item button>
+              <ion-icon slot="start" name='home'></ion-icon>
+              <ion-label>
+                Others 4
+              </ion-label>
+            </ion-item>
+
+            <ion-item button>
+              <ion-icon slot="start" name='home'></ion-icon>
+              <ion-label>
+                Other 5
+              </ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+        </ion-list>
+
+        
+      </ion-content>
+    </ion-menu>
+
+    <div class="ion-page" id="main-content">
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-menu-toggle>
+              <ion-button>
+                <ion-icon slot="icon-only" name="menu"></ion-icon>
+              </ion-button>
+            </ion-menu-toggle>
+          </ion-buttons>
+          <ion-title>Header</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <h1>Main Content</h1>
+
+        <!-- Play with color -->
+        <ion-list>
+          <ion-button color = "primary"> Primary  </ion-button>
+          <ion-button color = "primary-shade"> Primary shade</ion-button>
+          <ion-button color = "primary-tint"> Primary tint</ion-button>
+        </ion-list>
+
+        <ion-list>
+          <ion-button color = "secondary"> Primary  </ion-button>
+          <ion-button color = "secondary-shade"> Primary shade</ion-button>
+          <ion-button color = "secondary-tint"> Primary tint</ion-button>
+        </ion-list>
+
+        <ion-list>
+          <ion-button color = "tertiary"> Primary  </ion-button>
+          <ion-button color = "tertiary-shade"> Primary shade</ion-button>
+          <ion-button color = "tertiary-tint"> Primary tint</ion-button>
+        </ion-list>
+
+        <ion-list>
+          <ion-button color = "success"> Primary  </ion-button>
+          <ion-button color = "success-shade"> success shade</ion-button>
+          <ion-button color = "success-tint"> success tint</ion-button>
+        </ion-list>
+
+        <ion-list>
+          <ion-button color = "warning"> Primary  </ion-button>
+          <ion-button color = "warning-shade"> warning shade</ion-button>
+          <ion-button color = "warning-tint"> warning tint</ion-button>
+        </ion-list>
+
+        <ion-list>
+          <ion-button color = "danger"> Primary  </ion-button>
+          <ion-button color = "primary-shade"> Primary shade</ion-button>
+          <ion-button color = "primary-tint"> Primary tint</ion-button>
+        </ion-list>
+
+        <ion-list>
+          <ion-button color = "dark"> Primary  </ion-button>
+          <ion-button color = "dark-shade"> dark shade</ion-button>
+          <ion-button color = "dark-tint"> dark tint</ion-button>
+        </ion-list>
+
+        <ion-list>
+          <ion-button color = "light"> light  </ion-button>
+          <ion-button color = "light-shade"> light shade</ion-button>
+          <ion-button color = "light-tint"> light tint</ion-button>
+        </ion-list>
+
+      </ion-content>
+    </div>
+
+  </ion-split-pane>
+</ion-app>

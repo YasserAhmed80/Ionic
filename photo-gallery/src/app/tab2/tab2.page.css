@@ -1,0 +1,18 @@
+.images {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr;
+      grid-template-columns: 1fr;
+  grid-gap: 3px;
+}
+
+@media only screen and (min-width: 600px) {
+  .images {
+    display: -ms-grid;
+    display: grid;
+    -ms-grid-columns: 1fr 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 3px;
+  }
+}
+/*# sourceMappingURL=tab2.page.css.map */

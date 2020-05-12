@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Photo Gallery</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+ 
+  <ion-fab vertical="bottom" horizontal="center" slot="fixed"> 
+    <ion-fab-button (click)="getPhoto()">
+      <ion-icon name = "camera"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Photo Gallery</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+   <!-- Show photos here in grid -->
+   <div class="images">
+
+    <div size="4" *ngFor="let photo of photoService.photos; index as position">
+      <ion-img src="{{ photo.base64 ? photo.base64 : photo.webviewPath }}" (click) = "showMenu(photo,position)"></ion-img>
+    </div>
+  </div>
+  <!-- End show photos -->
+</ion-content>
