@@ -5,5 +5,76 @@
 </ion-header>
 
 <ion-content>
-  <ion-button (click)="presentActionSheet()">Open Action Sheet</ion-button>
+
+ 
+
+  <ion-list>
+    <ion-list-header>
+      <ion-label>Test Action Sheet Controler</ion-label>
+    </ion-list-header>
+    
+    <ion-item>
+      <ion-button expand="block" (click)="presentActionSheet()"> Open ActionSheet</ion-button>
+    </ion-item>
+
+  </ion-list>
+
+  <ion-list>
+
+    <ion-list-header>
+      <ion-label>Test Alert Controler</ion-label>
+    </ion-list-header>
+
+    <ion-item>
+      <ion-button expand="full" size="small" (click)="alertSampleOne()">Alert Sample 1</ion-button>
+    </ion-item>
+
+    <ion-item>
+      <ion-button size = "large" (click)="alertSampleTwo()">Alert Sample 2</ion-button>
+    </ion-item>
+    
+    <ion-item>
+      <ion-button size = "default" (click)="alertSampleThree()">Alert Sample 3</ion-button>
+    </ion-item>
+
+      
+   
+    <ion-item>
+      <ion-button (click)="alertSampleFour()">Alert Sample 4</ion-button>
+    </ion-item>
+    
+  </ion-list>
+ 
+  <!-- Badge samples -->
+  <ion-list>
+    <ion-list-header>
+      <ion-label>Badge sample</ion-label>
+    </ion-list-header>
+    <ion-item *ngFor="let i of badgeItems; index as pos">
+      <ion-badge slot = "start" color = "warning">{{pos -1}}</ion-badge>
+      <ion-label>  {{i}}  </ion-label>
+      <ion-badge slot = "end" color = "success">{{pos + 1}}</ion-badge>
+    </ion-item>
+  </ion-list>
+
+  <!-- Button samples --> 
+  <ion-list>
+    <ion-list-header>Buttons samples</ion-list-header>
+    <ion-button  class="shadow-red"> Full width</ion-button>
+    <ion-button expand = "block" color = "primary-tint"> Block width</ion-button>
+
+    <ion-button color = "danger"> 
+      with icon
+      <ion-icon slot = "end" name = "star"></ion-icon>
+      <ion-icon slot = "start" name = "star"></ion-icon>
+    </ion-button>
+
+    <ion-button color = "danger" border-color="primary" border-radius="100"> 
+      <ion-icon slot = "icon-only" name = "star" fill="outline"></ion-icon>
+    </ion-button>
+
+    <ion-button  border-color="primary" class="shadow-red"> 
+      <ion-icon slot = "icon-only" name = "star" fill="outline"></ion-icon>
+    </ion-button>
+  </ion-list>
 </ion-content>

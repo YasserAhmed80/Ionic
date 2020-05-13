@@ -9,7 +9,7 @@ import { AppThemeService } from '../services/app-theme.service';
 })
 export class Tab1Page {
   toggale: boolean = false;
-  currentTheme:string = "Normal";
+  currentTheme:string = 'Normal';
 
   constructor(private appTheme:AppThemeService) {}
 
@@ -20,7 +20,7 @@ export class Tab1Page {
  
   toggaleTheme(){
    
-    this.currentTheme = this.toggale? "Drak" : "Normal"
+    this.currentTheme = this.toggale? 'Drak' : 'Normal'
     this.appTheme.toggleDarkTheme(this.toggale)
 
     this.toggale=!this.toggale
