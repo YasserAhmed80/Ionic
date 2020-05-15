@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>chip</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content
+  [scrollEvents]="true"  >
+  
+  <ion-list>
+
+      <ion-item  *ngFor="let card of cards"> 
+        <ion-label color = "{{card.color}}">  {{card.color}}</ion-label>
+        <ion-chip  outline="false" expand="full" color = "{{card.color}}">
+          <ion-avatar >
+            <ion-img [src]= "card.image"> </ion-img>
+          </ion-avatar>
+          <ion-label>{{card.title}}</ion-label>
+        </ion-chip>
+      </ion-item>
+  </ion-list>
+  
+  <ion-button  color = "primary" size="small" expand="block" fill="outline"  (click) = "LoadMoreData()" [disabled] = "pageEnd">
+    <ion-label>Loading More ... </ion-label>
+  </ion-button>
+  
+
+
+</ion-content>

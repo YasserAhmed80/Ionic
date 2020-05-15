@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,OAAO,CAAA;EACH,OAAO,EAAE,KAAK;CACjB",
+    "sources": [
+        "fab.page.scss"
+    ],
+    "names": [],
+    "file": "fab.page.css"
+}

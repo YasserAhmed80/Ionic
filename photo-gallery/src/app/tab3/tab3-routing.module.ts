@@ -16,8 +16,20 @@ const routes: Routes = [
         loadChildren: () => import('../card/card.module').then( m => m.CardPageModule)
       },
       {
+        path: 'chip',
+        loadChildren: () => import('../chip/chip.module').then( m => m.ChipPageModule)
+      },
+      {
+        path: 'date',
+        loadChildren: () => import('../date/date.module').then( m => m.DatePageModule)
+      },
+      {
+        path: 'fab',
+        loadChildren: () => import('../fab/fab.module').then( m => m.FabPageModule)
+      },
+      {
         path: '',
-        redirectTo: 'card',
+        redirectTo: 'fab',
         pathMatch: 'full'
       }
     ]

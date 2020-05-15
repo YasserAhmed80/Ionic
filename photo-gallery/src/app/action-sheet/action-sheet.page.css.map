@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,WAAW,CAAA;EACP,eAAe,CAAA,KAAC;EAChB,YAAY,CAAA,sCAAC;CAChB",
+    "sources": [
+        "action-sheet.page.scss"
+    ],
+    "names": [],
+    "file": "action-sheet.page.css"
+}

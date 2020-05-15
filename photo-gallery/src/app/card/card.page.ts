@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DataService } from '../services/data.service';
 
 @Component({
   selector: 'app-card',
@@ -7,21 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CardPage implements OnInit {
   cards = [];
-  constructor() { }
-
-  ngOnInit() {
-    this.createCards();
+  constructor(private data:DataService) { 
+  
   }
 
-  createCards(){
-    for (let i=1; i<20; i++){
-      this.cards.push({
-        title:`Card# ${i}`,
-        subtitle: `Subtitle ${i}`,
-        content:`lorem20 djned edkedked dnendked ededkemd kedekdmked edknedkendk`,
-        image: `https://source.unsplash.com/random/${i*100}×${i*100}`
-      })
-    }
+  ngOnInit() {
+    this.data.createCards(6);
+    this.cards = this.data.cards;
   }
 
 }
