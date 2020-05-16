@@ -13,7 +13,7 @@ export class DataService {
 
 
   createCards(itemsCount: number = 5){
-    for (let i=1; i<itemsCount; i++){
+    for (let i=1; i<=itemsCount; i++){
       this.cards.push({
         title:`Card# ${i}`,
         subtitle: `Subtitle ${i}`,

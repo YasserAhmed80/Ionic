@@ -28,8 +28,12 @@ const routes: Routes = [
         loadChildren: () => import('../fab/fab.module').then( m => m.FabPageModule)
       },
       {
+        path: 'inputs',
+        loadChildren: () => import('../inputs/inputs.module').then( m => m.InputsPageModule)
+      },
+      {
         path: '',
-        redirectTo: 'fab',
+        redirectTo: 'inputs',
         pathMatch: 'full'
       }
     ]

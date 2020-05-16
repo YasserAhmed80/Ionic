@@ -1,0 +1,113 @@
+<ion-split-pane [when]="media" content-id="main">
+  <!-- Menu section -->
+  <ion-menu side="start" menuId="first" contentId="main">
+    <ion-header>
+      <ion-toolbar color="warning">
+        <ion-title>Main Menu</ion-title>
+        <ion-button slot="end" fill="outline" color = "danger" (click) = "closeMenu()" size="small">
+          <ion-icon name="close"  ></ion-icon>
+        </ion-button>
+        
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content>
+      <ion-list button lines="full">
+        <ion-item>Menu Item</ion-item>
+        <ion-item>Menu Item</ion-item>
+        <ion-item>Menu Item</ion-item>
+        <ion-item>Menu Item</ion-item>
+        <ion-item>Menu Item</ion-item>
+        <ion-item>Menu Item</ion-item>
+        <ion-item>Menu Item</ion-item>
+        <ion-item>Menu Item</ion-item>
+        <ion-item>Menu Item</ion-item>
+        <ion-item>Menu Item</ion-item>
+        <ion-item>Menu Item</ion-item>
+        <ion-item>Menu Item</ion-item>
+        <ion-item>Menu Item</ion-item>
+        <ion-item>Menu Item</ion-item>
+        <ion-item>Menu Item</ion-item>
+        <ion-item>Menu Item</ion-item>
+        <ion-item>Menu Item</ion-item>
+        <ion-item>Menu Item</ion-item>
+        <ion-item>Menu Item</ion-item>
+        <ion-item>Menu Item</ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-menu>
+
+  <!-- Page section -->
+  <div class="ion-page" id="main">
+
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-menu-toggle>
+            <ion-button (click)="addMedia()">
+              <ion-icon slot="icon-only" name="menu"></ion-icon>
+            </ion-button>
+          </ion-menu-toggle>
+        </ion-buttons>
+        <ion-title>Header</ion-title>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content class="ion-padding" id="main">
+      <h1>Main Content</h1>
+      <ion-button (click) = "openModal()"> Open Model Page </ion-button>
+
+      <ion-button (click) = "openPopover()"> Popover Page </ion-button>
+
+      <ion-item-divider>
+        <ion-button (click) = "presentLoading()"> Loading example one </ion-button>
+        <ion-button (click) = "presentLoadingWithOptions()"> Loading example two </ion-button>
+      </ion-item-divider>
+     
+    </ion-content>
+
+    <ion-card>
+      <ion-list lines="none">
+        <ion-item>
+          <!-- Default Progressbar -->
+          <ion-progress-bar></ion-progress-bar>
+        </ion-item>
+        <ion-item>
+          <!-- Default Progressbar with 50 percent -->
+          <ion-progress-bar value="0.5"></ion-progress-bar>
+        </ion-item>
+
+        <ion-item>
+           <!-- Colorize Progressbar -->
+
+          <ion-progress-bar color="danger" [value]="currentPercentage"></ion-progress-bar>
+        </ion-item>
+
+        <ion-item>
+          <!-- Colorize Progressbar -->
+         <ion-progress-bar color="danger" [value]="currentPercentage" reversed = "true"></ion-progress-bar>
+
+       </ion-item>
+
+        <ion-item>
+           <!-- Other types -->
+          <ion-progress-bar value="0.25" buffer="0.5"></ion-progress-bar>
+        </ion-item>
+        <ion-item>
+          <ion-progress-bar type="indeterminate"></ion-progress-bar>
+          
+        </ion-item>
+
+        <ion-item>
+          
+          <ion-progress-bar type="indeterminate" reversed="true"></ion-progress-bar>
+        </ion-item>
+      </ion-list>
+      
+
+      
+      
+    </ion-card>
+
+  </div>
+</ion-split-pane>
