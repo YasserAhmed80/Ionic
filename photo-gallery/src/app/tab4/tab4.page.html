@@ -12,9 +12,9 @@
     </ion-header>
 
     <ion-content>
-      <ion-list button lines="full">
-        <ion-item>Menu Item</ion-item>
-        <ion-item>Menu Item</ion-item>
+      <ion-list button lines="full" detail>
+        <ion-item button routerLink="skeleton" >Skeleton Example </ion-item>
+        <ion-item button  button routerLink="slide">Slide Example </ion-item>
         <ion-item>Menu Item</ion-item>
         <ion-item>Menu Item</ion-item>
         <ion-item>Menu Item</ion-item>
@@ -34,12 +34,16 @@
         <ion-item>Menu Item</ion-item>
         <ion-item>Menu Item</ion-item>
       </ion-list>
+
     </ion-content>
   </ion-menu>
 
+
+
+ 
+
   <!-- Page section -->
   <div class="ion-page" id="main">
-
     <ion-header>
       <ion-toolbar>
         <ion-buttons slot="start">
@@ -104,10 +108,12 @@
         </ion-item>
       </ion-list>
       
-
-      
       
     </ion-card>
+    
 
   </div>
+
+
+
 </ion-split-pane>

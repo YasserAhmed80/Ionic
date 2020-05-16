@@ -7,7 +7,16 @@ const routes: Routes = [
   {
     path: '',
     component: Tab4Page
+  },
+  {
+    path: 'skeleton',
+    loadChildren: () => import('../skeleton/skeleton.module').then( m => m.SkeletonPageModule)
+  },
+  {
+    path: 'slide',
+    loadChildren: () => import('../slide/slide.module').then( m => m.SlidePageModule)
   }
+ 
 ];
 
 @NgModule({

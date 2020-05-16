@@ -33,7 +33,7 @@ const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: 'inputs',
+        redirectTo: 'card',
         pathMatch: 'full'
       }
     ]
