@@ -16,6 +16,11 @@ const routes: Routes = [
     path: 'slide',
     loadChildren: () => import('../slide/slide.module').then( m => m.SlidePageModule)
   }
+  ,
+  {
+    path: 'toolbar',
+    loadChildren: () => import('../toolbar/toolbar.module').then( m => m.ToolbarPageModule)
+  }
  
 ];
 
