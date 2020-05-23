@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { userService } from '../services/user.service';
 import { IUser, UserRole} from '../../model/types'
 
+
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -42,7 +44,9 @@ export class LoginPage implements OnInit {
 
   
   loginUser (){
-    this.userService.signIn(this.email, this.password)
+    this.userService.signIn(this.email, this.password).then((res)=>{
+      console.log('sign in:', res)
+    })
   }
 
   verifyMail (){
@@ -56,4 +60,13 @@ export class LoginPage implements OnInit {
   resetPassword(){
     this.userService.resetPassword(this.userService.user.email)
   }
+
+  facebook_SignIn(){
+    this.userService.facebook_SignIn();
+  }
+
+  facebook_SignOut(){
+    this.userService.facebook_SignOut();
+  }
+
 }

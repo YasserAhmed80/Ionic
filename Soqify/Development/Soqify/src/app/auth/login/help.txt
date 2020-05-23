@@ -1,0 +1,26 @@
+//////////////////////
+Facebool
+documentation:
+https://www.joshmorony.com/native-web-facebook-authentication-with-firebase-in-ionic/
+
+facebook settings:
+Andorid haskey comand: 
+keytool -exportcert -alias androiddebugkey -keystore %HOMEPATH%\.android\debug.keystore | openssl sha1 -binary | openssl base64
+
+Package Dependencies install:
+npm install cordova-plugin-facebook4 --save
+npm install --save @ionic-native/facebook
+
+///////////////////////
+help for firebase auth for different providers
+
+
+
+
+
+//////////////////
+
+https://www.youtube.com/watch?v=Fw46diR8rAs
+
+
+https://enappd.com/blog/facebook-login-in-capacitor-apps-with-ionic-angular/128/

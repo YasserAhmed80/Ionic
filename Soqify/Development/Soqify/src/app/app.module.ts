@@ -10,6 +10,12 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 // End firebase imports
 
+// Facebook login
+import { registerWebPlugin } from '@capacitor/core';
+import { FacebookLogin } from '@rdlabo/capacitor-facebook-login';
+registerWebPlugin(FacebookLogin);
+// End facebook login
+
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
@@ -28,12 +34,12 @@ import { environment } from '../environments/environment';
             AppRoutingModule,
             AngularFireModule.initializeApp(environment.firebaseConfig),
             AngularFireAuthModule,
-            AngularFirestoreModule
+            AngularFirestoreModule,
            ],
   providers: [
     StatusBar,
     SplashScreen,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
   ],
   bootstrap: [AppComponent]
 })
