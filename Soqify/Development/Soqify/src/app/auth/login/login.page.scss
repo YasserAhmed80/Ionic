@@ -1,0 +1,19 @@
+ion-input{
+    border: 1px solid var(--ion-color-secondary);
+    border-radius: 2rem;
+    --padding-start: 20px;
+}
+
+.facebook-color{
+    --background: #3b5998;
+}
+
+.or{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    padding: 0px 0px;
+    margin: 0px 0px;
+}
+

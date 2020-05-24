@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { userService } from '../services/user.service';
+import { authService } from '../services/auth.service';
 import { IUser, UserRole} from '../../model/types'
 
 
@@ -15,7 +15,7 @@ export class LoginPage implements OnInit {
   password: string = '123456';
 
 
-  constructor(private userService:userService) {
+  constructor(private authService:authService) {
     
    }
 
@@ -31,7 +31,7 @@ export class LoginPage implements OnInit {
       tel:'01028787773',
       role: UserRole.Admin
     }
-    this.userService.registerUser(user,this.password)
+    this.authService.registerUser(user,this.password)
     .then((x)=>{
       if (x ==='sucess') {
         console.log('x',x)
@@ -44,29 +44,29 @@ export class LoginPage implements OnInit {
 
   
   loginUser (){
-    this.userService.signIn(this.email, this.password).then((res)=>{
+    this.authService.signIn(this.email, this.password).then((res)=>{
       console.log('sign in:', res)
     })
   }
 
   verifyMail (){
-    this.userService.sendVerificationMail();
+    this.authService.sendVerificationMail();
   }
 
   signOut(){
-    this.userService.SignOut();
+    this.authService.SignOut();
   }
 
   resetPassword(){
-    this.userService.resetPassword(this.userService.user.email)
+    this.authService.resetPassword(this.authService.user.email)
   }
 
   facebook_SignIn(){
-    this.userService.facebook_SignIn();
+    this.authService.facebook_SignIn();
   }
 
   facebook_SignOut(){
-    this.userService.facebook_SignOut();
+    this.authService.facebook_SignOut();
   }
 
 }

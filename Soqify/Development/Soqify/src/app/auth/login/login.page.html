@@ -1,74 +1,116 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>login</ion-title>
+    <ion-title>تسجيل الدخول</ion-title>
+
+    
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <!-- Login by user name and pwd -->
   <ion-card>
     <ion-card-header>
-      <ion-card-subtitle>
-        <ion-label>
-          Please enter username and password -------------
-        </ion-label> 
-      </ion-card-subtitle>
+      <ion-icon name = "log-in-outline" slot="start" size="xl"></ion-icon>
       <ion-card-title>
         <ion-label>
-          Login
+          تسجيل الدخول
         </ion-label> 
       </ion-card-title>
+
+      <ion-card-subtitle>
+        <ion-label>
+          من فضلك سجل دخولك
+        </ion-label> 
+      </ion-card-subtitle>
       
     </ion-card-header>
 
     <ion-card-content>
 
       <form>
-        <ion-list lines="full" >
+
+        <ion-list lines="none" >
       
           <ion-item>
-            <ion-label position="fixed">Email: </ion-label>
-            <ion-input name = "email" placeholder = "Email" clearInput="true" [(ngModel)] = "email"></ion-input>
+            <ion-label position="stacked">البريد الالكتروني </ion-label>
+            <ion-input pattern="email" inputmode="email" name = "email" placeholder = "البريد الالكتروني" clearInput="true" [(ngModel)] = "email"></ion-input>
           </ion-item>
 
           <ion-item>
-            <ion-label position="fixed" >Password: </ion-label>
-            <ion-input name="password" placeholder="Password" type="password" clearInput  [(ngModel)] = "password"></ion-input>
+            <ion-label position="floating" >كلمة السر </ion-label>
+            <ion-input name="password" placeholder="كلمة السر" type="password" clearInput  [(ngModel)] = "password"></ion-input>
           </ion-item>
 
-      </ion-list>
-      
-      <ion-item lines="none">
-        <ion-button slot="start" (click)="registerUser()">Register User</ion-button>
-        <ion-button slot="start" (click)="loginUser()">Login </ion-button>
-        
-      </ion-item>
+        </ion-list>
+          
+       
+        <br>
+        <ion-button (click)="loginUser()" expand = "block" color="secondary">تسجيل الدخول </ion-button>
+    
 
-      <ion-item lines="none">
-        
-        
-        <ion-button fill="outline" (click) = "verifyMail()" slot="end">Send verification mail</ion-button>
-        <ion-button fill="outline"(click) = "signOut()" slot="end">Sign out</ion-button>
-      </ion-item>
-
-      <ion-item lines="none">
-        
-        
-        <ion-button fill="outline" (click) = "resetPassword()" slot="end">Reset Passwor</ion-button>
-     
-      </ion-item>
-
-      <ion-item lines="none">
-        
-        
-        <ion-button fill="outline" (click) = "facebook_SignIn()" slot="start">Facebook Sign In +</ion-button>
-        <ion-button fill="outline" (click) = "facebook_SignOut()" slot="end">Facebook Sign Out -</ion-button>
-     
-      </ion-item>
-
-
-
-    </form>
+      </form>
 
     </ion-card-content>
   </ion-card>
+  <!-- End login by user name and pwd -->
+
+  <!-- <div class = "or">
+     -- او --
+  </div> -->
+  <!-- Facebook login -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle>أو باستخدام</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      
+      <ion-button (click)="facebook_SignIn()" expand = "block"   class = "facebook-color"> 
+          <ion-icon slot="end" name = "logo-facebook" ></ion-icon>
+          تسجيل باستخدام فيس بوك
+      </ion-button>
+  
+    </ion-card-content>
+  </ion-card>
+  <!-- End Facebook Login -->
+
+  <!-- Registeration Section -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle>أو قم بتسجيل بياناتك الان</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      
+      <ion-button (click)="loginUser()" expand = "block"   fill="outline" > 
+          قم بتسجيل بياناتك الان
+      </ion-button>
+  
+    </ion-card-content>
+  </ion-card>
+  <!-- End Registeration section -->
+
+
+  <!-- <ion-button slot="start" (click)="registerUser()">Register User</ion-button>
+
+  <ion-item lines="none">
+        
+        
+    <ion-button fill="outline" (click) = "verifyMail()" slot="end">Send verification mail</ion-button>
+    <ion-button fill="outline"(click) = "signOut()" slot="end">Sign out</ion-button>
+  </ion-item>
+
+  <ion-item lines="none">
+    
+    
+    <ion-button fill="outline" (click) = "resetPassword()" slot="end">Reset Passwor</ion-button>
+ 
+  </ion-item>
+
+  <ion-item lines="none">
+    
+    
+    <ion-button fill="outline" (click) = "facebook_SignIn()" slot="start">Facebook Sign In +</ion-button>
+    <ion-button fill="outline" (click) = "facebook_SignOut()" slot="end">Facebook Sign Out -</ion-button>
+ 
+  </ion-item> -->
+
 </ion-content>
