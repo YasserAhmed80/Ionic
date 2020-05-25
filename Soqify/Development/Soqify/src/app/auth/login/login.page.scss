@@ -1,19 +1,17 @@
-ion-input{
-    border: 1px solid var(--ion-color-secondary);
-    border-radius: 2rem;
-    --padding-start: 20px;
-}
 
 .facebook-color{
     --background: #3b5998;
 }
 
-.or{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 2rem;
-    padding: 0px 0px;
-    margin: 0px 0px;
+ion-card{
+    margin-bottom: .5rem !important;
+    margin-top: .5rem !important;
+    margin-right: .5rem;
+    margin-left: .5rem;
+}
+
+ion-card-title {
+    font-size: 20 !important;
+    font-weight: 500 !important;
 }
 

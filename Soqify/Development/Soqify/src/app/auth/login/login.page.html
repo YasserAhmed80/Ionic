@@ -1,8 +1,6 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color = "primary">
     <ion-title>تسجيل الدخول</ion-title>
-
-    
   </ion-toolbar>
 </ion-header>
 
@@ -10,9 +8,11 @@
   <!-- Login by user name and pwd -->
   <ion-card>
     <ion-card-header>
-      <ion-icon name = "log-in-outline" slot="start" size="xl"></ion-icon>
+      
       <ion-card-title>
+        
         <ion-label>
+          <ion-icon name = "log-in-outline"  slot = "end" color = "primary"></ion-icon>
           تسجيل الدخول
         </ion-label> 
       </ion-card-title>
@@ -29,23 +29,25 @@
 
       <form>
 
-        <ion-list lines="none" >
-      
+        <ion-list lines="none" > 
           <ion-item>
-            <ion-label position="stacked">البريد الالكتروني </ion-label>
-            <ion-input pattern="email" inputmode="email" name = "email" placeholder = "البريد الالكتروني" clearInput="true" [(ngModel)] = "email"></ion-input>
+            <ion-label position="floating">البريد الالكتروني </ion-label>
+            <ion-input pattern="email" inputmode="email" name = "email"   clearInput="true" [(ngModel)] = "email"></ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label position="floating" >كلمة السر </ion-label>
-            <ion-input name="password" placeholder="كلمة السر" type="password" clearInput  [(ngModel)] = "password"></ion-input>
+            <ion-input name="password"  type="password" clearInput  [(ngModel)] = "password"></ion-input>
           </ion-item>
-
         </ion-list>
-          
+        
+        
        
         <br>
-        <ion-button (click)="loginUser()" expand = "block" color="secondary">تسجيل الدخول </ion-button>
+        <ion-button (click)="loginUser()" expand = "block" color="secondary">
+          <ion-icon slot="end" name = "log-in-outline" ></ion-icon>
+          تسجيل الدخول 
+        </ion-button>
     
 
       </form>
@@ -54,14 +56,12 @@
   </ion-card>
   <!-- End login by user name and pwd -->
 
-  <!-- <div class = "or">
-     -- او --
-  </div> -->
+
   <!-- Facebook login -->
   <ion-card>
-    <ion-card-header>
+    <!-- <ion-card-header>
       <ion-card-subtitle>أو باستخدام</ion-card-subtitle>
-    </ion-card-header>
+    </ion-card-header> -->
     <ion-card-content>
       
       <ion-button (click)="facebook_SignIn()" expand = "block"   class = "facebook-color"> 
@@ -75,13 +75,18 @@
 
   <!-- Registeration Section -->
   <ion-card>
-    <ion-card-header>
+
+    <!-- <ion-card-header>
       <ion-card-subtitle>أو قم بتسجيل بياناتك الان</ion-card-subtitle>
-    </ion-card-header>
+    </ion-card-header> -->
+
     <ion-card-content>
       
-      <ion-button (click)="loginUser()" expand = "block"   fill="outline" > 
+      <ion-button routerLink="register" expand = "block"   fill="outline" color = "secondary" > 
+        <ion-icon slot="end" name = "person-add-sharp" ></ion-icon>
+        <ion-label slot="start">
           قم بتسجيل بياناتك الان
+        </ion-label>
       </ion-button>
   
     </ion-card-content>

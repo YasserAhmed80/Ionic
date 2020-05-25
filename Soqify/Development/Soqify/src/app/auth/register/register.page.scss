@@ -1,0 +1,20 @@
+ion-col{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.row-title{
+    ion-col{
+        
+        border-radius: 20%;
+    }
+}
+
+.row-data{
+    ion-col{
+        border-bottom : 1px solid var(--ion-color-primary);
+        border-top : 1px solid var(--ion-color-primary);
+        border-radius: 20%;
+    }
+}
