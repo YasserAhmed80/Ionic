@@ -23,6 +23,8 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
+import { AuthService } from './auth/services/auth.service'
+
 import { environment } from '../environments/environment';
 
 @NgModule({
@@ -40,6 +42,7 @@ import { environment } from '../environments/environment';
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    AuthService 
   ],
   bootstrap: [AppComponent]
 })

@@ -1,15 +1,17 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 
 import { IUser, UserRole } from '../../model/types'
+import { take } from 'rxjs/operators'
 
 
 // Facebool blugin for auth for Android, iOS, Web
 import { Plugins } from '@capacitor/core';
 import { FacebookLoginResponse } from '@rdlabo/capacitor-facebook-login';
-import { Observable } from 'rxjs';
+import { isUndefined } from 'util';
+
 const { FacebookLogin } = Plugins;
 const FACEBOOK_PERMISSIONS = ['email', 'user_birthday', 'user_photos', 'user_gender'];
 // End Facebook auth
@@ -17,7 +19,7 @@ const FACEBOOK_PERMISSIONS = ['email', 'user_birthday', 'user_photos', 'user_gen
 @Injectable({
   providedIn: 'root'
 })
-export class authService {
+export class AuthService {
  
   public user: IUser={};
 
@@ -25,6 +27,12 @@ export class authService {
              public fireStore: AngularFirestore
              ) 
   { 
+    let user = localStorage.getItem('identity');
+    if ( user !== 'undefined'){
+      this.user = JSON.parse(user);
+      
+    }
+    
   }
 
   // >> Sign in using mail and password <<-------------------------------------
@@ -48,9 +56,10 @@ export class authService {
           console.log ('Register successfully ', auth.user);
           // Save user data into database
           console.log('from register user',user);
-          this.saveUserData(user, auth.user.uid,'email')
 
-          localStorage.setItem('user', JSON.stringify(this.user));
+          this.addUserData(user);
+
+          localStorage.setItem('identity', JSON.stringify(this.user));
           // send verification mail
           this.sendVerificationMail();
           return 'success';
@@ -69,7 +78,6 @@ export class authService {
        return 'verify';
       }else{
         // reterive user data after sign in
-        this.getUserData();
         localStorage.setItem('identity', JSON.stringify(this.user));
         return 'success';
       }
@@ -106,47 +114,48 @@ export class authService {
   }
 
   // Store user in localStorage
-  saveUserData(user:IUser, uid, provider) {
-    this.user = {
-      auth_id: uid,
-      email:user.email,
-      name: user.name,
-      role: user.role,
-      tel:user.tel,
-      provider:provider
-    };
-
-    this.fireStore.collection('identity', ref => ref.where ('auth_id','==', uid))
-    .valueChanges({idField: 'uid'})
-    .subscribe((user)=>{
-      // if user not exsit add it
-      console.log('user is ',user)
-      if (user.length==0) {
-        let newUSer = this.fireStore.collection('identity').add(this.user);
-        newUSer
-        .then((doc)=>{
-          return true;
+  async addUserData(userData:IUser) {
+      let newUSer = this.fireStore.collection('identity').add(userData);
+      
+      await newUSer
+        .then((doc) => {
+          return doc;
         })
-        .catch((err)=>{
-          
+        .catch((err) => {
           return false;
-        })
-      }else{
-        this.user =<IUser>user[0];
-        console.log('user already added',this.user)
-        return true;
-      }
-    })
+        });
   }
 
-  // get user data from database
-  getUserData(){
-    let user$  = this.fireStore.collection('identity', (ref)=> ref.where ('auth_id', '==', this.user.auth_id)).valueChanges({idField: 'uid'});
-    user$.subscribe((user)=>{
-      console.log('user data: ',user);
-      this.user =<IUser>user[0];
-    })
-   
+  // Store user in localStorage
+  async updateUserData(userData:IUser) {
+    await this.fireStore
+      .collection("identity")
+      .doc(userData.uid)
+      .set(userData, { merge: true })
+      .then((user) => {
+        localStorage.setItem('identity', JSON.stringify(userData));
+        return user;
+      })
+      .catch((err)=>{
+        return err;
+      })
+  }
+
+  // get user data from database bu auth_id
+  async getUserData(auth_id:string){
+    console.log('get user data:', auth_id)
+    return await this.fireStore.collection('identity', (ref)=> ref.where ('auth_id', '==',auth_id))
+                 .valueChanges({idField: 'uid'})
+                 .pipe(
+                   take(1)
+                 ).toPromise()
+                 .then((user)=>{
+                   return user[0]
+                 })
+                 .catch((err)=>{
+                   return err
+                 })
+
   }
 
 
@@ -163,32 +172,39 @@ export class authService {
   // >> End section of sign in using mail and password ------------------------
 
   // >> Sign in using Facebook <<----------------------------------------------
-  async facebook_SignIn(){
-    FacebookLogin.login({ permissions: FACEBOOK_PERMISSIONS })
-      .then((result: FacebookLoginResponse)=>{
+  async facebook_auth(){
+    return await FacebookLogin.login({ permissions: FACEBOOK_PERMISSIONS })
+      .then((result: FacebookLoginResponse) => {
         console.log(`Facebook response`, result);
-
-        this.getFB_userInfo ()
-        .then ((FB_user)=>{
-          this.firebase_FB_provider(result.accessToken.token)
-          .then((user)=>{
-            this.user = {
-              auth_id: user.uid,
-              email:'none',
-              name: FB_user.name,
-              role:UserRole.Admin,
-              tel:'none',
-              provider:'FB'
-            };
-            this.saveUserData(this.user, user.uid,'FB');
-            localStorage.setItem('identity', JSON.stringify(this.user));
-          })
-         
-        })
+        return this.getFB_userInfo().then((FB_user) => {
+          return this.firebase_FB_provider(result.accessToken.token).then(
+            (user) => {
+              console.log("facebook auth user:", user);
+              return user;
+            }
+          );
+        });
       })
-      .catch ((err)=>{
+      .catch((err) => {
         console.log(`Facebook response: user cancelled`);
-      })
+      });
+  }
+
+  async facebook_SignIn(){
+    return await this.facebook_auth().then((user)=>{
+      // get identiy data
+      return this.getUserData(user.uid)
+        .then((identity)=>{
+          if (identity){
+            this.user = identity;
+            localStorage.setItem('identity', JSON.stringify(this.user));
+            return identity
+          }
+        })
+        .catch((err)=>{
+          return err
+        })
+    })
   }
 
   async facebook_SignOut (){

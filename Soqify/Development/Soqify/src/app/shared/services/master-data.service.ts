@@ -1,89 +1,81 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
+import {take } from 'rxjs/operators'
 
-import { main_cat, parent_cat,sub_cat, IParent_cat, IMain_cat, ISub_cat } from '../../data/product_master'
+import { main_cat, parent_cat,sub_cat, IParent_cat, IMain_cat, ISub_cat,IBusiness_type, business_type } from '../../data/master-data';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class MasterDataService {
 
-  parentCategories:IParent_cat[];
-  mainCategories:IMain_cat[];
-  subCategories:ISub_cat[];
+  productParentCat:IParent_cat[]=[];
+  productMainCat:IMain_cat[]=[];
+  productSubCat:ISub_cat[]=[];
+  businessType:IBusiness_type[]=[];
 
-  constructor(private fireStore:AngularFirestore ) { }
+  constructor(private fireStore:AngularFirestore ) { 
+    
+  }
 
-  private addParentCat(){
-    for (let c of parent_cat){
-      let key = c.p_key;
-      delete c.p_key; // avoid adding key to document
-      this.fireStore.doc(`p_cat/${key}`).set(c)
+
+  // get data of look up tabe
+  private async  setData(collectionName, dataArray:Array<any>){
+    for (let c of dataArray){
+      let key = c.key;
+      delete c.key; // avoid adding key to document
+      await this.fireStore.doc(`${collectionName}/${key}`).set(c)
     }
-  
+    console.log('master data added for collection >>', collectionName);
+  }
+  async addMasterData(){
+    await this.setData('ref_prod_parent_cat',parent_cat);
+    await this.setData('ref_prod_main_cat',main_cat);
+    await this.setData('ref_prod_sub_cat',sub_cat);
+    await this.setData('ref_business_type',business_type);
+    await console.log('All master data added successfully');
   }
 
-  private addMainCat(){
-    for (let c of main_cat){
-      let key = c.m_key;
-      delete c.m_key; // avoid adding key to document
-      this.fireStore.doc(`m_cat/${key}`).set(c)
+  // get data of look up tabe
+  private async  getData(collectionName) {
+      let data =await   this.fireStore.collection(collectionName).valueChanges({idField:'key'}).pipe(take(1)).toPromise();
+      // console.log('get data of collection >>', collectionName)
+      return data;
+  }
+
+  async getMasterData(){
+
+    if (this.productParentCat.length===0) {
+      console.log('master data reload!')
+      this.productParentCat =  await <any>this.getData('ref_prod_parent_cat');
+      this.productParentCat.sort((a,b)=> a.seq-b.seq)
+      
     }
-  }
 
-  private addSubCat(){
-    for (let c of sub_cat){
-      let key = c.s_key;
-      delete c.s_key; // avoid adding key to document
-      this.fireStore.doc(`s_cat/${key}`).set(c)
+    if (this.productMainCat.length==0) {
+
+      this.productMainCat =  await <any>this.getData('ref_prod_main_cat');
+      this.productMainCat.sort((a,b)=> a.seq-b.seq)
     }
-  }
 
-  addProductCats(){
-    this.addParentCat();
-    this.addMainCat();
-    this.addSubCat();
-  }
-
-  // get product categories
-  private getParentCat(){
-    if ( this.parentCategories.length=0) {
-      this.fireStore.collection('p_cat').valueChanges({idField:'p_key'})
-      .subscribe((data)=>{
-        this.parentCategories=<any>data;
-      })
+    if (this.productSubCat.length==0) {
+      this.productSubCat =  await <any>this.getData('ref_prod_sub_cat');
+      this.productSubCat.sort((a,b)=> a.seq-b.seq)
     }
-  }
 
-  private getMainCat(){
-    if (this.mainCategories.length=0){
-      this.fireStore.collection('m_cat').valueChanges({idField:'m_key'})
-      .subscribe((data)=>{
-        this.mainCategories=<any>data;
-      })
-    }
-  }
-
-  private getSubCat(){
-    if (this.subCategories.length=0){
-      this.fireStore.collection('s_cat').valueChanges({idField:'s_key'})
-      .subscribe((data)=>{
-        this.subCategories=<any>data;
-      })
+    if (this.businessType.length==0) {
+      this.businessType =  await <any>this.getData('ref_business_type');
+      this.businessType.sort((a,b)=> a.seq-b.seq)
     }
   }
 
-  getProductCat(){
-    this.getParentCat();
-    this.getMainCat();
-    this.getSubCat();
-  }
 
-  selectMainCat(p_key:number){
-    return this.mainCategories.filter(c=>c.p_cde == p_key);
+  selectMainCat(key:number){
+    return this.productMainCat.filter(c=>c.p_cde == key);
   }
-  selectSubCat(m_key:number){
-    return this.subCategories.filter(c=> c.m_cde == m_key)
+  selectSubCat(key:number){
+    return this.productSubCat.filter(c=> c.m_cde == key)
   }
 
 

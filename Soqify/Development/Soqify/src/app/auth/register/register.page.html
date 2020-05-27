@@ -4,10 +4,10 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content *ngIf="user">
     <!--Personal Info -->
     <ion-card>
-
+     
       <ion-card-header>
         <ion-card-title>
           <ion-label>
@@ -18,23 +18,22 @@
       </ion-card-header>
   
       <ion-card-content>
-  
-        <form>
+        <form >
   
           <ion-list lines="none" > 
             <ion-item>
               <ion-label position="floating">الاسم</ion-label>
-              <ion-input   clearInput="true"></ion-input>
+              <ion-input [(ngModel)]="user.name"  clearInput="true" name="name"></ion-input>
             </ion-item>
   
             <ion-item>
               <ion-label position="floating" > موبيل</ion-label>
-              <ion-input  clearInput ></ion-input>
+              <ion-input [(ngModel)]="user.mob" clearInput name="mob" ></ion-input>
             </ion-item>
 
             <ion-item>
               <ion-label position="floating" > تليفونات اخري</ion-label>
-              <ion-input  clearInput ></ion-input>
+              <ion-input [(ngModel)]="user.tel_o"  clearInput name="tel_o" ></ion-input>
             </ion-item>
 
           </ion-list>
@@ -42,7 +41,7 @@
           
          
           <br>
-          <ion-button  expand = "block" color="secondary" fill="outline">
+          <ion-button  expand = "block" color="secondary" fill="outline" (click)="saveUser()">
             <ion-icon slot="end" name = "save-outline" ></ion-icon>
             حفظ بياناتك الشخصية
           </ion-button>
@@ -73,22 +72,22 @@
           <ion-list lines="none" > 
             <ion-item>
               <ion-label position="floating">المحافظه</ion-label>
-              <ion-input   clearInput="true"></ion-input>
+              <ion-input [(ngModel)]="user.gov" name="gov"  clearInput="true"></ion-input>
             </ion-item>
   
             <ion-item>
               <ion-label position="floating" > المدينة</ion-label>
-              <ion-input  clearInput ></ion-input>
+              <ion-input [(ngModel)]="user.cty" name="cty" clearInput ></ion-input>
             </ion-item>
 
             <ion-item>
               <ion-label position="floating" >العنوان</ion-label>
-              <ion-input  clearInput ></ion-input>
+              <ion-input [(ngModel)]="user.addr" name="addr" clearInput ></ion-input>
             </ion-item>
 
             <ion-item>
               <ion-label position="floating" >موقعك علي الخريطة</ion-label>
-              <ion-input  clearInput ></ion-input>
+              <ion-input  [(ngModel)]="user.loc" name="loc"  clearInput ></ion-input>
             </ion-item>
 
           </ion-list>
@@ -96,7 +95,7 @@
           
          
           <br>
-          <ion-button  expand = "block" color="secondary" fill="outline">
+          <ion-button  expand = "block" color="secondary" fill="outline" (click) = "saveUser()">
             <ion-icon slot="end" name = "save-outline" ></ion-icon>
             حفظ العنوان
           </ion-button>
@@ -123,50 +122,50 @@
       <ion-card-content>
   
         <form>
-  
+            <div class="business-type">
+              <ion-label>نوع العمل</ion-label>
+              <ion-radio-group [(ngModel)]="user.bus_type" name="bus_type" >
+                <ion-grid>
+                  <!-- header row -->
+                  <ion-row class="row-title">
+                    <ion-col size="3" *ngFor = "let business of businessType">
+                        <ion-label>{{business.name}}</ion-label>
+                    </ion-col>
+                  </ion-row>
+                  <!-- data row -->
+                  <ion-row class="row-data">
+                    <ion-col size="3" *ngFor = "let business of businessType">
+                        <ion-radio value="{{business.key}}"></ion-radio>
+                    </ion-col>
+                  
+                  </ion-row>
 
-            <ion-label>طبيعة العمل</ion-label>
-
-            <ion-radio-group value="biff">
-              <ion-grid>
-                <ion-row class="row-title">
-                  <ion-col size="3">
-                      <ion-label>محل</ion-label>
-                  </ion-col>
-                  <ion-col size="3">
-                      <ion-label>تاجر جملة</ion-label>
-                  </ion-col>
-                  <ion-col size="3">
-                      <ion-label>مصنع</ion-label>
-                  </ion-col>
-                  <ion-col size="3">
-                      <ion-label>فردي</ion-label>
-                  </ion-col>
-                </ion-row>
-
-                <ion-row class="row-data">
-                  <ion-col size="3">
-                      <ion-radio value="biff"></ion-radio>
-                  </ion-col>
-                  <ion-col size="3">
-                      <ion-radio value="griff"></ion-radio>
-                  </ion-col>
-                  <ion-col size="3">
-                        <ion-radio value="buford"></ion-radio>
-                  </ion-col>
-                  <ion-col size="3">
-                      <ion-radio value="bufoيrd"></ion-radio>
-                  </ion-col>
-                </ion-row>
-
-              </ion-grid>
-
-            </ion-radio-group>
-      
-      
+                </ion-grid>
+              </ion-radio-group>
+            </div>
+            
+            <div class="business-cat">
+              <ion-label>نوع النشاط</ion-label>
+              <!-- Toggles in a List -->
+              <ion-list>
+                <ion-item *ngFor="let cat of parentCat">
+                  <ion-label>{{cat.name}}</ion-label>
+                  <ion-toggle color="secondary" [checked]="setToggalCheck(cat.key)" value="{{cat.key}}"  (ionChange)="addBusinessSection($event,cat.key)"></ion-toggle>
+                </ion-item>
+                
+              </ion-list>
+            </div>
+                    
+            <br>
+            <ion-button  expand = "block" color="secondary" fill="outline" (click) = "saveUser()" >
+              <ion-icon slot="end" name = "save-outline" ></ion-icon>
+              حفظ النشاط
+            </ion-button>
+        
   
         </form>
-  
+        
+
       </ion-card-content>
     </ion-card>
     <!-- End business type -->

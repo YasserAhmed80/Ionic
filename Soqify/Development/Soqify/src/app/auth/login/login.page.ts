@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { authService } from '../services/auth.service';
+import { AuthService } from '../services/auth.service';
 import { IUser, UserRole} from '../../model/types'
 
 
@@ -15,7 +15,7 @@ export class LoginPage implements OnInit {
   password: string = '123456';
 
 
-  constructor(private authService:authService) {
+  constructor(public authService:AuthService) {
     
    }
 
@@ -28,7 +28,7 @@ export class LoginPage implements OnInit {
     user = {
       email: this.email,
       name:'yasser',
-      tel:'01028787773',
+      mob:'01028787773',
       role: UserRole.Admin
     }
     this.authService.registerUser(user,this.password)
@@ -62,7 +62,7 @@ export class LoginPage implements OnInit {
   }
 
   facebook_SignIn(){
-    this.authService.facebook_SignIn();
+    this.authService.facebook_SignIn().then((user)=> console.log('facebook signed user', user))
   }
 
   facebook_SignOut(){
