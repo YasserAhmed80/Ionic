@@ -33,7 +33,11 @@
 // End register fonts ---------------------------------------------------------
 
 // Custom global style --------------------------------------------------------
-  ion-input{
+  *{
+    font-family: Cairo, Verdana, Tahoma !important;
+  }
+
+  ion-input, ion-select {
     //border: 1px solid var(--ion-color-secondary-tint);
     border-bottom:  1px solid var(--ion-color-secondary-tint);;
     border-radius: .5em;
@@ -50,17 +54,15 @@
   }
   
   ion-icon {
-    font-size: 1.5rem !important //Preferred size here
+    font-size: 1.5rem !important; //Preferred size here
   }
   
   .toast-success{
     --background: var(--ion-color-success);
-    --border-color : var(--ion-color-success-shade)
+    --border-color : var(--ion-color-success-shade);
   }
 
 
-  *{
-      font-family: Cairo, Verdana, Tahoma;
-  }
+  
   
   // End Custom global stype ----------------------------------------------------

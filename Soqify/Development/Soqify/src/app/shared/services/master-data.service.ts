@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import {take } from 'rxjs/operators'
 
-import { main_cat, parent_cat,sub_cat, IParent_cat, IMain_cat, ISub_cat,IBusiness_type, business_type } from '../../data/master-data';
+import { main_cat, parent_cat,sub_cat, IParent_cat, IMain_cat, ISub_cat,IBusiness_type, 
+        business_type, IGovernate, ICity, governates,cities } from '../../data/master-data';
 
 
 @Injectable({
@@ -14,8 +15,11 @@ export class MasterDataService {
   productMainCat:IMain_cat[]=[];
   productSubCat:ISub_cat[]=[];
   businessType:IBusiness_type[]=[];
+  governates: IGovernate[]=[];
+  cities: ICity[]=[];
 
   constructor(private fireStore:AngularFirestore ) { 
+    
     
   }
 
@@ -34,6 +38,8 @@ export class MasterDataService {
     await this.setData('ref_prod_main_cat',main_cat);
     await this.setData('ref_prod_sub_cat',sub_cat);
     await this.setData('ref_business_type',business_type);
+    await this.setData('ref_governates',governates);
+    await this.setData('ref_cities',cities);
     await console.log('All master data added successfully');
   }
 
@@ -41,32 +47,55 @@ export class MasterDataService {
   private async  getData(collectionName) {
       let data =await   this.fireStore.collection(collectionName).valueChanges({idField:'key'}).pipe(take(1)).toPromise();
       // console.log('get data of collection >>', collectionName)
+      
       return data;
   }
 
   async getMasterData(){
 
+    // get first from local strotage
+    this.productParentCat = this.getFromLocalStorage('productParentCat');
+    this.productMainCat = this.getFromLocalStorage('productMainCat');
+    this.productSubCat = this.getFromLocalStorage('productSubCat');
+    this.businessType = this.getFromLocalStorage('businessType');
+    this.governates = this.getFromLocalStorage('governates');
+    this.cities = this.getFromLocalStorage('cities')
+
     if (this.productParentCat.length===0) {
       console.log('master data reload!')
       this.productParentCat =  await <any>this.getData('ref_prod_parent_cat');
       this.productParentCat.sort((a,b)=> a.seq-b.seq)
-      
+      this.saveToLocalStorage('productParentCat', this.productParentCat);
     }
 
     if (this.productMainCat.length==0) {
-
       this.productMainCat =  await <any>this.getData('ref_prod_main_cat');
       this.productMainCat.sort((a,b)=> a.seq-b.seq)
+      this.saveToLocalStorage('productMainCat', this.productMainCat);
     }
 
     if (this.productSubCat.length==0) {
       this.productSubCat =  await <any>this.getData('ref_prod_sub_cat');
       this.productSubCat.sort((a,b)=> a.seq-b.seq)
+      this.saveToLocalStorage('productSubCat', this.productSubCat);
     }
 
     if (this.businessType.length==0) {
       this.businessType =  await <any>this.getData('ref_business_type');
       this.businessType.sort((a,b)=> a.seq-b.seq)
+      this.saveToLocalStorage('businessType', this.businessType);
+    }
+
+    if (this.governates.length==0) {
+      this.governates =  await <any>this.getData('ref_governates');
+      this.governates.sort((a,b)=> a.seq-b.seq)
+      this.saveToLocalStorage('governates', this.governates);
+    }
+
+    if (this.cities.length==0) {
+      this.cities =  await <any>this.getData('ref_cities');
+      this.cities.sort((a,b)=> a.seq-b.seq)
+      this.saveToLocalStorage('cities', this.cities);
     }
   }
 
@@ -76,6 +105,23 @@ export class MasterDataService {
   }
   selectSubCat(key:number){
     return this.productSubCat.filter(c=> c.m_cde == key)
+  }
+
+  selectCity(key:number){
+    return this.cities.filter(c=> c.gov_cde == key)
+  }
+
+  saveToLocalStorage(key, value){
+    localStorage.setItem(key,JSON.stringify(value))
+  }
+
+  getFromLocalStorage(key){
+    let x=localStorage.getItem(key);
+    if (x!=='undefined' && x!==null){
+      return JSON.parse(x);
+    }else{
+      return [];
+    }
   }
 
 

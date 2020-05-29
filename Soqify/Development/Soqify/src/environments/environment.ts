@@ -32,3 +32,5 @@ tel:01028787773
 P:soqify
 
 */
+
+// Goodle MAP API key = AIzaSyCwnN6qDfD_5uRjQt_4hDzjEZ5qh1_1nZQ

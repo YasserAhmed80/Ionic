@@ -1,3 +1,8 @@
+export interface IGeoLocation{
+    latitude: number,
+    longitude: number
+}
+
 export interface IUser{
     uid?: string,
     auth_id?:string,
@@ -13,7 +18,7 @@ export interface IUser{
     gov?:number, //governate
     cty?:number, // city
     addr?:string, // address
-    loc?:Geolocation, //geolocation
+    loc?:IGeoLocation, //geolocation
     // business data
     bus_type?:number, // business type (individual, shop, ..)
     bus_sec?:number[], // business sections (clothes, fashion, elec.)

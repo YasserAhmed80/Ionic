@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
-import { ToastController } from '@ionic/angular';
+import { ToastController, LoadingController } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MessagesService {
 
-  constructor(public toastController:ToastController) 
+  constructor(public toastController:ToastController,
+              public loadingController:LoadingController) 
   { }
 
  
@@ -28,4 +29,15 @@ export class MessagesService {
     });
     toast.present();
   }
+
+  async showLoading(message:string) {
+    const loading = await this.loadingController.create({
+      //spinner:"bubbles",
+      message: message,
+
+    });
+    await loading.present();
+    return loading;
+  }
+
 }
