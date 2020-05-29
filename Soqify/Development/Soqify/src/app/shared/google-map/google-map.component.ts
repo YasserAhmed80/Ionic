@@ -1,7 +1,6 @@
 import { Component, OnInit ,AfterViewInit,  ViewChild, ElementRef, Input, Output, EventEmitter } from '@angular/core';
 import { IGeoLocation } from 'src/app/model/types';
 
-declare var google: any;
 
 @Component({
   selector: 'app-google-map',
@@ -61,8 +60,6 @@ export class GoogleMapComponent implements  AfterViewInit {
     //this.addMarkers ();
 
     google.maps.event.addListener(this.map, 'click', (event)=>this.addMarkerPosition(event.latLng, this.map));
-  
-
 
   }
 
