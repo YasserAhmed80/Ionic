@@ -10,7 +10,8 @@ import { IGeoLocation } from 'src/app/model/types';
 export class GoogleMapComponent implements  AfterViewInit {
 
   @Input ('currentLocation') currentLocation: IGeoLocation;
-  @Output() getLocation = new EventEmitter();
+
+  @Output() locationChanged = new EventEmitter();
 
   @ViewChild('mapElement',{read:ElementRef, static:false}) mapElement: ElementRef;
 
@@ -26,11 +27,15 @@ export class GoogleMapComponent implements  AfterViewInit {
   constructor() { }
 
   ngAfterViewInit() {
-     this.initMap(this.currentLocation)
+     this.initMap(this.currentLocation);
+
   }
 
 
+
   initMap(loc:IGeoLocation) {
+
+    this.map = null;
 
     this.currentPosition = loc;
 
@@ -38,7 +43,7 @@ export class GoogleMapComponent implements  AfterViewInit {
     let mapOptions: google.maps.MapOptions ={
       center:coords,
       
-      zoom:4,
+      zoom:10,
       mapTypeControl:false
     };
 
@@ -48,19 +53,22 @@ export class GoogleMapComponent implements  AfterViewInit {
     this.positionMarker = new google.maps.Marker({
       map:this.map,
       position:coords,
-      title:'Drag me!',
       draggable: true,
-      label: 'موقع عملك'
+      title: 'موقعك'
     })
 
-    this.positionMarker.addListener('dragend', (m)=>{
-      // do shome thing
-    });
-
-    //this.addMarkers ();
+    this.addMarkerPosition(coords, this.map)
 
     google.maps.event.addListener(this.map, 'click', (event)=>this.addMarkerPosition(event.latLng, this.map));
 
+  }
+
+  addInfoWindow (content){
+    var infowindow = new google.maps.InfoWindow({
+      content: content
+    })
+
+    return infowindow
   }
 
   addMarkerPosition(coords, map){
@@ -69,12 +77,18 @@ export class GoogleMapComponent implements  AfterViewInit {
     this.positionMarker = new google.maps.Marker({
       position:coords,
       draggable: true,
-      map:map,
-      //animation: google.maps.Animation.DROP,
-      label: 'Your Position' 
+      map:map
     });
 
-    
+    this.positionMarker.addListener('click', () =>{
+      this.addInfoWindow('موقعك الحالي').open(this.map, this.positionMarker);
+    });
+
+    this.positionMarker.addListener('dragend', (m)=>{
+      this.getMarkerPosition()
+    });
+
+    this.getMarkerPosition()
 
   }
 
@@ -86,8 +100,13 @@ export class GoogleMapComponent implements  AfterViewInit {
     this.currentPosition.longitude=x;
     this.currentPosition.latitude=y;
 
+    //console.log('marker postion changed: ',this.currentPosition)
+    this.locationChanged.emit(this.currentPosition)
+  }
 
-    this.getLocation.emit(this.currentPosition)
+  centerMap(loc:IGeoLocation){
+    this.map.setCenter({lat:loc.latitude, lng:loc.longitude},10);
+    console.log('center map')
   }
 
 

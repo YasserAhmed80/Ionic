@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild , AfterViewInit} from '@angular/core';
 import { MasterDataService } from '../../shared/services/master-data.service'
 import { main_cat, parent_cat,sub_cat, IParent_cat, IMain_cat, ISub_cat,IBusiness_type, business_type, IGovernate, ICity } from '../../data/master-data';
 import { IUser, IGeoLocation } from 'src/app/model/types';
@@ -6,6 +6,7 @@ import { AuthService } from '../services/auth.service';
 import { MessagesService } from 'src/app/shared/services/messages.service';
 import { LoadingController } from '@ionic/angular';
 import { Geolocation } from '@capacitor/core';
+import { GoogleMapComponent } from 'src/app/shared/google-map/google-map.component';
 
 
 
@@ -15,6 +16,8 @@ import { Geolocation } from '@capacitor/core';
   styleUrls: ['./register.page.scss'],
 })
 export class RegisterPage implements OnInit {
+
+  @ViewChild ('map') map:GoogleMapComponent;
 
   businessType: IBusiness_type[]=[];
   parentCat:IParent_cat[]=[];
@@ -32,7 +35,7 @@ export class RegisterPage implements OnInit {
   dataLoaded:Boolean =false;
   govChangeInitial:boolean= true;
 
-  map:any;
+  currentLocation:IGeoLocation;
 
 
 
@@ -44,12 +47,18 @@ export class RegisterPage implements OnInit {
 
   }
 
+ 
 
   ngOnInit() {
 
     this.user = this.authServcie.user;
     this.selectedBusSec = this.user.bus_sec;
-    
+    if (this.user.loc !== null){
+      this.currentLocation = {... this.user.loc};
+    }else{
+      this.getLocation();
+    }
+
 
     this.masterDataService.getMasterData().then(()=>{
 
@@ -73,6 +82,14 @@ export class RegisterPage implements OnInit {
 
   saveUser(){
     console.log('updated user =>', this.user);
+    this.authServcie.user = this.user;
+    this.authServcie.updateUserData(this.user).then(()=>{
+      this.messagesService.showToast('','تم حفظ بياناتك بنجاح!')
+    })
+  }
+
+  saveUserLocation(){
+    this.user.loc=this.currentLocation;
     this.authServcie.user = this.user;
     this.authServcie.updateUserData(this.user).then(()=>{
       this.messagesService.showToast('','تم حفظ بياناتك بنجاح!')
@@ -122,9 +139,20 @@ export class RegisterPage implements OnInit {
   getLocation(){
     Geolocation.getCurrentPosition().then((coord)=>{
       let loc = {latitude: coord.coords.latitude,longitude: coord.coords.longitude};
-      this.map(loc)
+      this.currentLocation=loc;
     })
     
+  }
+
+  changeLocation(loc){
+    this.currentLocation = loc;
+    //console.log('user location 1: ',this.user.loc);
+  }
+
+  centerLocation (){
+    //console.log('user location: ',this.user.loc)
+    this.map.initMap({...this.user.loc})
+    this.currentLocation = {...this.user.loc};
   }
 
 

@@ -31,7 +31,9 @@ ion-radio{
 }
 
 
-#map{
+app-google-map{
     width: 100%;
     height: 300px;
+    border: 1px solid var(--ion-color-secondary);
+    border-radius: 2px;
 }

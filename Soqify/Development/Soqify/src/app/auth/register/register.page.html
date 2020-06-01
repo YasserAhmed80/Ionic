@@ -129,16 +129,16 @@
   
           <ion-list lines="none" > 
 
-
+            <ion-button (click)="centerLocation()">
+              center location
+            </ion-button>
             <ion-item>
-              <ion-button (click) = "getLocation()">
-                <ion-icon name="location"></ion-icon>
-                تحديد موقعي
-              </ion-button>
               <ion-label position="floating" >موقعك علي الخريطة</ion-label>
 
-              <div id="map">
-              </div>
+              <app-google-map #map [currentLocation] = "this.currentLocation"
+                              (locationChanged) = "changeLocation($event)">
+
+              </app-google-map>
 
             </ion-item>
 
@@ -147,9 +147,9 @@
           
          
           <br>
-          <ion-button  expand = "block" color="secondary" fill="outline" (click) = "saveUser()">
+          <ion-button  expand = "block" color="secondary" fill="outline" (click) = "saveUserLocation()">
             <ion-icon slot="end" name = "save-outline" ></ion-icon>
-            حفظ العنوان
+            حفظ موقعك
           </ion-button>
       
   
