@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Data } from '@angular/router';
+import { DataService } from '../services/data.service';
 
 
 @Component({
@@ -8,6 +10,6 @@ import { Component } from '@angular/core';
 })
 export class Tab3Page {
   storedData:string ;
-  constructor() {}
+  constructor(public dataservice:DataService) {}
 
 }

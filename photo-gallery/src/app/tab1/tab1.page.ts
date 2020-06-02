@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AppThemeService } from '../services/app-theme.service';
+import { DataService } from '../services/data.service';
 
 
 @Component({
@@ -11,7 +12,7 @@ export class Tab1Page {
   toggale: boolean = false;
   currentTheme:string = 'Normal';
 
-  constructor(private appTheme:AppThemeService) {}
+  constructor(private appTheme:AppThemeService, public   dataservice:DataService) {}
 
   ngOnInit(): void {
     this.toggaleTheme ();

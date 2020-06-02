@@ -7,6 +7,8 @@ export class DataService {
 
   cards = [];
   colors = [];
+
+  test:number = 1;
   constructor( ) {
 
    }

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { PhotoService } from '../services/photo.service';
 import { ActionSheetController, Platform } from '@ionic/angular';
+import { DataService } from '../services/data.service';
 
 @Component({
   selector: 'app-tab2',
@@ -9,12 +10,14 @@ import { ActionSheetController, Platform } from '@ionic/angular';
 })
 export class Tab2Page {
 
-  constructor(public photoService:PhotoService,public actionSheetControl:ActionSheetController,  private platform: Platform) {
+  constructor(public photoService:PhotoService,public actionSheetControl:ActionSheetController,  private platform: Platform,
+    public dataservice:DataService ) {
 
   }
   
   ngOnInit(): void {
     this.photoService.loadSavedPhotos();
+    this.dataservice.test = 15;
 
   }
 

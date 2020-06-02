@@ -20,6 +20,8 @@
    <!-- Show photos here in grid -->
    <div class="images">
 
+    {{dataservice.test}}
+
     <div size="4" *ngFor="let photo of photoService.photos; index as position">
       <ion-img src="{{ photo.base64 ? photo.base64 : photo.webviewPath }}" (click) = "showMenu(photo,position)"></ion-img>
     </div>
