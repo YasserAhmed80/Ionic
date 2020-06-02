@@ -1,4 +1,4 @@
-import { Component, OnInit ,AfterViewInit,  ViewChild, ElementRef, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit ,AfterViewInit,  ViewChild, ElementRef, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { IGeoLocation } from 'src/app/model/types';
 
 
@@ -10,17 +10,12 @@ import { IGeoLocation } from 'src/app/model/types';
 export class GoogleMapComponent implements  AfterViewInit {
 
   @Input ('currentLocation') currentLocation: IGeoLocation;
-
   @Output() locationChanged = new EventEmitter();
-
   @ViewChild('mapElement',{read:ElementRef, static:false}) mapElement: ElementRef;
 
   map:any;
-
   marker: google.maps.Marker []=[];
-
   positionMarker: google.maps.Marker;
-
   currentPosition: IGeoLocation;
 
 
@@ -28,22 +23,22 @@ export class GoogleMapComponent implements  AfterViewInit {
 
   ngAfterViewInit() {
      this.initMap(this.currentLocation);
-
   }
-
 
 
   initMap(loc:IGeoLocation) {
 
     this.map = null;
 
+
     this.currentPosition = loc;
 
+    
     let coords = new google.maps.LatLng(loc.latitude, loc.longitude)
     let mapOptions: google.maps.MapOptions ={
       center:coords,
-      
-      zoom:10,
+
+      zoom:14,
       mapTypeControl:false
     };
 
@@ -57,12 +52,13 @@ export class GoogleMapComponent implements  AfterViewInit {
       title: 'موقعك'
     })
 
-    this.addMarkerPosition(coords, this.map)
+    //this.addMarkerPosition(coords, this.map)
 
     google.maps.event.addListener(this.map, 'click', (event)=>this.addMarkerPosition(event.latLng, this.map));
 
   }
 
+  // add info windows function 
   addInfoWindow (content){
     var infowindow = new google.maps.InfoWindow({
       content: content
@@ -105,7 +101,7 @@ export class GoogleMapComponent implements  AfterViewInit {
   }
 
   centerMap(loc:IGeoLocation){
-    this.map.setCenter({lat:loc.latitude, lng:loc.longitude},10);
+    this.map.setCenter({lat:loc.latitude, lng:loc.longitude},20);
     console.log('center map')
   }
 

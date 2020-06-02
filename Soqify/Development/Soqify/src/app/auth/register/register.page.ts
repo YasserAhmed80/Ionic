@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild , AfterViewInit} from '@angular/core';
+import { Component, OnInit, ViewChild , AfterViewInit, OnChanges} from '@angular/core';
 import { MasterDataService } from '../../shared/services/master-data.service'
 import { main_cat, parent_cat,sub_cat, IParent_cat, IMain_cat, ISub_cat,IBusiness_type, business_type, IGovernate, ICity } from '../../data/master-data';
 import { IUser, IGeoLocation } from 'src/app/model/types';
@@ -7,6 +7,7 @@ import { MessagesService } from 'src/app/shared/services/messages.service';
 import { LoadingController } from '@ionic/angular';
 import { Geolocation } from '@capacitor/core';
 import { GoogleMapComponent } from 'src/app/shared/google-map/google-map.component';
+import { NgControlStatusGroup } from '@angular/forms';
 
 
 
@@ -51,9 +52,15 @@ export class RegisterPage implements OnInit {
 
   ngOnInit() {
 
+    //set the default location (my home)
+    this.currentLocation ={"latitude":30.167038399999996,"longitude":31.319837900000003};
+
     this.user = this.authServcie.user;
     this.selectedBusSec = this.user.bus_sec;
-    if (this.user.loc !== null){
+
+    console.log (this.user.loc)
+
+    if (this.user.loc !== undefined){
       this.currentLocation = {... this.user.loc};
     }else{
       this.getLocation();
@@ -73,8 +80,12 @@ export class RegisterPage implements OnInit {
 
       this.dataLoaded = true
       loader.then((loading)=> loading.dismiss());
+    });
 
+  
 
+    google.maps.event.addDomListener(window, 'load', ()=>{
+      this.centerLocation();
     });
 
     
@@ -139,7 +150,8 @@ export class RegisterPage implements OnInit {
   getLocation(){
     Geolocation.getCurrentPosition().then((coord)=>{
       let loc = {latitude: coord.coords.latitude,longitude: coord.coords.longitude};
-      this.currentLocation=loc;
+      this.currentLocation={...loc};
+      this.centerLocation();
     })
     
   }
@@ -150,11 +162,7 @@ export class RegisterPage implements OnInit {
   }
 
   centerLocation (){
-    //console.log('user location: ',this.user.loc)
-    this.map.initMap({...this.user.loc})
-    this.currentLocation = {...this.user.loc};
+    this.map.initMap({...this.currentLocation})
   }
-
-
 
 }
