@@ -192,18 +192,43 @@ export class AuthService {
 
   async facebook_SignIn(){
     return await this.facebook_auth().then((user)=>{
-      // get identiy data
-      return this.getUserData(user.uid)
+      if (user) {
+        // get identiy data
+        return this.getUserData(user.uid)
         .then((identity)=>{
           if (identity){
             this.user = identity;
             localStorage.setItem('identity', JSON.stringify(this.user));
             return identity
+          }else{
+            console.log('user not added to DB', user);
+            let newUser: IUser ={
+              auth_id: user.uid,
+              name: user.displayName
+            };
+
+            console.log('user to beadded to DB', newUser);
+            return this.addUserData(newUser).then((addedUser)=>{
+              console.log('user added to DB');
+              localStorage.setItem('identity', JSON.stringify(addedUser));
+              return newUser;
+            })
+            .catch((err)=>{
+              console.log('FB sign in add user err:', err)
+            })
+            
           }
         })
         .catch((err)=>{
           return err
         })
+      }else{
+        console.log ('facebook auth provider user', user);
+      }
+      
+    })
+    .catch((err)=>{
+      console.log ('facebook auth provider', err);
     })
   }
 
@@ -245,6 +270,9 @@ export class AuthService {
     .then ((auth)=>{
       console.log('sign in with FB/firebase:', auth.user);
       return auth.user;
+    })
+    .catch((err)=>{
+      console.log ('firebase FB auth error', err)
     })
 
   }

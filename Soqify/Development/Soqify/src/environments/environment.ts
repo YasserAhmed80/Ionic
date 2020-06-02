@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   firebaseConfig : {
-    apiKey: 'AIzaSyA3Q88p8sh38gnslzWRJh5VYKYcsufVJgM',
+    apiKey: 'AIzaSyCwnN6qDfD_5uRjQt_4hDzjEZ5qh1_1nZQ',
     authDomain: 'soqify-c4356.firebaseapp.com',
     databaseURL: 'https://soqify-c4356.firebaseio.com',
     projectId: 'soqify-c4356',
