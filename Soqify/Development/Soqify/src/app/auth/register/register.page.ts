@@ -109,6 +109,9 @@ export class RegisterPage implements OnInit {
 
   addBusinessSection(event, sec:number){ 
 
+    if(this.selectedBusSec === undefined){
+      this.selectedBusSec = [];
+    }
     let index = this.selectedBusSec.indexOf(sec);
 
     // reomve item if exist
@@ -127,12 +130,17 @@ export class RegisterPage implements OnInit {
   }
 
   setToggalCheck(sec:number){
-    let index = this.selectedBusSec.indexOf(sec);
-    if (index>=0) {
-      return true;
-    }else{
-      return false;
+
+    if(this.selectedBusSec !== undefined){
+      let index = this.selectedBusSec.indexOf(sec);
+      if (index>=0) {
+        return true;
+      }else{
+        return false;
+      }
     }
+    
+   
   }
 
   getSelectedCities(gov_key){

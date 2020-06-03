@@ -137,6 +137,7 @@ export class AuthService {
         return user;
       })
       .catch((err)=>{
+        console.log('update user error:', err)
         return err;
       })
   }

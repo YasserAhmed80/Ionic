@@ -23,7 +23,7 @@
           <ion-list lines="none" > 
             <ion-item>
               <ion-label position="floating">الاسم</ion-label>
-              <ion-input [(ngModel)]="user.name"  clearInput="true" name="name"></ion-input>
+              <ion-input [(ngModel)]="user.name"  clearInput="true" name="name" class="input-padding"></ion-input>
             </ion-item>
   
             <ion-item>
@@ -73,7 +73,7 @@
             <ion-item>
               <ion-label position = "floating">المحافظه</ion-label>
               <ion-select  name = "gov"  [(ngModel)] = "user.gov"  
-                           placeholder="اختار المحافظة" okText="موافق" cancelText="الغاء"
+                           okText="موافق" cancelText="الغاء"
                            (ionChange)="getSelectedCities(user.gov)"
                            >
                 <ion-select-option  *ngFor="let gov of governates" value = "{{gov.key}}">{{gov.name}}</ion-select-option>
@@ -82,7 +82,7 @@
 
             <ion-item>
               <ion-label position = "floating">المدينة</ion-label>
-              <ion-select name = "cty"  [(ngModel)] = "user.cty"  placeholder="اختار المدينة" okText="موافق" cancelText="الغاء">
+              <ion-select name = "cty"  [(ngModel)] = "user.cty"   okText="موافق" cancelText="الغاء">
                 <ion-select-option  *ngFor="let city of selectedCities"  value="{{city.key}}">{{city.name}}</ion-select-option>
               </ion-select>
             </ion-item>
