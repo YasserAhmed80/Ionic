@@ -1,7 +1,23 @@
 <ion-header>
-  <ion-toolbar color = "primary">
+  <ion-toolbar >
+    <ion-buttons slot= "end">
+      <ion-button slot="start"  >
+        <ion-label>
+           الاصناف
+        </ion-label>
+       
+        <ion-icon name="list"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-buttons slot= "start">
+      <ion-button slot="start" color="danger" fill="outline">حفظ الصنف</ion-button>
+    </ion-buttons>
+    
     <ion-title>بيانات الصنف</ion-title>
+
   </ion-toolbar>
+
 </ion-header>
 
 <ion-content *ngIf="dataLoaded">
@@ -86,33 +102,103 @@
     <ion-item-divider>
       <ion-label>تحديد الالوان و المقاسات </ion-label>
     </ion-item-divider>
-  
-    <ion-item>
-      <ion-label>الالوان المتاحة</ion-label>
-      <ion-input></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label>المقاسات المتاحة</ion-label>
-      <ion-input></ion-input>
-    </ion-item>
+    
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+            <ion-label>اختار الالوان المتاحة</ion-label>
+        </ion-card-title>
+
+      </ion-card-header>
+      <ion-card-content class="color-card-content">
+
+        <ion-chip *ngFor="let color of colors" 
+                  color="{{color.selected?'success' : 'medium'}}"  
+                  (click) = "setSelectedColor(color)"
+                  outline="false">
+          <ion-avatar>
+            <ion-img src="assets/colors/{{color.image}}.svg"></ion-img>
+          </ion-avatar>
+          <ion-label color="secondary">{{color.name}}</ion-label>
+          <ion-icon name="checkmark-circle" *ngIf="color.selected"></ion-icon>
+        </ion-chip>
+        
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+            <ion-label>اختار المقاسات المتاحة</ion-label>
+        </ion-card-title>
+
+      </ion-card-header>
+      <ion-card-content class="size-card-content">
+
+        <ion-chip *ngFor="let size of sizes" 
+                  color="{{size.selected?'success' : 'medium'}}"  
+                  (click) = "setSelectedSize(size)"
+                  outline="false">
+          <ion-label color="secondary">{{size.name}}</ion-label>
+          <ion-icon name="checkmark-circle" *ngIf="size.selected"></ion-icon>
+        </ion-chip>
+        
+      </ion-card-content>
+    </ion-card>
 
   </ion-item-group>
 
   <ion-item-group>
     <ion-item-divider>
       <ion-label>صور الصنف </ion-label>
-      <ion-button>Take Photo</ion-button>
     </ion-item-divider>
   
-    <ion-item>
-      <ion-label>Bangladesh</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label>Belarus</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label>Belgium</ion-label>
-    </ion-item>
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+            <ion-label>قم بادخال صور الصنف</ion-label>
+        </ion-card-title>
+ 
+      </ion-card-header>
+      <ion-card-content class="image-card-content">
+        <ion-img [src] = "currentImage" class="current-image"></ion-img>
+
+        <ion-fab vertical="top" horizontal="center"  >
+          <ion-fab-button edge color = "success" 
+                          fill="outline"  
+                          [disabled]="cameraDisabled"
+                          (click) = "getNewPhoto()">
+            <ion-icon name="camera"></ion-icon>
+          </ion-fab-button>
+        </ion-fab>
+
+        <ion-fab vertical="top" >
+          <ion-fab-button edge 
+                          [disabled] = "photoDeleteDisable"
+                          (click)="deleteImage()"
+                          color="danger" >
+            <ion-icon name="remove"></ion-icon>
+          </ion-fab-button>
+        </ion-fab>
+
+        <div class="image-thumb" *ngIf="images.length!==0; else empty"> 
+
+          <ion-thumbnail *ngFor="let image of images"  (click)="setCurrentImage(image)" class="{{image.selected? 'thumb-Selected' : 'none'}}">
+            <ion-img src = "{{image.img}}"></ion-img>
+          </ion-thumbnail>
+        </div>
+
+        <ng-template #empty  >  
+          <div class="image-thumb">
+            <ion-thumbnail *ngFor="let i of [1,2,3,4,5,6]" >
+              <ion-img src = "assets/images/camira-placeholder.png"></ion-img>
+            </ion-thumbnail>
+          </div>     
+        </ng-template>
+        
+      </ion-card-content>
+    </ion-card>
+
   </ion-item-group>
   
   

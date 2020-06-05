@@ -1,8 +1,53 @@
 // colors
 
-// export ProductColors=[
-//   {}
-// ]
+export const Colors=[
+  {key:1,image:'multicolour',name:'متعدد الألوان',lang_cde:1,seq:1},
+  {key:2,image:'black',name:'اسود',lang_cde:1,seq:2},
+  {key:3,image:'blue',name:'ازرق',lang_cde:1,seq:3},
+  {key:4,image:'silver',name:'فضي',lang_cde:1,seq:4},
+  {key:5,image:'white',name:'ابيض',lang_cde:1,seq:5},
+  {key:6,image:'grey',name:'رمادي',lang_cde:1,seq:6},
+  {key:7,image:'pink',name:'وردي',lang_cde:1,seq:7},
+  {key:8,image:'red',name:'احمر',lang_cde:1,seq:8},
+  {key:9,image:'brown',name:'بني',lang_cde:1,seq:9},
+  {key:10,image:'green',name:'اخضر',lang_cde:1,seq:10},
+  {key:11,image:'beige',name:'بيج',lang_cde:1,seq:11},
+  {key:12,image:'gold',name:'ذهبي',lang_cde:1,seq:12},
+  {key:13,image:'yellow',name:'اصفر',lang_cde:1,seq:13},
+  {key:14,image:'purple',name:'بنفسجي',lang_cde:1,seq:14},
+  {key:15,image:'orange',name:'برتقالي',lang_cde:1,seq:15},
+  {key:16,image:'clear',name:'شفاف',lang_cde:1,seq:16}
+]
+
+// product Sizes
+export const Sizes=[
+  {key:1,name:'2XS',cat:1,seq:1},
+  {key:2,name:'XS',cat:1,seq:2},
+  {key:3,name:'S',cat:1,seq:3},
+  {key:4,name:'M',cat:1,seq:4},
+  {key:5,name:'L',cat:1,seq:5},
+  {key:6,name:'XL',cat:1,seq:6},
+  {key:7,name:'2XL',cat:1,seq:7},
+  {key:8,name:'3XL',cat:1,seq:8},
+  {key:9,name:'4XL',cat:1,seq:9},
+  {key:10,name:'24',cat:2,seq:10},
+  {key:11,name:'26',cat:2,seq:11},
+  {key:12,name:'28',cat:2,seq:12},
+  {key:13,name:'30',cat:2,seq:13},
+  {key:14,name:'32',cat:2,seq:14},
+  {key:15,name:'34',cat:2,seq:15},
+  {key:16,name:'36',cat:2,seq:16},
+  {key:17,name:'38',cat:2,seq:17},
+  {key:18,name:'40',cat:2,seq:18},
+  {key:19,name:'42',cat:2,seq:19},
+  {key:20,name:'44',cat:2,seq:20},
+  {key:21,name:'46',cat:2,seq:21},
+  {key:22,name:'48',cat:2,seq:22},
+  {key:23,name:'50',cat:2,seq:23},
+  {key:24,name:'52',cat:2,seq:24},
+  {key:25,name:'54',cat:2,seq:25},
+  {key:26,name:'56',cat:2,seq:26},
+]
 
 // this file include products master data like category (parent, main and sub).
 

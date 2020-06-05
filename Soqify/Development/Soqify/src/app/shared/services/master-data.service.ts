@@ -5,7 +5,7 @@ import { take } from 'rxjs/operators'
 
 
 import { main_cat, parent_cat,sub_cat, IParent_cat, IMain_cat, ISub_cat,IBusiness_type, 
-        business_type, IGovernate, ICity, governates,cities } from '../../data/master-data';
+        business_type, IGovernate, ICity, governates,cities,Colors, Sizes } from '../../data/master-data';
 
 
 @Injectable({
@@ -19,8 +19,10 @@ export class MasterDataService {
   businessType:IBusiness_type[]=[];
   governates: IGovernate[]=[];
   cities: ICity[]=[];
+  colors=[];
 
-  constructor(private fireStore:AngularFirestore ) { 
+  constructor(private fireStore:AngularFirestore
+             ) { 
     
     
   }
@@ -144,6 +146,14 @@ export class MasterDataService {
      
    } 
 
+  }
+
+  getColors (){
+    return Colors.sort ((a,b)=> a.seq-b.seq);
+  }
+
+  getSizes (){
+    return Sizes.sort ((a,b)=> a.seq-b.seq);
   }
 
 

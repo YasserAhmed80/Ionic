@@ -1,5 +1,6 @@
 ion-item-divider {
   --color: var(--ion-color-primary);
+  background-color: var(--ion-color-light);
 }
 
 .item-prices{
@@ -11,3 +12,54 @@ ion-item-divider {
     //     height: 30px;
     // }
 }
+
+ion-chip{
+  font-size:13px !important;
+  ion-label{
+    padding: 2px 2px !important;
+  }
+}
+
+
+
+.color-card-content, .size-card-content{
+  padding: 1px 1px !important;
+  display:grid;
+}
+
+.color-card-content{
+  grid-template-columns: 1fr 1fr;
+}
+
+.size-card-content{
+  grid-template-columns: 1fr 1fr 1fr 1fr ;
+}
+
+.image-thumb{
+  margin: 4px 4px;
+  display:grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap:3px;
+}
+
+ion-thumbnail{
+  border : 1px solid var(--ion-color-light) !important;
+}
+
+.thumb-Selected{
+  border : 2px solid var(--ion-color-secondary) !important;
+}
+
+.current-image{
+  widows: 100% !important;;
+  height:300px !important;
+  object-fit: cover;
+  border:2px solid var(--ion-color-secondary);
+  border-radius: 5px;
+}
+
+ion-fab-button{
+  height:40px !important;
+  width:40px !important;
+}
+

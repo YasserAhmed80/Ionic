@@ -1,5 +1,5 @@
 import { Component, OnInit ,AfterViewInit,  ViewChild, ElementRef, Input, Output, EventEmitter, OnChanges } from '@angular/core';
-import { IGeoLocation } from 'src/app/model/types';
+import { IGeoLocation } from '../../model/identity';
 
 
 @Component({

@@ -3,7 +3,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 
-import { IUser, UserRole } from '../../model/identity'
+import { IUser } from '../../model/identity'
 import { take } from 'rxjs/operators'
 
 
