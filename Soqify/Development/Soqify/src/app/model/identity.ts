@@ -3,6 +3,12 @@ export interface IGeoLocation{
     longitude: number
 }
 
+export enum UserRoleRef{
+    Admin = 1 ,
+    Operator = 2,
+    Content = 3
+}
+
 export interface IUser{
     uid?: string,
     auth_id?:string,
@@ -11,7 +17,7 @@ export interface IUser{
     mob?:string,
     tel_o?:string,
     comp_id?:string, // (if register under company)
-    role?: UserRole, // Admin, operator, 
+    role?: UserRoleRef, // Admin, operator, 
     provider?: string;
     // address
     cntry?:number, //countery
@@ -27,8 +33,3 @@ export interface IUser{
 };
 
 
-export enum UserRole{
-    Admin = 1 ,
-    Operator = 2,
-    Content = 3
-}

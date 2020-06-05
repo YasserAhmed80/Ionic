@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import { IUser, UserRole} from '../../model/types'
+import { IUser, UserRoleRef} from '../../model/identity'
 
 
 
@@ -29,7 +29,7 @@ export class LoginPage implements OnInit {
       email: this.email,
       name:'yasser',
       mob:'01028787773',
-      role: UserRole.Admin
+      role: UserRoleRef.Admin
     }
     this.authService.registerUser(user,this.password)
     .then((x)=>{

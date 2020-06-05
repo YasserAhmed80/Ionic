@@ -1,3 +1,9 @@
+// colors
+
+// export ProductColors=[
+//   {}
+// ]
+
 // this file include products master data like category (parent, main and sub).
 
 // Parent Category

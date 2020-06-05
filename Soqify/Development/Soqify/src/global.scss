@@ -37,27 +37,7 @@
     font-family: Cairo, Verdana, Tahoma !important;
   }
 
-  ion-input, ion-select {
-    //border: 1px solid var(--ion-color-secondary-tint);
-    border:  1px solid var(--ion-color-warning-tint);;
-    border-radius: .5em;
-    --padding-start: .5rem !important;
-    --padding-end:.3rem !important;
-    font-size: 14px !important;
-
-   
-    
-  }
-
-   //font-family: Cairo !important;
-   ion-item {
-    ion-label{
-      font-size: 14px !important;
-      font-family: Cairo, Verdana, Tahoma !important;
-    }
-    
-  }
-
+ 
   
   ion-card-title{
     font-size:18px ;
@@ -73,6 +53,28 @@
     --border-color : var(--ion-color-success-shade);
   }
 
+  
+
+  ion-item{
+    ion-label{
+    font-size: 12px !important;
+    --color: var(--ion-color-secondary-tint) !important;
+    }
+
+    ion-input, ion-select{
+      font-size: 13px !important;
+      --color: var(--ion-color-primary-shade) !important;
+      font-weight: 600;
+    }
+
+    ion-textarea{
+      font-size: 14px !important;
+      --color: var(--ion-color-primary-shade) !important;
+      font-weight: 300;
+    }
+
+  }
+  
 
   
   

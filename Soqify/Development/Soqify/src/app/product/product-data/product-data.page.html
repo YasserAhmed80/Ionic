@@ -1,0 +1,119 @@
+<ion-header>
+  <ion-toolbar color = "primary">
+    <ion-title>بيانات الصنف</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="dataLoaded">
+  <ion-item-group>
+    <ion-item-divider>
+      <ion-label>وصصف الصنف</ion-label>
+    </ion-item-divider>
+  
+    <ion-item>
+      <ion-label position="floating">اسم الصنف </ion-label>
+      <ion-input></ion-input>
+    </ion-item>
+    <ion-item >
+      <ion-label position="floating">وصف الصنف</ion-label>
+      <ion-textarea></ion-textarea>
+    </ion-item> 
+    <ion-item>
+      <ion-label position="floating">كود الصنف</ion-label>
+      <ion-input></ion-input>
+    </ion-item>
+  </ion-item-group>
+
+  
+  <ion-item-group>
+    <ion-item-divider>
+      <ion-label>  تصنيف الصنف  </ion-label>
+    </ion-item-divider>
+  
+    <ion-item >
+      <ion-label>النشاط</ion-label>
+      <ion-select  interface="popover" 
+                  [interfaceOptions]="customPopoverOptions"
+                  placeholder="من فضلم اختار"
+                   [(ngModel)] = "selectedParentCat"
+                   (ionChange) = "getMainCat(selectedParentCat)">
+        <ion-select-option *ngFor = "let cat of parentCat" value="{{cat.key}}">{{cat.name}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>الفئة</ion-label>
+      <ion-select  interface="popover" 
+                   [(ngModel)] = "selectedMainCat"
+                   (ionChange) = "getSubCat(selectedMainCat)"
+                   placeholder="من فضلم اختار">
+        <ion-select-option *ngFor = "let cat of mainCat" value="{{cat.key}}">{{cat.name}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label> الفرعي</ion-label>
+      <ion-select  interface="popover" 
+                   [(ngModel)] = "selectedSubCat"
+                   placeholder="من فضلم اختار">
+        <ion-select-option *ngFor = "let cat of subCat" value="{{cat.key}}">{{cat.name}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-item-group>
+  
+  <ion-item-group class="item-prices">
+    <ion-item-divider>
+      <ion-label>تحديد سعر و كميات </ion-label>
+    </ion-item-divider>
+  
+    <ion-item>
+      <ion-label>السعر</ion-label>
+      <ion-input no-padding></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>السعر بعد اخصم</ion-label>
+      <ion-input></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>اقل كمية مشتريات</ion-label>
+      <ion-input></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>اكبر كمية مشتريات</ion-label>
+      <ion-input></ion-input>
+    </ion-item>
+  </ion-item-group>
+
+  <ion-item-group>
+    <ion-item-divider>
+      <ion-label>تحديد الالوان و المقاسات </ion-label>
+    </ion-item-divider>
+  
+    <ion-item>
+      <ion-label>الالوان المتاحة</ion-label>
+      <ion-input></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>المقاسات المتاحة</ion-label>
+      <ion-input></ion-input>
+    </ion-item>
+
+  </ion-item-group>
+
+  <ion-item-group>
+    <ion-item-divider>
+      <ion-label>صور الصنف </ion-label>
+      <ion-button>Take Photo</ion-button>
+    </ion-item-divider>
+  
+    <ion-item>
+      <ion-label>Bangladesh</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>Belarus</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>Belgium</ion-label>
+    </ion-item>
+  </ion-item-group>
+  
+  
+</ion-content>

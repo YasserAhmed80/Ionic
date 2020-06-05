@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
-import {take } from 'rxjs/operators'
+
+import { take } from 'rxjs/operators'
+
 
 import { main_cat, parent_cat,sub_cat, IParent_cat, IMain_cat, ISub_cat,IBusiness_type, 
         business_type, IGovernate, ICity, governates,cities } from '../../data/master-data';
@@ -122,6 +124,26 @@ export class MasterDataService {
     }else{
       return [];
     }
+  }
+
+  getCatName(key:number, catType:string){
+    switch(catType) { 
+      case 'parent': { 
+        let item =this.productParentCat.find(item => item.key === key)
+         return item.name;
+      } 
+      case 'main': { 
+        let item =this.productMainCat.find(item => item.key === key)
+         return item.name;
+      } 
+
+      case 'sub': { 
+        let item =this.productSubCat.find(item => item.key === key)
+         return item.name;
+      } 
+     
+   } 
+
   }
 
 
