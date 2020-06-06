@@ -5,6 +5,10 @@ import { MasterDataService } from 'src/app/shared/services/master-data.service';
 import { MessagesService } from 'src/app/shared/services/messages.service';
 import { PhotoService } from 'src/app/shared/services/photo.service';
 
+import { Plugins } from '@capacitor/core';
+
+const { Filesystem} = Plugins;
+
 
 
 @Component({
@@ -19,7 +23,12 @@ export class ProductDataPage implements OnInit {
   subCat=[];
   colors=[];
   sizes=[];
-  images = [];
+  images = [
+    // {key:1 , img:'assets/images/1.jpg', selected:false},
+    // {key:2 , img:'assets/images/1.jpg', selected:false},
+    // {key:1 , img:'assets/images/1.jpg', selected:false},
+    // {key:3 , img:'assets/images/1.jpg', selected:false},
+  ];
   MAX_PHOTOS = 6;
 
   currentImage = "assets/images/camira-placeholder.png"
@@ -55,6 +64,8 @@ export class ProductDataPage implements OnInit {
       this.setSizes();
       this.dataLoaded = true;
 
+      if (this.images.length> 0) this.setCurrentImage(this.images[0]);
+      
       this.setCameraAccess();
       this.setPhotoDeleteAccess();
 
@@ -147,13 +158,13 @@ export class ProductDataPage implements OnInit {
   getNewPhoto(){
     var currentImage;
 
-    this.photoService.addNewPhoto().then(()=>{
-      this.images = this.photoService.photos.map((photo)=>{
-        let img= photo.base64? photo.base64: photo.webviewPath;
-        currentImage={key:1,  img: img, selected:true};
-        return currentImage;
-      });
+    this.photoService.addNewPhoto().then((photo)=>{
+        
+      let img=  this.photoService.currentPhoto.base64? this.photoService.currentPhoto.base64: this.photoService.currentPhoto.webviewPath;
+      currentImage={key:1,  img: img, selected:true, blob:this.photoService.currentPhoto.blob} ;
 
+      this.images.push(currentImage);
+     
       this.setCurrentImage (currentImage);
       this.setCameraAccess();
       this.photoDeleteDisable=false;
@@ -185,24 +196,30 @@ export class ProductDataPage implements OnInit {
   deleteImage(){
 
     console.log('image', this.currentImage)
-    console.log('images', this.images)
+ 
 
     let index = this.images.map(m=>{return m.img}).indexOf(this.currentImage);
     this.images.splice(index,1);
 
-    console.log('index', index)
 
-    if (this.images.length>-1){
+    if (this.images.length>0){
       // set current position of images
       if (index > this.images.length-1){ // this means the last item deleted
         index = this.images.length-1
       }else{
-        index++;
+        index; // set the current index same as index of deleted item
       }
       this.setCurrentImage(this.images[index])
     }
     this.setPhotoDeleteAccess();
   }
+
+  uploadImages(){
+    this.images.forEach((image)=>{
+      console.log(image)
+      this.photoService.uploadPhoto('new-path', image.blob).subscribe(url=> console.log(url))
+    })
+  } 
 
   
 

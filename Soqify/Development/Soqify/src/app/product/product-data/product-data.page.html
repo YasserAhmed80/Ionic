@@ -159,27 +159,35 @@
             <ion-label>قم بادخال صور الصنف</ion-label>
         </ion-card-title>
  
+     
       </ion-card-header>
+
+      <ion-button (click) = "uploadImages()">upload images</ion-button>
       <ion-card-content class="image-card-content">
-        <ion-img [src] = "currentImage" class="current-image"></ion-img>
+        <div class="image-section--">
+          
 
-        <ion-fab vertical="top" horizontal="center"  >
-          <ion-fab-button edge color = "success" 
-                          fill="outline"  
-                          [disabled]="cameraDisabled"
-                          (click) = "getNewPhoto()">
-            <ion-icon name="camera"></ion-icon>
-          </ion-fab-button>
-        </ion-fab>
+          <ion-fab vertical="top" horizontal="center"  >
+            <ion-fab-button  color = "success" 
+                            fill="outline"  
+                            [disabled]="cameraDisabled"
+                            (click) = "getNewPhoto()">
+              <ion-icon name="camera"></ion-icon>
+            </ion-fab-button>
+          </ion-fab>
 
-        <ion-fab vertical="top" >
-          <ion-fab-button edge 
-                          [disabled] = "photoDeleteDisable"
-                          (click)="deleteImage()"
-                          color="danger" >
-            <ion-icon name="remove"></ion-icon>
-          </ion-fab-button>
-        </ion-fab>
+          <ion-fab vertical="top" horizontal="end" >
+            <ion-fab-button  
+                            [disabled] = "photoDeleteDisable"
+                            (click)="deleteImage()"
+                            color="danger" >
+              <ion-icon name="remove"></ion-icon>
+            </ion-fab-button>
+          </ion-fab>
+
+          <ion-img [src] = "currentImage" class="current-image"></ion-img>
+
+        </div>
 
         <div class="image-thumb" *ngIf="images.length!==0; else empty"> 
 

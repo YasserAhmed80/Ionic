@@ -51,14 +51,22 @@ ion-thumbnail{
 }
 
 .current-image{
-  widows: 100% !important;;
+  width: 100% !important;;
   height:300px !important;
   object-fit: cover;
   border:2px solid var(--ion-color-secondary);
   border-radius: 5px;
+  //margin-top: 150px;
+
+}
+
+.image-section{
+  display: grid !important;
+  grid-template-columns: 20fr 6fr !important;
 }
 
 ion-fab-button{
+  margin-top: -25px;
   height:40px !important;
   width:40px !important;
 }

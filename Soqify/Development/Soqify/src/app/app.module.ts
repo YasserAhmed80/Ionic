@@ -8,6 +8,7 @@ import { RouteReuseStrategy } from '@angular/router';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireStorageModule } from '@angular/fire/storage';
 // End firebase imports
 
 // Facebook login
@@ -38,6 +39,7 @@ import { SharedModule } from './shared/shared.module';
             AngularFireModule.initializeApp(environment.firebaseConfig),
             AngularFireAuthModule,
             AngularFirestoreModule,
+            AngularFireStorageModule
            ],
   providers: [
     StatusBar,
