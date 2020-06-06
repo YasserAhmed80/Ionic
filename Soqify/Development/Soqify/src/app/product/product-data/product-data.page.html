@@ -21,193 +21,220 @@
 </ion-header>
 
 <ion-content *ngIf="dataLoaded">
-  <ion-item-group>
-    <ion-item-divider>
-      <ion-label>وصصف الصنف</ion-label>
-    </ion-item-divider>
-  
-    <ion-item>
-      <ion-label position="floating">اسم الصنف </ion-label>
-      <ion-input></ion-input>
-    </ion-item>
-    <ion-item >
-      <ion-label position="floating">وصف الصنف</ion-label>
-      <ion-textarea></ion-textarea>
-    </ion-item> 
-    <ion-item>
-      <ion-label position="floating">كود الصنف</ion-label>
-      <ion-input></ion-input>
-    </ion-item>
-  </ion-item-group>
-
-  
-  <ion-item-group>
-    <ion-item-divider>
-      <ion-label>  تصنيف الصنف  </ion-label>
-    </ion-item-divider>
-  
-    <ion-item >
-      <ion-label>النشاط</ion-label>
-      <ion-select  interface="popover" 
-                  [interfaceOptions]="customPopoverOptions"
-                  placeholder="من فضلم اختار"
-                   [(ngModel)] = "selectedParentCat"
-                   (ionChange) = "getMainCat(selectedParentCat)">
-        <ion-select-option *ngFor = "let cat of parentCat" value="{{cat.key}}">{{cat.name}}</ion-select-option>
-      </ion-select>
-    </ion-item>
-    <ion-item>
-      <ion-label>الفئة</ion-label>
-      <ion-select  interface="popover" 
-                   [(ngModel)] = "selectedMainCat"
-                   (ionChange) = "getSubCat(selectedMainCat)"
-                   placeholder="من فضلم اختار">
-        <ion-select-option *ngFor = "let cat of mainCat" value="{{cat.key}}">{{cat.name}}</ion-select-option>
-      </ion-select>
-    </ion-item>
-    <ion-item>
-      <ion-label> الفرعي</ion-label>
-      <ion-select  interface="popover" 
-                   [(ngModel)] = "selectedSubCat"
-                   placeholder="من فضلم اختار">
-        <ion-select-option *ngFor = "let cat of subCat" value="{{cat.key}}">{{cat.name}}</ion-select-option>
-      </ion-select>
-    </ion-item>
-  </ion-item-group>
-  
-  <ion-item-group class="item-prices">
-    <ion-item-divider>
-      <ion-label>تحديد سعر و كميات </ion-label>
-    </ion-item-divider>
-  
-    <ion-item>
-      <ion-label>السعر</ion-label>
-      <ion-input no-padding></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label>السعر بعد اخصم</ion-label>
-      <ion-input></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label>اقل كمية مشتريات</ion-label>
-      <ion-input></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label>اكبر كمية مشتريات</ion-label>
-      <ion-input></ion-input>
-    </ion-item>
-  </ion-item-group>
-
-  <ion-item-group>
-    <ion-item-divider>
-      <ion-label>تحديد الالوان و المقاسات </ion-label>
-    </ion-item-divider>
+  <!-- Start From --------------------------------- -->
+  <form [formGroup]="productForm" > 
+    <ion-item-group>
+      <ion-item-divider>
+        <ion-label>وصصف الصنف</ion-label>
+      </ion-item-divider>
     
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>
-            <ion-label>اختار الالوان المتاحة</ion-label>
-        </ion-card-title>
-
-      </ion-card-header>
-      <ion-card-content class="color-card-content">
-
-        <ion-chip *ngFor="let color of colors" 
-                  color="{{color.selected?'success' : 'medium'}}"  
-                  (click) = "setSelectedColor(color)"
-                  outline="false">
-          <ion-avatar>
-            <ion-img src="assets/colors/{{color.image}}.svg"></ion-img>
-          </ion-avatar>
-          <ion-label color="secondary">{{color.name}}</ion-label>
-          <ion-icon name="checkmark-circle" *ngIf="color.selected"></ion-icon>
-        </ion-chip>
+      <ion-item>
+        <ion-label position="fixed">اسم الصنف </ion-label>
+        <ion-input formControlName="name" #name clearInput></ion-input>
         
-      </ion-card-content>
-    </ion-card>
+      </ion-item>
+      <app-control-message [control]="productForm.get('name')"></app-control-message>
+      
 
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>
-            <ion-label>اختار المقاسات المتاحة</ion-label>
-        </ion-card-title>
+      <ion-item >
+        <ion-label position="fixed">وصف الصنف</ion-label>
+        <ion-textarea formControlName="desc" #desc clearInput></ion-textarea>
+      </ion-item> 
+      <app-control-message [control]="productForm.get('desc')"></app-control-message>
 
-      </ion-card-header>
-      <ion-card-content class="size-card-content">
+      <ion-item>
+        <ion-label position="fixed">كود الصنف</ion-label>
+        <ion-input formControlName="code" #code></ion-input>
+      </ion-item>
+    </ion-item-group>
 
-        <ion-chip *ngFor="let size of sizes" 
-                  color="{{size.selected?'success' : 'medium'}}"  
-                  (click) = "setSelectedSize(size)"
-                  outline="false">
-          <ion-label color="secondary">{{size.name}}</ion-label>
-          <ion-icon name="checkmark-circle" *ngIf="size.selected"></ion-icon>
-        </ion-chip>
+    
+    <ion-item-group>
+      <ion-item-divider>
+        <ion-label>  تصنيف الصنف  </ion-label>
+      </ion-item-divider>
+    
+      <ion-item >
+        <ion-label>النشاط</ion-label>
+        <ion-select  interface="popover"  formControlName="parent_cat" #parent_cat
+                    [interfaceOptions]="customPopoverOptions"
+                    placeholder="من فضلم اختار"
+                    [(ngModel)]="selectedParentCat"
+                    (ionChange) = "getMainCat(selectedParentCat)">
+          <ion-select-option *ngFor = "let cat of parentCat" value="{{cat.key}}">{{cat.name}}</ion-select-option>
+        </ion-select>
         
-      </ion-card-content>
-    </ion-card>
-
-  </ion-item-group>
-
-  <ion-item-group>
-    <ion-item-divider>
-      <ion-label>صور الصنف </ion-label>
-    </ion-item-divider>
-  
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>
-            <ion-label>قم بادخال صور الصنف</ion-label>
-        </ion-card-title>
- 
+      </ion-item>
+      <app-control-message [control]="productForm.get('parent_cat')"></app-control-message>
      
-      </ion-card-header>
-
-      <ion-button (click) = "uploadImages()">upload images</ion-button>
-      <ion-card-content class="image-card-content">
-        <div class="image-section--">
-          
-
-          <ion-fab vertical="top" horizontal="center"  >
-            <ion-fab-button  color = "success" 
-                            fill="outline"  
-                            [disabled]="cameraDisabled"
-                            (click) = "getNewPhoto()">
-              <ion-icon name="camera"></ion-icon>
-            </ion-fab-button>
-          </ion-fab>
-
-          <ion-fab vertical="top" horizontal="end" >
-            <ion-fab-button  
-                            [disabled] = "photoDeleteDisable"
-                            (click)="deleteImage()"
-                            color="danger" >
-              <ion-icon name="remove"></ion-icon>
-            </ion-fab-button>
-          </ion-fab>
-
-          <ion-img [src] = "currentImage" class="current-image"></ion-img>
-
-        </div>
-
-        <div class="image-thumb" *ngIf="images.length!==0; else empty"> 
-
-          <ion-thumbnail *ngFor="let image of images"  (click)="setCurrentImage(image)" class="{{image.selected? 'thumb-Selected' : 'none'}}">
-            <ion-img src = "{{image.img}}"></ion-img>
-          </ion-thumbnail>
-        </div>
-
-        <ng-template #empty  >  
-          <div class="image-thumb">
-            <ion-thumbnail *ngFor="let i of [1,2,3,4,5,6]" >
-              <ion-img src = "assets/images/camira-placeholder.png"></ion-img>
-            </ion-thumbnail>
-          </div>     
-        </ng-template>
+      <ion-item>
+        <ion-label>الفئة</ion-label>
+        <ion-select  interface="popover"  formControlName="main_cat" #main_cat
+                    [(ngModel)]="selectedMainCat"
+                    (ionChange) = "getSubCat(selectedMainCat)"
+                    placeholder="من فضلم اختار">
+          <ion-select-option *ngFor = "let cat of mainCat" value="{{cat.key}}">{{cat.name}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <app-control-message [control]="productForm.get('main_cat')"></app-control-message>
+      
+      <ion-item>
+        <ion-label> الفرعي</ion-label>
+        <ion-select  interface="popover"  formControlName="sub_cat" #sub_cat
+                   
+                    placeholder="من فضلم اختار">
+          <ion-select-option *ngFor = "let cat of subCat" value="{{cat.key}}">{{cat.name}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <app-control-message [control]="productForm.get('sub_cat')"></app-control-message>
+    </ion-item-group>
+    
+    <ion-item-group class="item-prices">
+      <ion-item-divider>
+        <ion-label>تحديد سعر و كميات </ion-label>
+      </ion-item-divider>
+    
+      <ion-item>
+        <ion-label position="fixed" >السعر</ion-label>
+        <ion-input clearInput no-padding formControlName="price" #price></ion-input>
         
-      </ion-card-content>
-    </ion-card>
+      </ion-item>
+      <app-control-message [control]="productForm.get('price')"></app-control-message>
 
-  </ion-item-group>
+      <ion-item>
+        <ion-label position="fixed" >السعر بعد اخصم</ion-label>
+        <ion-input clearInput formControlName="discountPrice" #discountPrice></ion-input>
+      </ion-item>
+      <app-control-message [control]="productForm.get('discountPrice')"></app-control-message>
+
+
+      <ion-item>
+        <ion-label position="fixed" >اقل كمية مشتريات</ion-label>
+        <ion-input clearInput formControlName="minAmount" #minAmount></ion-input>
+      </ion-item>
+      <app-control-message [control]="productForm.get('minAmount')"></app-control-message>
+
+
+      <ion-item>
+        <ion-label position="fixed" >اكبر كمية مشتريات</ion-label>
+        <ion-input clearInput formControlName="maxAmount" #maxAmount></ion-input>
+      </ion-item> 
+      <app-control-message [control]="productForm.get('maxAmount')"></app-control-message>
+
+
+    </ion-item-group>
+
+    <ion-item-group>
+      <ion-item-divider>
+        <ion-label>تحديد الالوان و المقاسات </ion-label>
+      </ion-item-divider>
+      
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>
+              <ion-label>اختار الالوان المتاحة</ion-label>
+          </ion-card-title>
+
+        </ion-card-header>
+        <ion-card-content class="color-card-content">
+
+          <ion-chip *ngFor="let color of colors" 
+                    color="{{color.selected?'success' : 'medium'}}"  
+                    (click) = "setSelectedColor(color)"
+                    outline="false">
+            <ion-avatar>
+              <ion-img src="assets/colors/{{color.image}}.svg"></ion-img>
+            </ion-avatar>
+            <ion-label color="secondary">{{color.name}}</ion-label>
+            <ion-icon name="checkmark-circle" *ngIf="color.selected"></ion-icon>
+          </ion-chip>
+          
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>
+              <ion-label>اختار المقاسات المتاحة</ion-label>
+          </ion-card-title>
+
+        </ion-card-header>
+        <ion-card-content class="size-card-content">
+
+          <ion-chip *ngFor="let size of sizes" 
+                    color="{{size.selected?'success' : 'medium'}}"  
+                    (click) = "setSelectedSize(size)"
+                    outline="false">
+            <ion-label color="secondary">{{size.name}}</ion-label>
+            <ion-icon name="checkmark-circle" *ngIf="size.selected"></ion-icon>
+          </ion-chip>
+          
+        </ion-card-content>
+      </ion-card>
+
+    </ion-item-group>
+
+    <ion-item-group>
+      <ion-item-divider>
+        <ion-label>صور الصنف </ion-label>
+      </ion-item-divider>
+    
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>
+              <ion-label>قم بادخال صور الصنف</ion-label>
+          </ion-card-title>
   
+      
+        </ion-card-header>
+
+        <ion-button (click) = "uploadImages()">upload images</ion-button>
+        <ion-card-content class="image-card-content">
+          <div class="image-section--">
+            
+
+            <ion-fab vertical="top" horizontal="center"  >
+              <ion-fab-button  color = "success" 
+                              fill="outline"  
+                              [disabled]="cameraDisabled"
+                              (click) = "getNewPhoto()">
+                <ion-icon name="camera"></ion-icon>
+              </ion-fab-button>
+            </ion-fab>
+
+            <ion-fab vertical="top" horizontal="end" >
+              <ion-fab-button  
+                              [disabled] = "photoDeleteDisable"
+                              (click)="deleteImage()"
+                              color="danger" >
+                <ion-icon name="remove"></ion-icon>
+              </ion-fab-button>
+            </ion-fab>
+
+            <ion-img [src] = "currentImage.src" class="current-image"></ion-img>
+
+          </div>
+
+          <div class="image-thumb" *ngIf="images.length!==0; else empty"> 
+
+            <ion-thumbnail *ngFor="let image of getImages()"  (click)="setCurrentImage(image)" class="{{image.selected? 'thumb-Selected' : 'none'}}">
+              <ion-img [src] = "image.src"></ion-img>
+            </ion-thumbnail>
+          </div>
+
+          <ng-template #empty  >  
+            <div class="image-thumb">
+              <ion-thumbnail *ngFor="let i of [1,2,3,4,5,6]" >
+                <ion-img src = "assets/images/camira-placeholder.png"></ion-img>
+              </ion-thumbnail>
+            </div>     
+          </ng-template>
+          
+        </ion-card-content>
+      </ion-card>
+
+    </ion-item-group>
+    <!-- End form ---------------------------------------------------------- -->
+  </form>
   
 </ion-content>

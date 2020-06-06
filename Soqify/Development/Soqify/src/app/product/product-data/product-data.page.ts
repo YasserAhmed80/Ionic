@@ -3,9 +3,11 @@ import { AuthService } from 'src/app/auth/services/auth.service';
 import { MasterDataService } from 'src/app/shared/services/master-data.service';
 
 import { MessagesService } from 'src/app/shared/services/messages.service';
-import { PhotoService } from 'src/app/shared/services/photo.service';
+import { PhotoService, IImage } from 'src/app/shared/services/photo.service';
 
 import { Plugins } from '@capacitor/core';
+import { IProduct } from 'src/app/model/product';
+import { FormGroup, FormControl,Validators ,FormBuilder } from '@angular/forms';
 
 const { Filesystem} = Plugins;
 
@@ -23,15 +25,11 @@ export class ProductDataPage implements OnInit {
   subCat=[];
   colors=[];
   sizes=[];
-  images = [
-    // {key:1 , img:'assets/images/1.jpg', selected:false},
-    // {key:2 , img:'assets/images/1.jpg', selected:false},
-    // {key:1 , img:'assets/images/1.jpg', selected:false},
-    // {key:3 , img:'assets/images/1.jpg', selected:false},
-  ];
+  images: IImage [] = [];
   MAX_PHOTOS = 6;
+  product:IProduct;
 
-  currentImage = "assets/images/camira-placeholder.png"
+  currentImage:IImage = {src:"assets/images/camira-placeholder.png"}
 
   // selected category type
   selectedParentCat:number;
@@ -49,12 +47,31 @@ export class ProductDataPage implements OnInit {
     header: 'اختار من القائمة',
   };
 
+  productForm:any;
+
+
 
   constructor(private authUser: AuthService,
               private masterDataService:MasterDataService,
               private photoService:PhotoService,
-              private messagesService:MessagesService)
-  { }
+              private messagesService:MessagesService,
+              private formBuilder: FormBuilder)
+  { 
+    
+    this.productForm = this.formBuilder.group({
+      name: ['', [Validators.required, Validators.maxLength(100)]],
+      desc: ['', [Validators.required, Validators.maxLength(200)]],
+      code: ['', [Validators.maxLength(50)]],
+      parent_cat: ['', [Validators.required]],
+      main_cat: ['', [Validators.required]],
+      sub_cat: ['', [Validators.required]],
+      price: ['0', [Validators.required, Validators.min(1), Validators.max(1000000)]],
+      discountPrice: ['0', [Validators.required, Validators.min(0), Validators.max(1000000)]],
+      minAmount: ['1', [Validators.required, Validators.min(1), Validators.max(1000)]],
+      maxAmount: ['999', [Validators.required, Validators.min(1), Validators.max(10000)]],
+    });
+
+  }
 
   ngOnInit() {
     let loader = this.messagesService.showLoading('جاري تحميل البيانات')
@@ -156,12 +173,13 @@ export class ProductDataPage implements OnInit {
 
   // Access Photos 
   getNewPhoto(){
-    var currentImage;
+    var currentImage: IImage;
 
     this.photoService.addNewPhoto().then((photo)=>{
         
-      let img=  this.photoService.currentPhoto.base64? this.photoService.currentPhoto.base64: this.photoService.currentPhoto.webviewPath;
-      currentImage={key:1,  img: img, selected:true, blob:this.photoService.currentPhoto.blob} ;
+      currentImage =this.photoService.currentPhoto;
+      currentImage.selected = true;
+      currentImage.key = this.images.length+1;
 
       this.images.push(currentImage);
      
@@ -173,10 +191,10 @@ export class ProductDataPage implements OnInit {
    
   }
 
-  setCurrentImage(selectedImage){
-    this.currentImage = selectedImage.img;
+  setCurrentImage(selectedImage:IImage){
+    this.currentImage = selectedImage;
     this.images.map((image)=>{
-      if(image.img === selectedImage.img ){
+      if(image.key === selectedImage.key ){
         image.selected=true;
       }else{
         image.selected=false;
@@ -198,7 +216,7 @@ export class ProductDataPage implements OnInit {
     console.log('image', this.currentImage)
  
 
-    let index = this.images.map(m=>{return m.img}).indexOf(this.currentImage);
+    let index = this.images.map(m=>{return m.key}).indexOf(this.currentImage.key);
     this.images.splice(index,1);
 
 
@@ -215,11 +233,39 @@ export class ProductDataPage implements OnInit {
   }
 
   uploadImages(){
+
     this.images.forEach((image)=>{
-      console.log(image)
-      this.photoService.uploadPhoto('new-path', image.blob).subscribe(url=> console.log(url))
+      //console.log(image)
+      this.photoService.uploadImage('product', 'product-1' ,image.key.toString(), image.blob)
+        .then(url=> {
+          console.log(url);
+          image.src = url;
+        })
     })
   } 
+
+  getImages(){
+    return this.images.sort((a,b)=> a.key-b.key)
+  }
+
+  setProductData(){
+    // this.product = {
+    //   sid:this.authUser.user_id, // supplier ID
+    //   N: string, // name
+    //   D?: string, //description
+    //   P:number, //price
+    //   dp?:number, // discount price
+    //   Pc:number,// parent category
+    //   Mc: number, // main category
+    //   Sc: number, //sub category
+    //   S:ProductSatusRef,//status (new, active,inactive)
+    //   sa?:[number], // size attributes
+    //   Ca?:[number], //color attribute
+    //   Img?:[string], // product images
+    //   min:number, // min quantity
+    //   Max:number, //max quantity 
+    // }
+  }
 
   
 
