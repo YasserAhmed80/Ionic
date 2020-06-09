@@ -95,7 +95,7 @@ export class RegisterPage implements OnInit {
     console.log('updated user =>', this.user);
     this.authServcie.user = this.user;
     this.authServcie.updateUserData(this.user).then(()=>{
-      this.messagesService.showToast('','تم حفظ بياناتك بنجاح!')
+      this.messagesService.showToast('','تم حفظ بياناتك بنجاح!','success')
     })
   }
 
@@ -103,7 +103,7 @@ export class RegisterPage implements OnInit {
     this.user.loc=this.currentLocation;
     this.authServcie.user = this.user;
     this.authServcie.updateUserData(this.user).then(()=>{
-      this.messagesService.showToast('','تم حفظ بياناتك بنجاح!')
+      this.messagesService.showToast('','تم حفظ بياناتك بنجاح!','success')
     })
   }
 

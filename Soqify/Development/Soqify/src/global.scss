@@ -49,7 +49,12 @@
   }
   
   .toast-success{
-    --background: var(--ion-color-success);
+    --background: var(--ion-color-success-tint);
+    --border-color : var(--ion-color-success-shade);
+  }
+
+  .toast-danger{
+    --background: var(--ion-color-danger-tint);
     --border-color : var(--ion-color-success-shade);
   }
 
@@ -57,21 +62,25 @@
 
   ion-item{
     ion-label{
-    font-size: 12px !important;
-    --color: var(--ion-color-secondary-tint) !important;
+    font-size: 14px !important;
+    //--color: var(--ion-color-secondary-tint) !important;
     }
 
-    ion-input, ion-select{
-      font-size: 13px !important;
-      --color: var(--ion-color-primary-shade) !important;
+    ion-input, ion-select, ion-textarea{
+      font-size: 15px !important;
+     // --color: var(--ion-color-primary-shade) !important;
       font-weight: 600;
+      :focus{
+        //background-color:red !important;
+        border: 1px solid var(--ion-color-primary-tint) !important;
+      }
     }
 
-    ion-textarea{
-      font-size: 14px !important;
-      --color: var(--ion-color-primary-shade) !important;
-      font-weight: 300;
-    }
+    // ion-textarea{
+    //   font-size: 14px !important;
+    //   --color: var(--ion-color-primary-shade) !important;
+    //   font-weight: 300;
+    // }
 
   }
   

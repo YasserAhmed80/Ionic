@@ -11,18 +11,17 @@ export class MessagesService {
   { }
 
  
-  async showToast(header:string, message:string) {
+  async showToast(header:string, message:string, type:string) {
     const toast = await this.toastController.create({
       header: header,
       message: message,
       position: 'top',
       duration:2000,
-      cssClass: 'toast-success',
+      cssClass: type==='success'? 'toast-success' : 'toast-danger',
       buttons: [{
           text: 'شكرا',
           role: 'cancel',
           handler: () => {
-            console.log('Cancel clicked');
           }
         }
       ]
@@ -33,6 +32,7 @@ export class MessagesService {
   async showLoading(message:string) {
     const loading = await this.loadingController.create({
       //spinner:"bubbles",
+      duration:20000, // max of 20 sec 
       message: message,
 
     });

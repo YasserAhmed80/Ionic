@@ -15,7 +15,9 @@ export class ValidatorService {
       invalidPassword:
         'Invalid password. Password must be at least 6 characters long, and contain a number.',
       minlength: `عدد الحروف لايقل عن:  ${validatorValue.requiredLength}`,
-      maxlength: `عدد الحروف لايزيد عن:  ${validatorValue.requiredLength}`
+      maxlength: `عدد الحروف لايزيد عن:  ${validatorValue.requiredLength}`,
+      min: `اقل قيمة: ${validatorValue.min}`,
+      max: `اكبر قيمة: ${validatorValue.max}`,
     };
 
     return config[validatorName];

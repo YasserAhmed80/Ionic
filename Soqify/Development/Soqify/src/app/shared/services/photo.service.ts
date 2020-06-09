@@ -15,7 +15,8 @@ export interface IImage {
   key?:number,
   src?:string,
   blob?:any,
-  selected?:boolean
+  selected?:boolean,
+  deleted?:boolean
 }
 
 @Injectable({
@@ -104,20 +105,27 @@ export class PhotoService {
     const storageRef = this.fireStorage.ref(storagePath);
     const task = storageRef.put(data,metadata);
 
-    return await task.snapshotChanges().toPromise().then((x)=>{
-      //console.log('x',x)
-      return  storageRef.getDownloadURL().pipe(take(1)).toPromise()
-    })
+    let snapshot =  await task.snapshotChanges().toPromise();
+
+    let url = await  storageRef.getDownloadURL().pipe(take(1)).toPromise();
+
+    return {key: fileName, url:url};
   
   }
 
   downloadImage(pathType: string ,path: string, fileName: string){
 
     // pathType: product folder; path: product code, filename: image name
-    let storagePath = `${pathType}/${path}/${fileName}/${fileName}.jpeg`;
+    let storagePath = `${pathType}/${path}/${fileName}.jpeg`;
 
     const storageRef = this.fireStorage.ref(storagePath);
-    return storageRef.getDownloadURL();
+    return storageRef.getDownloadURL().pipe(take(1)).toPromise();
  }
+
+ async DeleteImage(url: string){
+
+  await this.fireStorage.storage.refFromURL(url).delete()
+
+}
 }
 

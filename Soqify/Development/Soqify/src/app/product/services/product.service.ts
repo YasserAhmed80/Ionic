@@ -10,26 +10,30 @@ import { take } from 'rxjs/operators'
 export class ProductService {
 
   constructor(public fireStore: AngularFirestore) { }
+  currentProduct: IProduct 
 
   // add new product
   async addProduct(product:IProduct) {
     let newProduct = this.fireStore.collection('product').add(product);
     
-    await newProduct
+    return await newProduct
       .then((doc) => {
         console.log ('added product', doc)
+        this.currentProduct = product;
         return doc;
       })
       .catch((err) => {
         console.log ('added product err', err)
-        return false;
+        return err;
       });
   }
 
-    // get data of look up tabe
-    async  getProduct(productID) {
-      let data =await   this.fireStore.collection('product').valueChanges({idField:'uid'}).pipe(take(1)).toPromise();
+  // get data of look up tabe
+  async  getProduct(productID) {
+      let data =await   this.fireStore.collection(`product/${productID}`).valueChanges({idField:'uid'}).pipe(take(1)).toPromise();
       console.log ('get product ', data)
       return data;
   }
+
+  
 }

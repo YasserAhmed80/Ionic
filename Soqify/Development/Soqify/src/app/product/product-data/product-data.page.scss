@@ -47,15 +47,15 @@ ion-thumbnail{
 }
 
 .thumb-Selected{
-  border : 2px solid var(--ion-color-secondary) !important;
+  border : 2px solid var(--ion-color-danger) !important;
 }
 
 .current-image{
   width: 100% !important;;
   height:300px !important;
   object-fit: cover;
-  border:2px solid var(--ion-color-secondary);
-  border-radius: 5px;
+  border:2px solid var(--ion-color-danger);
+  border-radius: 10px;
   //margin-top: 150px;
 
 }

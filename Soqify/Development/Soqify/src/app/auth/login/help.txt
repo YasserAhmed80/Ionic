@@ -1,5 +1,9 @@
+  /*-----------------------------------------------------------------------------*/
+  //  delete image from a list on screen.
+  /*-----------------------------------------------------------------------------*/
+
 //////////////////////
-Facebool
+Facebook
 documentation:
 https://www.joshmorony.com/native-web-facebook-authentication-with-firebase-in-ionic/
 

@@ -11,7 +11,7 @@
     </ion-buttons>
 
     <ion-buttons slot= "start">
-      <ion-button slot="start" color="danger" fill="outline">حفظ الصنف</ion-button>
+      <ion-button slot="start" color="danger" fill="outline" (click) = "saveProductData()">حفظ الصنف</ion-button>
     </ion-buttons>
     
     <ion-title>بيانات الصنف</ion-title>
@@ -44,7 +44,7 @@
 
       <ion-item>
         <ion-label position="fixed">كود الصنف</ion-label>
-        <ion-input formControlName="code" #code></ion-input>
+        <ion-input formControlName="code" #code clearInput></ion-input>
       </ion-item>
     </ion-item-group>
 
@@ -96,28 +96,28 @@
     
       <ion-item>
         <ion-label position="fixed" >السعر</ion-label>
-        <ion-input clearInput no-padding formControlName="price" #price></ion-input>
+        <ion-input type="number" inputmode="numeric" clearInput  formControlName="price" #price></ion-input>
         
       </ion-item>
       <app-control-message [control]="productForm.get('price')"></app-control-message>
 
       <ion-item>
         <ion-label position="fixed" >السعر بعد اخصم</ion-label>
-        <ion-input clearInput formControlName="discountPrice" #discountPrice></ion-input>
+        <ion-input type="number" inputmode="numeric"  clearInput formControlName="discountPrice" #discountPrice></ion-input>
       </ion-item>
       <app-control-message [control]="productForm.get('discountPrice')"></app-control-message>
 
 
       <ion-item>
         <ion-label position="fixed" >اقل كمية مشتريات</ion-label>
-        <ion-input clearInput formControlName="minAmount" #minAmount></ion-input>
+        <ion-input type="number" inputmode="numeric"  clearInput formControlName="minAmount" #minAmount></ion-input>
       </ion-item>
       <app-control-message [control]="productForm.get('minAmount')"></app-control-message>
 
 
       <ion-item>
         <ion-label position="fixed" >اكبر كمية مشتريات</ion-label>
-        <ion-input clearInput formControlName="maxAmount" #maxAmount></ion-input>
+        <ion-input type="number" inputmode="numeric"  clearInput formControlName="maxAmount" #maxAmount></ion-input>
       </ion-item> 
       <app-control-message [control]="productForm.get('maxAmount')"></app-control-message>
 
@@ -181,35 +181,52 @@
     
       <ion-card>
         <ion-card-header>
-          <ion-card-title>
-              <ion-label>قم بادخال صور الصنف</ion-label>
-          </ion-card-title>
+
+          <ion-card-subtitle>
+            <ion-toolbar >
+              <ion-buttons slot = "start">
+                <!-- <ion-button (click)= "savedProductImages('1000')">  save</ion-button> -->
+                <ion-button slot="start" color = "success" 
+                            fill="outline"  
+                            [disabled]="cameraDisabled"
+                            (click) = "getNewPhoto()">
+                  
+                            <ion-label>كاميرا </ion-label>
+                            <ion-icon name = "camera-outline"></ion-icon>
+                 
+                </ion-button>
+                <ion-button slot = "start" slot="start" color = "success" 
+                            fill="outline"  
+                            [disabled]="cameraDisabled"
+                            (click) = "getNewPhoto()">
+
+                           <ion-label>صورة </ion-label>          
+                          <ion-icon name = "folder-outline"></ion-icon>
+                </ion-button>
+              </ion-buttons>
+
+              <ion-buttons slot = "end">
+                <ion-button slot = "end" 
+                            [disabled] = "photoDeleteDisable"
+                            fill="outline" 
+                            (click)="deleteImage()"
+                            color="danger" 
+                            >
+
+                            <ion-label>حذف </ion-label>  
+                            <ion-icon name = "remove"></ion-icon>
+                </ion-button>
+              </ion-buttons>
+              
+            </ion-toolbar>
+          </ion-card-subtitle>
   
       
         </ion-card-header>
 
-        <ion-button (click) = "uploadImages()">upload images</ion-button>
         <ion-card-content class="image-card-content">
           <div class="image-section--">
             
-
-            <ion-fab vertical="top" horizontal="center"  >
-              <ion-fab-button  color = "success" 
-                              fill="outline"  
-                              [disabled]="cameraDisabled"
-                              (click) = "getNewPhoto()">
-                <ion-icon name="camera"></ion-icon>
-              </ion-fab-button>
-            </ion-fab>
-
-            <ion-fab vertical="top" horizontal="end" >
-              <ion-fab-button  
-                              [disabled] = "photoDeleteDisable"
-                              (click)="deleteImage()"
-                              color="danger" >
-                <ion-icon name="remove"></ion-icon>
-              </ion-fab-button>
-            </ion-fab>
 
             <ion-img [src] = "currentImage.src" class="current-image"></ion-img>
 
