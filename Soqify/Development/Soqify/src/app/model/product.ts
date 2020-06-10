@@ -6,7 +6,7 @@ export enum ProductSatusRef{
 };
 
 export interface IProduct{
-    uid?: string, //unique number
+    id?: string, //unique number
     sid:string, // supplier ID
     n: string, // name
     d?: string, //description

@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar >
+  <ion-toolbar color = primary>
     <ion-buttons slot= "end">
       <ion-button slot="start"  >
         <ion-label>
@@ -11,10 +11,26 @@
     </ion-buttons>
 
     <ion-buttons slot= "start">
-      <ion-button slot="start" color="danger" fill="outline" (click) = "saveProductData()">حفظ الصنف</ion-button>
+      <ion-button slot="start"  (click) = "productFormClear()" >
+        <ion-icon name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    
+    <ion-title> الاصناف</ion-title>
+
+  </ion-toolbar>
+
+  <ion-toolbar >
+
+    <ion-buttons slot= "start">
+      <ion-button slot="start" color="success" fill="outline" (click) = "saveProductData()">حفظ الصنف</ion-button>
+    </ion-buttons>
+    <ion-buttons slot= "end">
+      <ion-button slot="start" color="danger"   (click) = "saveProductData()">الغاء </ion-button>
     </ion-buttons>
     
-    <ion-title>بيانات الصنف</ion-title>
+    <ion-title>بيانات صنف</ion-title>
 
   </ion-toolbar>
 
