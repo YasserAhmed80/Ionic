@@ -47,14 +47,14 @@ ion-thumbnail{
 }
 
 .thumb-Selected{
-  border : 2px solid var(--ion-color-danger) !important;
+  border : 2px solid var(--ion-color-primary) !important;
 }
 
 .current-image{
   width: 100% !important;;
   height:300px !important;
   object-fit: cover;
-  border:2px solid var(--ion-color-danger);
+  border:2px solid var(--ion-color-primary);
   border-radius: 10px;
   //margin-top: 150px;
 

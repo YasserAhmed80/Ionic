@@ -42,6 +42,8 @@ export class ProductDataPage implements OnInit {
   cameraDisabled: boolean = false;
   photoDeleteDisable:boolean = false;
 
+  currentProductCode: string = null;
+
   customPopoverOptions: any = {
     header: 'اختار من القائمة',
   };
@@ -61,7 +63,9 @@ export class ProductDataPage implements OnInit {
   });
 
 
-
+  /*-----------------------------------------------------------------------------*/
+  //  Constructor function
+  /*-----------------------------------------------------------------------------*/
   constructor(private authUser: AuthService,
               private masterDataService:MasterDataService,
               private photoService:PhotoService,
@@ -71,11 +75,11 @@ export class ProductDataPage implements OnInit {
   { 
     
    
-
   }
 
-
-
+  /*-----------------------------------------------------------------------------*/
+  //  Component onInit function
+  /*-----------------------------------------------------------------------------*/
   ngOnInit() {
     let loader = this.messagesService.showLoading('جاري تحميل البيانات')
     this.masterDataService.getMasterData().then(()=>{
@@ -85,9 +89,18 @@ export class ProductDataPage implements OnInit {
       this.dataLoaded = true;
 
       if (this.images.length> 0) this.setCurrentImage(this.images[0]);
+
+ 
+      this.currentProduct = this.productService.currentProduct;
+      if ( this.currentProduct ){
+        this.currentProductCode = this.currentProduct.id;
+      }
       
+      this.productFormShow(this.currentProduct);
+
+            
       this.setCameraAccess();
-      this.setPhotoDeleteAccess();
+      this.setPhotoDeleteAccess(); 
 
       loader.then((loading)=> loading.dismiss());
     });
@@ -120,6 +133,7 @@ export class ProductDataPage implements OnInit {
   getMainCat(p_cde:number){
     this.selectedMainCat=undefined
     this.mainCat = this.masterDataService.selectMainCat(p_cde);
+    //console.log('main cat',p_cde,  this.mainCat)
     
   }
   /*-----------------------------------------------------------------------------*/
@@ -249,9 +263,10 @@ export class ProductDataPage implements OnInit {
   //  Enable/disable delete photo button based on images array
   /*-----------------------------------------------------------------------------*/
   setPhotoDeleteAccess(){
+
     let notDeleted = this.images.filter(img=> img.deleted === false);
 
-    this.photoDeleteDisable = notDeleted.length===0?true: false;
+    this.photoDeleteDisable = notDeleted.length === 0?true: false;
     this.cameraDisabled=false;
   }
 
@@ -379,13 +394,14 @@ export class ProductDataPage implements OnInit {
   //  Get product images URL from storage
   /*-----------------------------------------------------------------------------*/
   getProductImagesFromStorage(prod:IProduct){
-    this.images = [];
 
     return prod.imgs.map((key)=>{
-      this.photoService.downloadImage('products',prod.id,key.toString())
-      .then((url)=>{
-        this.images.push({key:key, src:url})
+      let url = this.photoService.downloadImageURL('products',prod.id,key.toString())
+
+      url.subscribe((url)=> {
+        this.setImageURL(key, url)
       })
+
     })
 
 
@@ -407,9 +423,14 @@ export class ProductDataPage implements OnInit {
       maxAmount : 999,
     });
 
+    this.selectedColors = [];
+    this.selectedSizes = [];
     this.setColors();
     this.setSizes();
     this.images=[];
+
+    this.currentImage = this.noImage;
+    this.currentProductCode = null;
 
   }
   /*-----------------------------------------------------------------------------*/
@@ -456,32 +477,42 @@ export class ProductDataPage implements OnInit {
       let messages = this.validateProductData();
 
       if (messages.length === 0){
+        // set current product to new object using current values
         this.currentProduct = {
-          sid:this.authUser.user_id, // supplier ID
-          n: this.productForm.value.name,
-          d: this.productForm.value.desc, //description
-          p:this.productForm.value.price, //price
-          dp:this.productForm.value.discountPrice, // discount price
-          pc:this.productForm.value.parent_cat,// parent category
-          mc: this.productForm.value.main_cat, // main category
-          sc: this.productForm.value.sub_cat, //sub category
-          s: ProductSatusRef.New,//status (new, active,inactive)
-          sa:this.selectedColors, // size attributes
-          ca:this.selectedSizes, //color attribute
-          imgs: this.images.map(m=> {return m.key}), // product images
-          min:this.productForm.value.minAmount, // min quantity
-          max:this.productForm.value.maxAmount, //max quantity 
+          sup_id:this.authUser.user_id, // supplier ID
+          name: this.productForm.value.name,
+          desc: this.productForm.value.desc, //description
+          price:this.productForm.value.price, //price
+          price_disc:this.productForm.value.discountPrice, // discount price
+          p_cat:this.productForm.value.parent_cat,// parent category
+          m_cat: this.productForm.value.main_cat, // main category
+          s_cat: this.productForm.value.sub_cat, //sub category
+          status: ProductSatusRef.New,//status (new, active,inactive)
+          sizes:this.selectedSizes, // size attributes
+          colors:this.selectedColors, //color attribute
+          //imgs: this.images.map(m=> {return m.src}), // product images
+          min_qty:this.productForm.value.minAmount, // min quantity
+          max_qty:this.productForm.value.maxAmount, //max quantity 
         };
+
+        // set the new object id to current product code in case of this product saved before
+        this.currentProduct.id =  this.currentProductCode;  
     
         //console.log(this.product);
         let loader = this.messagesService.showLoading('جاري حفظ بيانات الصنف')
 
-        // save the product 1st
-        let savedProd = await  this.productService.addProduct(this.currentProduct);
+        let savedProd = await  this.productService.saveProduct(this.currentProduct);
+        this.currentProductCode = savedProd.id;
 
-        // save product photos
+        // save product images
         this.currentProduct.id = savedProd.id;
-        await this.savedProductImages (savedProd.id);
+        await this.savedProductImages (savedProd.id); // images array will be updated by new urls
+
+        // save product images after getting image url from SaveProductImages
+        // we will call save product again -- it is Costily!!!
+        this.currentProduct.imgs =this.images.map(m=> {return m.src}); // product images
+        savedProd = await  this.productService.saveProduct(this.currentProduct);
+        
         this.messagesService.showToast('حفظ الصنف', 'تم حفظ الصنف بنجاح', 'success')
         loader.then((loading)=> loading.dismiss());
 
@@ -492,29 +523,50 @@ export class ProductDataPage implements OnInit {
         this.messagesService.showToast('لم نتمكن من حفظ الصنف', msg, 'danger')
       }  
     } catch (error) {
-      
+      //do somethig with error
     }
   }
   /*-----------------------------------------------------------------------------*/
   //  Papulate product form with product data
   /*-----------------------------------------------------------------------------*/
   productFormShow(p:IProduct){
-    this.productForm.value.name = p.n;
-    this.productForm.value.desc = p.d;
-    this.productForm.value.code = p.cde;
-    this.productForm.value.parent_cat = p.pc;
-    this.productForm.value.main_cat = p.mc;
-    this.productForm.value.sub_cat = p.sc;
-    this.productForm.value.price = p.p;
-    this.productForm.value.discountPrice = p.dp;
-    this.productForm.value.minAmount = p.min;
-    this.productForm.value.maxAmount = p.max;
+    if (p){
 
-    this.selectedColors=p.ca;
-    this.selectedSizes=p.sa;
-    
-    // get images url from storage
-    this.getProductImagesFromStorage(p);
+      this.productForm.patchValue({
+        name : p.name,
+        desc : p.desc,
+        code : p.code,
+        parent_cat : p.p_cat,
+        main_cat : p.m_cat,
+        sub_cat : p.s_cat,
+        price : p.price,
+        discountPrice : p.price_disc,
+        minAmount : p.min_qty,
+        maxAmount : p.max_qty,
+      });
 
+      this.selectedParentCat = p.p_cat
+      this.getMainCat(this.selectedParentCat);
+      this.selectedMainCat= p.m_cat
+      this.getSubCat(this.selectedMainCat);
+      this.selectedSubCat =p.s_cat
+
+      this.selectedColors=p.colors;
+      this.selectedSizes=p.sizes;
+
+      
+
+      this.setColors();
+      this.setSizes();
+      
+      if (p.imgs.length >0){
+        let i = 0;
+        this.images = p.imgs.map(src => {return {key:i++, src:src, deleted:false}})
+        console.log(this.images)
+        this.setCurrentImage(this.images[0])
+      }
+      // get images url from storage
+      //this.getProductImagesFromStorage(p);
+    }
   }
 }

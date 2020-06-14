@@ -113,13 +113,13 @@ export class PhotoService {
   
   }
 
-  downloadImage(pathType: string ,path: string, fileName: string){
+  downloadImageURL(pathType: string ,path: string, fileName: string){
 
     // pathType: product folder; path: product code, filename: image name
-    let storagePath = `${pathType}/${path}/${fileName}.jpeg`;
+    let storagePath = `${pathType}/${path}/${fileName}`;
 
     const storageRef = this.fireStorage.ref(storagePath);
-    return storageRef.getDownloadURL().pipe(take(1)).toPromise();
+    return storageRef.getDownloadURL();
  }
 
  async DeleteImage(url: string){

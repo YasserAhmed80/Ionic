@@ -7,19 +7,19 @@ export enum ProductSatusRef{
 
 export interface IProduct{
     id?: string, //unique number
-    sid:string, // supplier ID
-    n: string, // name
-    d?: string, //description
-    cde?: string,
-    p:number, //price
-    dp?:number, // discount price
-    pc:number,// parent category
-    mc: number, // main category
-    sc: number, //sub category
-    s:ProductSatusRef,//status (new, active,inactive)
-    sa?:number[], // size attributes
-    ca?:number[], //color attribute
-    imgs?:number[], // product images
-    min:number, // min quantity
-    max:number, //max quantity 
+    sup_id:string, // supplier ID
+    name: string, // name
+    desc?: string, //description
+    code?: string,
+    price:number, //price
+    price_disc?:number, // discount price
+    p_cat:number,// parent category
+    m_cat: number, // main category
+    s_cat: number, //sub category
+    status:ProductSatusRef,//status (new, active,inactive)
+    sizes?:number[], // size attributes
+    colors?:number[], //color attribute
+    imgs?:string[], // product images
+    min_qty:number, // min quantity
+    max_qty:number, //max quantity 
 };
