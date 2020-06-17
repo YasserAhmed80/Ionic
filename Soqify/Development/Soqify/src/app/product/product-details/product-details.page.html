@@ -1,16 +1,12 @@
 <ion-header>
   <ion-toolbar color = primary>
-    <ion-buttons slot= "end">
-      <ion-button slot="start"  >
-        <ion-label>
-           الاصناف
-        </ion-label>
-       
-        <ion-icon name="list"></ion-icon>
-      </ion-button>
+   
+    <ion-buttons slot= "start">
+      <ion-back-button text=" "  icon="chevron-back-outline">
+      </ion-back-button>
     </ion-buttons>
 
-    <ion-buttons slot= "start">
+    <ion-buttons slot= "end">
       <ion-button slot="start"  (click) = "productFormClear()" >
         <ion-icon name="add"></ion-icon>
       </ion-button>
@@ -27,7 +23,7 @@
       <ion-button slot="start" color="success" fill="outline" (click) = "saveProductData()">حفظ الصنف</ion-button>
     </ion-buttons>
     <ion-buttons slot= "end">
-      <ion-button slot="start" color="danger"   (click) = "saveProductData()">الغاء </ion-button>
+      <ion-button slot="start" color="danger"   (click) = "cancelUpdates()">الغاء </ion-button>
     </ion-buttons>
     
     <ion-title>بيانات صنف</ion-title>
@@ -161,7 +157,7 @@
             <ion-avatar>
               <ion-img src="assets/colors/{{color.image}}.svg"></ion-img>
             </ion-avatar>
-            <ion-label color="secondary">{{color.name}}</ion-label>
+            <ion-label >{{color.name}}</ion-label>
             <ion-icon name="checkmark-circle" *ngIf="color.selected"></ion-icon>
           </ion-chip>
           
@@ -181,7 +177,7 @@
                     color="{{size.selected?'success' : 'medium'}}"  
                     (click) = "setSelectedSize(size)"
                     outline="false">
-            <ion-label color="secondary">{{size.name}}</ion-label>
+            <ion-label >{{size.name}}</ion-label>
             <ion-icon name="checkmark-circle" *ngIf="size.selected"></ion-icon>
           </ion-chip>
           
@@ -229,8 +225,8 @@
                             color="danger" 
                             >
 
-                            <ion-label>حذف </ion-label>  
-                            <ion-icon name = "remove"></ion-icon>
+                            <ion-label> </ion-label>  
+                            <ion-icon name = "close-outline"></ion-icon>
                 </ion-button>
               </ion-buttons>
               

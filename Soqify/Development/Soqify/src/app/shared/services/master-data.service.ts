@@ -6,6 +6,7 @@ import { take } from 'rxjs/operators'
 
 import { main_cat, parent_cat,sub_cat, IParent_cat, IMain_cat, ISub_cat,IBusiness_type, 
         business_type, IGovernate, ICity, governates,cities,Colors, Sizes } from '../../data/master-data';
+import { AuthService } from 'src/app/auth/services/auth.service';
 
 
 @Injectable({
@@ -21,7 +22,8 @@ export class MasterDataService {
   cities: ICity[]=[];
   colors=[];
 
-  constructor(private fireStore:AngularFirestore
+  constructor(private fireStore:AngularFirestore,
+              private authUser: AuthService
              ) { 
     
     
@@ -103,6 +105,22 @@ export class MasterDataService {
     }
   }
 
+  selectParentCat(){
+    // if business type not defined set it to 1 [clothes]
+    var businessSections;
+
+    if (this.authUser.user){
+      businessSections = this.authUser.user.bus_sec
+    }else{
+      businessSections = [1] 
+    }
+
+    console.log (businessSections)
+
+    return  businessSections.map(key =>{
+        return {key:key, name: this.getCatName(key, 'parent')}
+    });
+  }
 
   selectMainCat(key:number){
     return this.productMainCat.filter(c=>c.p_cde == key);
@@ -131,16 +149,17 @@ export class MasterDataService {
   getCatName(key:number, catType:string){
     switch(catType) { 
       case 'parent': { 
-        let item =this.productParentCat.find(item => item.key === key)
+        let item =this.productParentCat.find(item => item.key == key)
+        console.log(this.productParentCat)
          return item.name;
       } 
       case 'main': { 
-        let item =this.productMainCat.find(item => item.key === key)
+        let item =this.productMainCat.find(item => item.key == key)
          return item.name;
       } 
 
       case 'sub': { 
-        let item =this.productSubCat.find(item => item.key === key)
+        let item =this.productSubCat.find(item => item.key == key)
          return item.name;
       } 
      

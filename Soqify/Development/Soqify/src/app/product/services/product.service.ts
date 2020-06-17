@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IProduct} from '../../model/product'
-import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 
 import { take } from 'rxjs/operators'
 
@@ -9,7 +9,8 @@ import { take } from 'rxjs/operators'
 })
 export class ProductService {
 
-  currentProduct: IProduct 
+  currentProduct: IProduct ;
+  selectedProducts: IProduct[]=[];
 
   constructor(public fireStore: AngularFirestore) {
     
@@ -17,7 +18,7 @@ export class ProductService {
     if ( product !== 'undefined'){
       this.currentProduct = JSON.parse(product);
     }
-    console.log('current prod', this.currentProduct)
+    //console.log('current prod', this.currentProduct)
    }
 
 
@@ -36,6 +37,7 @@ export class ProductService {
     console.log ('local storage prod', savedProduct);
     localStorage.setItem('currentProduct', JSON.stringify(savedProduct));
 
+    this.updateSelectedProducts(savedProduct);
     return savedProduct;
   }
   // add new product
@@ -73,10 +75,51 @@ export class ProductService {
 
   // get data of look up tabe
   async  getProduct(productID) {
-      let data =await   this.fireStore.collection(`product/${productID}`).valueChanges({idField:'uid'}).pipe(take(1)).toPromise();
-      console.log ('get product ', data)
-      return data;
+    
+      let data =  await this.fireStore.collection('product', (ref)=> ref.where ('id', '==',productID))
+      .valueChanges({idField: 'id'}).pipe(take(1)).toPromise();
+      //console.log ('get product ', data[0])
+      return <IProduct>data[0];
   }
+
+  // get data of look up tabe
+  async  getAllProduct() {
+
+    var productCollection:AngularFirestoreCollection<IProduct> = this.fireStore.collection("product")
+    
+    const query = productCollection.ref;
+
+    return await  query.get().then((results)=>{
+       results.forEach((doc)=>{
+        this.selectedProducts.push(<any> doc.data())
+       })
+
+       return this.selectedProducts;
+
+    })
+  }
+
+  updateSelectedProducts (prod:IProduct){
+    let index = this.selectedProducts.map(prod=> prod.id).indexOf(prod.id);
+
+    if (index > -1) {
+      this.selectedProducts[index] = prod; 
+    }
+   
+  }
+
+  getSelectedProduct(prodId){
+    let index = this.selectedProducts.map(prod=> prod.id).indexOf(prodId);
+
+    if (index > -1) {
+      return this.selectedProducts[index] ;
+
+    }else{
+      return null;
+    }
+  }
+
+
 
   
 }

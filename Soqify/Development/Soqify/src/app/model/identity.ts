@@ -26,7 +26,7 @@ export interface IUser{
     addr?:string, // address
     loc?:IGeoLocation, //geolocation
     // business data
-    bus_type?:number, // business type (individual, shop, ..)
+    bus_type?:number, // business type (individual, company, ..)
     bus_sec?:number[], // business sections (clothes, fashion, elec.)
 
 

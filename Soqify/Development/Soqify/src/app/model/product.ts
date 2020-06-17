@@ -13,13 +13,13 @@ export interface IProduct{
     code?: string,
     price:number, //price
     price_disc?:number, // discount price
-    p_cat:number,// parent category
-    m_cat: number, // main category
-    s_cat: number, //sub category
+    p_cat?:number,// parent category
+    m_cat?: number, // main category
+    s_cat?: number, //sub category
     status:ProductSatusRef,//status (new, active,inactive)
     sizes?:number[], // size attributes
     colors?:number[], //color attribute
     imgs?:string[], // product images
-    min_qty:number, // min quantity
-    max_qty:number, //max quantity 
+    min_qty?:number, // min quantity
+    max_qty?:number, //max quantity 
 };

@@ -7,14 +7,16 @@ import { PhotoService, IImage } from 'src/app/shared/services/photo.service';
 
 
 import { IProduct, ProductSatusRef } from 'src/app/model/product';
-import { FormGroup, FormControl,Validators ,FormBuilder, Form } from '@angular/forms';
+import { Validators ,FormBuilder, Form } from '@angular/forms';
 import { ProductService } from '../services/product.service';
+import { ActivatedRoute, Router } from '@angular/router';
+
 
 
 @Component({
-  selector: 'app-product-data',
-  templateUrl: './product-data.page.html',
-  styleUrls: ['./product-data.page.scss'],
+  selector: 'app-product-details',
+  templateUrl: './product-details.page.html',
+  styleUrls: ['./product-details.page.scss'],
 })
 export class ProductDataPage implements OnInit {
   
@@ -71,36 +73,56 @@ export class ProductDataPage implements OnInit {
               private photoService:PhotoService,
               private productService: ProductService,
               private messagesService:MessagesService,
+              private router:Router,
+              private activedRroute:ActivatedRoute,
               private formBuilder: FormBuilder)
   { 
     
-   
+    //console.log(this.activedRroute)
+
   }
+
 
   /*-----------------------------------------------------------------------------*/
   //  Component onInit function
   /*-----------------------------------------------------------------------------*/
-  ngOnInit() {
+  async ngOnInit() {
     let loader = this.messagesService.showLoading('جاري تحميل البيانات')
+    this.dataLoaded = false;
+
+    const productId = this.activedRroute.snapshot.params['productId'];
+
+    if (productId){
+      //  check if the product in current selected product in productService.
+      let prod = this.productService.getSelectedProduct(productId);
+      if (prod){
+        // product for selectedProducts List
+        console.log('product from memory')
+        this.currentProduct = prod;
+      }else{
+        // get product from DB
+        console.log('product from data base')
+        this.currentProduct =  await  this.productService.getProduct(productId);
+      }
+    }
+    else {
+      this.currentProduct = this.productService.currentProduct;
+    }   
+
     this.masterDataService.getMasterData().then(()=>{
       this.getParentCat();
       this.setColors();
       this.setSizes();
-      this.dataLoaded = true;
-
-      if (this.images.length> 0) this.setCurrentImage(this.images[0]);
-
- 
-      this.currentProduct = this.productService.currentProduct;
-      if ( this.currentProduct ){
-        this.currentProductCode = this.currentProduct.id;
-      }
       
+      
+      this.currentProductCode = this.currentProduct.id;
       this.productFormShow(this.currentProduct);
 
             
       this.setCameraAccess();
       this.setPhotoDeleteAccess(); 
+
+      this.dataLoaded = true;
 
       loader.then((loading)=> loading.dismiss());
     });
@@ -110,12 +132,18 @@ export class ProductDataPage implements OnInit {
   //  Get parent categories based on user business type and save to array
   /*-----------------------------------------------------------------------------*/
   getParentCat(){
-    let businessType = this.authUser.user.bus_sec;
-    console.log('bus type', businessType);
+    // if business type not defined set it to 1 [clothes]
+    var businessSections;
 
-    this.parentCat= businessType.map(key =>{
-        return {key:key, name: this.masterDataService.getCatName(key, 'parent')}
-    });
+    if (this.authUser.user){
+      businessSections = this.authUser.user.bus_sec
+    }else{
+      businessSections = [1] 
+    }
+
+    console.log (businessSections)
+
+    this.parentCat= this.masterDataService.selectParentCat()
 
     if (this.parentCat.length===1){
       //console.log(this.selectedParentCat)
@@ -352,16 +380,23 @@ export class ProductDataPage implements OnInit {
 
     console.log('deleted images', deletedImages)
 
-    if (deletedImages.length >0 ){
+    if (deletedImages.length >0 ){ 
+
       for (let image of deletedImages){
         const img =  this.photoService.DeleteImage(image.src);
         promises.push(img);
       }
-  
-      // wait for all images to be uploaded in pararell
-      let images_url = await Promise.all(promises);
-  
-      return 'success';
+
+
+      try {
+        // wait for all images to be uploaded in pararell
+        let images_url = await Promise.all(promises);
+        return 'success';
+
+      } catch (error) {
+        // do something
+      }
+      
     }
   } 
 
@@ -399,7 +434,7 @@ export class ProductDataPage implements OnInit {
       let url = this.photoService.downloadImageURL('products',prod.id,key.toString())
 
       url.subscribe((url)=> {
-        this.setImageURL(key, url)
+        //this.setImageURL(key:key, url)
       })
 
     })
@@ -428,6 +463,7 @@ export class ProductDataPage implements OnInit {
     this.setColors();
     this.setSizes();
     this.images=[];
+    this.setPhotoDeleteAccess();
 
     this.currentImage = this.noImage;
     this.currentProductCode = null;
@@ -461,7 +497,7 @@ export class ProductDataPage implements OnInit {
       messages.push('يجب ادخال علي الاقل مقاس')
     }
 
-    if (this.images.length===0){
+    if (this.images.filter(m=> m.deleted===false).length===0){
       messages.push('يجب ادخال علي الاقل صورة')
     }
 
@@ -481,6 +517,7 @@ export class ProductDataPage implements OnInit {
         this.currentProduct = {
           sup_id:this.authUser.user_id, // supplier ID
           name: this.productForm.value.name,
+          code: this.productForm.value.code,
           desc: this.productForm.value.desc, //description
           price:this.productForm.value.price, //price
           price_disc:this.productForm.value.discountPrice, // discount price
@@ -510,7 +547,7 @@ export class ProductDataPage implements OnInit {
 
         // save product images after getting image url from SaveProductImages
         // we will call save product again -- it is Costily!!!
-        this.currentProduct.imgs =this.images.map(m=> {return m.src}); // product images
+        this.currentProduct.imgs =this.images.filter(m=>m.deleted === false).map(m=> {return m.src}); // product images
         savedProd = await  this.productService.saveProduct(this.currentProduct);
         
         this.messagesService.showToast('حفظ الصنف', 'تم حفظ الصنف بنجاح', 'success')
@@ -524,12 +561,13 @@ export class ProductDataPage implements OnInit {
       }  
     } catch (error) {
       //do somethig with error
+      alert(error)
     }
   }
   /*-----------------------------------------------------------------------------*/
   //  Papulate product form with product data
   /*-----------------------------------------------------------------------------*/
-  productFormShow(p:IProduct){
+  productFormShow(p){
     if (p){
 
       this.productForm.patchValue({
@@ -558,15 +596,29 @@ export class ProductDataPage implements OnInit {
 
       this.setColors();
       this.setSizes();
+      this.setPhotoDeleteAccess();
       
       if (p.imgs.length >0){
         let i = 0;
         this.images = p.imgs.map(src => {return {key:i++, src:src, deleted:false}})
-        console.log(this.images)
+        // console.log(this.images)
         this.setCurrentImage(this.images[0])
       }
       // get images url from storage
       //this.getProductImagesFromStorage(p);
     }
   }
+  
+  /*-----------------------------------------------------------------------------*/
+  //  Cancel screen updates
+  /*-----------------------------------------------------------------------------*/
+  cancelUpdates(){
+    this.productFormShow(this.currentProduct);
+  }
+  /*-----------------------------------------------------------------------------*/
+  //  Update product list
+  /*-----------------------------------------------------------------------------*/
+
+  
+  
 }

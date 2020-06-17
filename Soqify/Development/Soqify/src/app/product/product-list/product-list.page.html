@@ -1,0 +1,82 @@
+<ion-header>
+  <ion-toolbar color = primary>
+       
+    <ion-title> قائمة الاصناف</ion-title>
+
+    <ion-buttons>
+      <ion-menu-button menu = "main_menu" ></ion-menu-button>
+    </ion-buttons>
+
+    
+
+  </ion-toolbar>
+
+
+</ion-header>
+
+<ion-menu side="start" menuId="main_menu" contentId="main">
+  <ion-header>
+    <ion-toolbar color="">
+      <ion-title>الاقسام</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list *ngFor="let p of parentCat" lines = "none" >
+      <ion-item-divider  detail lines="none" color="light">
+        <ion-label color = "primary">{{p.name}}</ion-label>
+      </ion-item-divider>
+      
+      <ion-list lines="none" *ngFor="let m of masterData.selectMainCat(p.key)">
+        <ion-item-divider button detail lines="none" color="light">
+          <ion-label  >{{m.name}}</ion-label>
+          <ion-icon name="chevron-forward-circle-outline" slot = "end"></ion-icon>
+        </ion-item-divider>
+        <ion-item class = "menu-item" button  *ngFor="let s of masterData.selectSubCat(m.key)" detail>{{s.name}}</ion-item>
+      </ion-list>
+    </ion-list> 
+  </ion-content>
+</ion-menu>
+
+<ion-content *ngIf="true" id="main">
+   <ion-list>
+     <ion-list-header>
+      <ion-label>قائمة الاصناف</ion-label>
+     </ion-list-header>
+     <ion-item  detail button
+                *ngFor="let product of productList"
+                routerLink="product-details/{{product.id}}"  
+                >
+       <ion-label>
+         <ion-text color = "primary">
+          {{product.name}}
+         </ion-text> 
+         <p> 
+           <ion-label></ion-label>
+           <ion-text>
+             {{product.desc}} 
+           </ion-text>
+        </p> 
+
+        <p> 
+          السعر:
+          <ion-text color="dark" >
+            {{product.price | currency}}
+          </ion-text>
+        </p> 
+        <p> 
+          الكود:
+          <ion-text color="dark" >
+            {{product.code}}
+          </ion-text>
+        </p> 
+
+       </ion-label>
+       
+
+       <ion-avatar slot="start">
+        <img src="{{product.imgs[0]}}">
+      </ion-avatar>
+     </ion-item> 
+
+   </ion-list>
+</ion-content>

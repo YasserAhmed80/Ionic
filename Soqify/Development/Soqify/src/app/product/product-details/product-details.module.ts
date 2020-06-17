@@ -4,9 +4,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { ProductDataPageRoutingModule } from './product-data-routing.module';
+import { ProductDetailsPageRoutingModule } from './product-details-routing.module';
 
-import { ProductDataPage } from './product-data.page';
+import { ProductDataPage } from './product-details.page';
 import { ControlMessageComponent } from 'src/app/shared/control-message/control-message.component';
 
 @NgModule({
@@ -14,8 +14,8 @@ import { ControlMessageComponent } from 'src/app/shared/control-message/control-
     CommonModule,
     FormsModule,
     IonicModule,
-    ProductDataPageRoutingModule, ReactiveFormsModule
+    ProductDetailsPageRoutingModule, ReactiveFormsModule
   ],
   declarations: [ProductDataPage, ControlMessageComponent]
 })
-export class ProductDataPageModule {}
+export class ProductDetailsPageModule {}
