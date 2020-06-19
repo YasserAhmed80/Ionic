@@ -1,3 +1,4 @@
+import { Timestamp } from 'rxjs/internal/operators/timestamp';
 
 export enum ProductSatusRef{
     New = 1,
@@ -22,4 +23,5 @@ export interface IProduct{
     imgs?:string[], // product images
     min_qty?:number, // min quantity
     max_qty?:number, //max quantity 
+    createdAt?: any, 
 };

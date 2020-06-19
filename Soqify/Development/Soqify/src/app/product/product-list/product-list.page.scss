@@ -8,10 +8,12 @@
     margin: 0px 0px !important;
 }
 
-ion-avatar {
-    margin-top: 5px !important;
-    width:60px !important;
-    height:60px !important;
+ion-avatar  {
+    width:40px !important;
+    height:40px !important;
+
+    margin: 16px 6px ;
+    margin-bottom: auto;
 }
 
 .item-big-size{
@@ -20,4 +22,8 @@ ion-avatar {
         font-weight: 700;
     }
     
+}
+
+.filter-chip{
+    font-size: 12px !important;
 }

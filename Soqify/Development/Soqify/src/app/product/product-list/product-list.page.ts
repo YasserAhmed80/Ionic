@@ -46,6 +46,7 @@ export class ProductListPage implements OnInit {
      
       this.productService.productSearchReasult$.subscribe((results)=>{
          this.productList = results[0];
+         this.productList.sort((a,b)=>b.createdAt-a.createdAt)
          //console.log(results)
          this.productFilter = results[1]
          this.dataLoaded = true;

@@ -58,6 +58,10 @@
     --border-color : var(--ion-color-success-shade);
   }
 
+  ion-img {
+    object-fit: cover;
+  }
+
   
 
   ion-item{

@@ -63,7 +63,7 @@
    <!-- filter card -->
    <ion-card class = "filter-card" *ngIf="productFilter.length>0" color = 'light'>
      <ion-card-content>
-       <ion-chip *ngFor="let filter of productFilter" color = "primary" fill="outline">
+       <ion-chip class="filter-chip" *ngFor="let filter of productFilter" color = "secondary" fill="outline">
          <ion-label>{{filter.name}}</ion-label> 
          <ion-icon name="close-circle-outline" (click) = "removeFilter(filter)"></ion-icon>
       </ion-chip>
@@ -75,6 +75,7 @@
    <ion-list *ngIf="productList.length>0">
      <ion-list-header>
       <ion-label>قائمة الاصناف</ion-label>
+      <ion-chip color="primary" fill="full"><ion-label>{{productList.length}}</ion-label></ion-chip>
      </ion-list-header>
      <ion-item  detail button
                 *ngFor="let product of productList"
@@ -107,12 +108,21 @@
           </ion-text>
         </p> 
 
+        <p> 
+          تاريخ اضافة:
+          <ion-text color="dark" >
+            {{product.createdAt.seconds * 1000  | date:"short"}}
+          </ion-text>
+        </p> 
+
+
        </ion-label>
        
 
        <ion-avatar slot="start">
-        <img src="{{product.imgs[0]}}">
+        <ion-img src="{{product.imgs[0]}}"> </ion-img>
       </ion-avatar>
+
      </ion-item> 
 
    </ion-list>

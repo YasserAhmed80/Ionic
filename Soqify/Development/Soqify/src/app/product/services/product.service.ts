@@ -5,6 +5,7 @@ import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/fire
 import { take, switchMap,tap, distinctUntilChanged } from 'rxjs/operators'
 import { BehaviorSubject, Observable, combineLatest,  EMPTY, of } from 'rxjs';
 import { MasterDataService } from 'src/app/shared/services/master-data.service';
+import * as firebase from 'firebase/app';
 
 @Injectable({
   providedIn: 'root'
@@ -74,6 +75,8 @@ export class ProductService {
   }
   // add new product
   async addProduct(product:IProduct) {
+   // console.log  ('timestamp',  firebase.database.ServerValue.TIMESTAMP)
+    product.createdAt = this.timestamp
     let newProduct = this.fireStore.collection('product').add(product);
     
     return await newProduct
@@ -180,7 +183,8 @@ export class ProductService {
             if (main_cat) {query = query.where('m_cat', '==', main_cat)};
             if (sub_cat) {query = query.where('s_cat', '==', sub_cat)};
 
-            return query
+            //query = query.orderBy('createdAt','desc') ;
+            return query;
           });
 
           return combineLatest( results.valueChanges(), this.getProductFilter());
@@ -309,9 +313,8 @@ export class ProductService {
 
   }
 
-
-
-
-
+  get timestamp() {
+    return firebase.firestore.FieldValue.serverTimestamp();
+  };
   
 }

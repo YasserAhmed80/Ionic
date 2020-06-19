@@ -28,3 +28,70 @@ https://www.youtube.com/watch?v=Fw46diR8rAs
 
 
 https://enappd.com/blog/facebook-login-in-capacitor-apps-with-ionic-angular/128/
+
+
+
+////////////////////////////
+I created a universal cloud function to update whatever documents you want with the createdAt and updatedAt timestamp:
+
+exports.myFunction = functions.firestore
+    .document('{colId}/{docId}')
+    .onWrite(async (change, context) => {
+
+        // the collections you want to trigger
+        const setCols = ['posts', 'reviews','comments'];
+
+        // if not one of the set columns
+        if (setCols.indexOf(context.params.colId) === -1) {
+            return null;
+        }
+
+        // simplify event types
+        const createDoc = change.after.exists && !change.before.exists;
+        const updateDoc = change.before.exists && change.after.exists;
+        const deleteDoc = change.before.exists && !change.after.exists;
+
+        if (deleteDoc) {
+            return null;
+        }
+        // simplify input data
+        const after: any = change.after.exists ? change.after.data() : null;
+        const before: any = change.before.exists ? change.before.data() : null;
+
+        // prevent update loops from triggers
+        const canUpdate = () => {
+            // if update trigger
+            if (before.updatedAt && after.updatedAt) {
+                if (after.updatedAt._seconds !== before.updatedAt._seconds) {
+                    return false;
+                }
+            }
+            // if create trigger
+            if (!before.createdAt && after.createdAt) {
+                return false;
+            }
+            return true;
+        }
+
+        // add createdAt
+        if (createDoc) {
+            return change.after.ref.set({
+                createdAt: admin.firestore.FieldValue.serverTimestamp()
+            }, { merge: true })
+                .catch((e: any) => {
+                    console.log(e);
+                    return false;
+                });
+        }
+        // add updatedAt
+        if (updateDoc && canUpdate()) {
+            return change.after.ref.set({
+                updatedAt: admin.firestore.FieldValue.serverTimestamp()
+            }, { merge: true })
+                .catch((e: any) => {
+                    console.log(e);
+                    return false;
+                });
+        }
+        return null;
+    });
