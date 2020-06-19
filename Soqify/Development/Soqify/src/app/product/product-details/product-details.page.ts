@@ -93,16 +93,25 @@ export class ProductDataPage implements OnInit {
     const productId = this.activedRroute.snapshot.params['productId'];
 
     if (productId){
-      //  check if the product in current selected product in productService.
-      let prod = this.productService.getSelectedProduct(productId);
-      if (prod){
-        // product for selectedProducts List
-        console.log('product from memory')
-        this.currentProduct = prod;
+      if (productId !=-1) {
+        //  check if the product in current selected product in productService.
+        let prod = this.productService.getSelectedProduct(productId);
+        if (prod){
+          // product for selectedProducts List
+          console.log('product from memory')
+          this.currentProduct = prod;
+        }else{
+          // get product from DB
+          console.log('product from data base')
+          this.currentProduct =  await  this.productService.getProduct(productId);
+        }
+
+        this.currentProductCode = this.currentProduct.id;
+        this.productFormShow(this.currentProduct);
+
       }else{
-        // get product from DB
-        console.log('product from data base')
-        this.currentProduct =  await  this.productService.getProduct(productId);
+        // prepare for new product 
+        this.productFormClear();
       }
     }
     else {
@@ -115,10 +124,7 @@ export class ProductDataPage implements OnInit {
       this.setSizes();
       
       
-      this.currentProductCode = this.currentProduct.id;
-      this.productFormShow(this.currentProduct);
-
-            
+                  
       this.setCameraAccess();
       this.setPhotoDeleteAccess(); 
 

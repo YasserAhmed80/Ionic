@@ -9,13 +9,21 @@
       </ion-menu-button>
     </ion-buttons>
 
+    
+    <ion-buttons slot= "end">
+      <ion-button slot="start"   routerLink="product-details/-1">
+        <ion-icon name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+
   </ion-toolbar>
 
 
 </ion-header>
 
 <!-- Filter menu -->
-<ion-menu side="start" menuId="main_menu" contentId="main">
+<ion-menu side="start" menuId="main_menu" contentId="main" auto (click) = "menuClick()">
   <ion-header>
     <ion-toolbar color="">
       <ion-title>الاقسام</ion-title>
@@ -72,10 +80,10 @@
                 *ngFor="let product of productList"
                 routerLink="product-details/{{product.id}}"  
                 >
-       <ion-label>
-         <ion-text color = "primary">
+       <ion-label class='item-big-size'>
+         <h2>
           {{product.name}}
-         </ion-text> 
+         </h2> 
          <p> 
            <ion-label></ion-label>
            <ion-text>
@@ -85,8 +93,11 @@
 
         <p> 
           السعر:
-          <ion-text color="dark" >
-            {{product.price | currency}}
+          <ion-text color="dark" class="item-big-size">
+    
+             {{product.price | currency:" "}}
+             <ion-text color="medium">ج.م</ion-text> 
+            
           </ion-text>
         </p> 
         <p> 

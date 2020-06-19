@@ -3,6 +3,7 @@ import { ProductService } from '../services/product.service';
 import { IProduct } from 'src/app/model/product';
 import { MasterDataService } from 'src/app/shared/services/master-data.service';
 import { MessagesService } from 'src/app/shared/services/messages.service';
+import { MenuController } from '@ionic/angular';
 
 @Component({
   selector: 'app-product-list',
@@ -22,7 +23,8 @@ export class ProductListPage implements OnInit {
 
   constructor(public productService:ProductService,
               public masterData: MasterDataService,
-              private messagesService:MessagesService
+              private messagesService:MessagesService,
+              public menuController : MenuController
     ) { }
 
   async ngOnInit() {
@@ -34,16 +36,22 @@ export class ProductListPage implements OnInit {
     this.masterData.getMasterData().then(()=>{
       this.parentCat = this.masterData.selectParentCat();
 
+       this.productService.runQuery(true);
 
       if (this.productService.savedProductFilter){
+        console.log('saved search in local s', this.productService.savedProductFilter)
         this.productService.setProductFilter(this.productService.savedProductFilter)
       } 
-      this.productService.runQuery(true);
+
+     
       this.productService.productSearchReasult$.subscribe((results)=>{
          this.productList = results[0];
+         //console.log(results)
          this.productFilter = results[1]
          this.dataLoaded = true;
       })
+
+      this.productService.runQuery(true);
 
      
       loader.then((loading)=> loading.dismiss());
@@ -56,7 +64,10 @@ export class ProductListPage implements OnInit {
   removeFilter(filter){
     this.productService.removeProductFilter(filter)
   }
-
+  
+  menuClick(){
+    this.menuController.close();
+  }
   
 
   

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { IProduct} from '../../model/product'
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 
-import { take, switchMap } from 'rxjs/operators'
+import { take, switchMap,tap, distinctUntilChanged } from 'rxjs/operators'
 import { BehaviorSubject, Observable, combineLatest,  EMPTY, of } from 'rxjs';
 import { MasterDataService } from 'src/app/shared/services/master-data.service';
 
@@ -166,14 +166,20 @@ export class ProductService {
       this.mainCatFilter$,
       this.subCatFilter$
     ).pipe(
+      // distinctUntilChanged((p,c)=> { console.log('p and c',p,c); return true }),
+      // tap (value => console.log(value)),
       switchMap(([runFlag, parent_cat, main_cat, sub_cat])=>{
+        
+
         if (runFlag){
-          console.log('filter run')
+          console.log('filter run', runFlag, parent_cat, main_cat, sub_cat)
+
           let results =  <any>this.fireStore.collection("product", ref=>{
             let query: firebase.firestore.CollectionReference | firebase.firestore.Query = ref;
             if (parent_cat) {query = query.where('p_cat', '==', parent_cat)};
             if (main_cat) {query = query.where('m_cat', '==', main_cat)};
             if (sub_cat) {query = query.where('s_cat', '==', sub_cat)};
+
             return query
           });
 
@@ -238,6 +244,7 @@ export class ProductService {
       filters.push(filter);
     }
 
+    console.log('saved search fileter', filters)
     this.SaveProductSearchFilter(filters);
 
     return of( filters);
@@ -279,25 +286,27 @@ export class ProductService {
   }
 
   setProductFilter(filters:Array<any>){
-    this.runQuery(false);
 
     this.clearProductFilter();
 
-    console.log('filter',filters)
-
     filters.forEach(filter=>{
+      console.log('filter', filter)
       switch (filter.type){
         case 'parent': {
           this.parentCatFilter$.next(filter.key); 
+          break;
         } 
         case 'main': {
           this.mainCatFilter$.next(filter.key);
+          break;
         }
-        case 'sub': this.subCatFilter$.next(filter.key);
+        case 'sub':{
+          // console.log('sub-------', filter)
+          this.subCatFilter$.next(4);
+        }
       }
     })
-    
-    this.runQuery(true);
+
   }
 
 

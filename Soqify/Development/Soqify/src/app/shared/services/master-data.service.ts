@@ -118,7 +118,7 @@ export class MasterDataService {
     console.log (businessSections)
 
     return  businessSections.map(key =>{
-        return {key:key, name: this.getCatName(key, 'parent')}
+        return {key:key.toString(), name: this.getCatName(key, 'parent')}
     });
   }
 
