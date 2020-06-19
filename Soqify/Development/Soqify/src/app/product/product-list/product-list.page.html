@@ -4,16 +4,17 @@
     <ion-title> قائمة الاصناف</ion-title>
 
     <ion-buttons>
-      <ion-menu-button menu = "main_menu" ></ion-menu-button>
+      <ion-menu-button menu = "main_menu" >
+        <ion-icon name = "funnel-outline"></ion-icon>
+      </ion-menu-button>
     </ion-buttons>
-
-    
 
   </ion-toolbar>
 
 
 </ion-header>
 
+<!-- Filter menu -->
 <ion-menu side="start" menuId="main_menu" contentId="main">
   <ion-header>
     <ion-toolbar color="">
@@ -21,7 +22,8 @@
     </ion-toolbar>
   </ion-header>
   <ion-content>
-    <ion-list *ngFor="let p of parentCat" lines = "none" >
+
+    <ion-list *ngFor="let p of parentCat" lines = "none"  button>
       <ion-item-divider  detail lines="none" color="light">
         <ion-label color = "primary">{{p.name}}</ion-label>
       </ion-item-divider>
@@ -29,16 +31,40 @@
       <ion-list lines="none" *ngFor="let m of masterData.selectMainCat(p.key)">
         <ion-item-divider button detail lines="none" color="light">
           <ion-label  >{{m.name}}</ion-label>
-          <ion-icon name="chevron-forward-circle-outline" slot = "end"></ion-icon>
+          <ion-button  slot = "end" fill = "clear" 
+                        (click) = "productService.filterByMainCat(m.key,p.key)" 
+                        color = "medium">
+                        عرض الكل
+          </ion-button>
         </ion-item-divider>
-        <ion-item class = "menu-item" button  *ngFor="let s of masterData.selectSubCat(m.key)" detail>{{s.name}}</ion-item>
+        <ion-item *ngFor="let s of masterData.selectSubCat(m.key)" 
+                  class = "menu-item" button 
+                  (click) = "productService.filterBySubCat(s.key,m.key, p.key)" 
+                   detail>
+          {{s.name}}
+        </ion-item>
       </ion-list>
     </ion-list> 
+
   </ion-content>
 </ion-menu>
+<!-- End filter menu -->
 
 <ion-content *ngIf="true" id="main">
-   <ion-list>
+
+   <!-- filter card -->
+   <ion-card class = "filter-card" *ngIf="productFilter.length>0" color = 'light'>
+     <ion-card-content>
+       <ion-chip *ngFor="let filter of productFilter" color = "primary" fill="outline">
+         <ion-label>{{filter.name}}</ion-label> 
+         <ion-icon name="close-circle-outline" (click) = "removeFilter(filter)"></ion-icon>
+      </ion-chip>
+     </ion-card-content>
+   </ion-card>
+   <!-- End card filter -->
+
+   <!-- Product List -->
+   <ion-list *ngIf="productList.length>0">
      <ion-list-header>
       <ion-label>قائمة الاصناف</ion-label>
      </ion-list-header>
@@ -79,4 +105,14 @@
      </ion-item> 
 
    </ion-list>
+   <!-- End Product List -->
+
+   <!-- search return no data card -->
+     <ion-card  *ngIf="productList.length===0 && dataLoaded" color = 'light'>
+      <ion-card-content>
+        <ion-label>لا توجد اصناف  لهذة التصفية</ion-label>
+      </ion-card-content>
+    </ion-card>
+    <!-- End of search return no data card  -->
+   
 </ion-content>

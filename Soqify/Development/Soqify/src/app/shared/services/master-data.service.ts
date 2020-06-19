@@ -150,7 +150,6 @@ export class MasterDataService {
     switch(catType) { 
       case 'parent': { 
         let item =this.productParentCat.find(item => item.key == key)
-        console.log(this.productParentCat)
          return item.name;
       } 
       case 'main': { 

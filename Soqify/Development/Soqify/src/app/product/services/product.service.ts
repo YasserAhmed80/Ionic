@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { IProduct} from '../../model/product'
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 
-import { take } from 'rxjs/operators'
+import { take, switchMap } from 'rxjs/operators'
+import { BehaviorSubject, Observable, combineLatest,  EMPTY, of } from 'rxjs';
+import { MasterDataService } from 'src/app/shared/services/master-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,16 +12,46 @@ import { take } from 'rxjs/operators'
 export class ProductService {
 
   currentProduct: IProduct ;
+  savedProductFilter: Array<any>;
   selectedProducts: IProduct[]=[];
 
-  constructor(public fireStore: AngularFirestore) {
+  // set filter observables 
+  /**
+   * we need to filter by: business sec, parent cat, main cat, sub cat, supllier
+   */
+  runSearchQuery$: BehaviorSubject<boolean>; // it used to triger search query. False = pause search, true = run search
+  businessSecFilter$ : BehaviorSubject<number|null>;
+  parentCatFilter$ : BehaviorSubject<number|null>;
+  mainCatFilter$ : BehaviorSubject<number|null>;
+  subCatFilter$ : BehaviorSubject<number|null>;
+
+  productSearchReasult$: Observable<any>;
+
+
+
+
+
+
+  constructor(public fireStore: AngularFirestore,
+             private masterData:MasterDataService
+             ) 
+  {
     
     let product = localStorage.getItem('currentProduct');
     if ( product !== 'undefined'){
       this.currentProduct = JSON.parse(product);
     }
-    //console.log('current prod', this.currentProduct)
-   }
+
+    let savedProdFilter = localStorage.getItem('productSearchFilter');
+    if ( savedProdFilter !== 'undefined' && savedProdFilter !== null){
+      console.log(savedProdFilter)
+      this.savedProductFilter = JSON.parse(savedProdFilter);
+    }
+
+
+
+    this.defineProductSearchObs();
+  }
 
 
   async saveProduct (product:IProduct){
@@ -118,6 +150,157 @@ export class ProductService {
       return null;
     }
   }
+
+  // Product filters Started here ....c  // search observale preparation
+  defineProductSearchObs(){
+    this.businessSecFilter$ = new BehaviorSubject(null);
+    this.parentCatFilter$ = new BehaviorSubject(null);
+    this.mainCatFilter$ = new BehaviorSubject(null);
+    this.subCatFilter$ = new BehaviorSubject(null);
+
+    this.runSearchQuery$ = new BehaviorSubject(false);
+
+    this.productSearchReasult$ =<any> combineLatest(
+      this.runSearchQuery$,
+      this.parentCatFilter$,
+      this.mainCatFilter$,
+      this.subCatFilter$
+    ).pipe(
+      switchMap(([runFlag, parent_cat, main_cat, sub_cat])=>{
+        if (runFlag){
+          console.log('filter run')
+          let results =  <any>this.fireStore.collection("product", ref=>{
+            let query: firebase.firestore.CollectionReference | firebase.firestore.Query = ref;
+            if (parent_cat) {query = query.where('p_cat', '==', parent_cat)};
+            if (main_cat) {query = query.where('m_cat', '==', main_cat)};
+            if (sub_cat) {query = query.where('s_cat', '==', sub_cat)};
+            return query
+          });
+
+          return combineLatest( results.valueChanges(), this.getProductFilter());
+
+        }else{
+          return EMPTY;
+        }
+      })
+    ) 
+  }
+
+  filterByParentCat(key:number){
+    this.runQuery(false);
+    this.mainCatFilter$.next(null);
+    this.subCatFilter$.next(null);
+    this.parentCatFilter$.next(key);
+    this.runQuery(true);
+    
+  }
+  filterByMainCat(main_key:number, parent_key: number){
+    this.runQuery(false);
+    this.subCatFilter$.next(null);
+    this.mainCatFilter$.next(main_key);
+    this.parentCatFilter$.next(parent_key);
+    this.runQuery(true);
+    
+  }
+  filterBySubCat(sub_key:number, main_key:number, parent_key: number){ 
+    this.runQuery(false);
+    this.subCatFilter$.next(sub_key);
+    this.mainCatFilter$.next(main_key);
+    this.parentCatFilter$.next(parent_key);
+    this.runQuery(true);
+  }
+
+  runQuery(flag: boolean){
+    this.runSearchQuery$.next(flag);
+  }
+
+
+  getProductFilter():Observable<any> {
+    let filters = [];
+    let filter = {}
+
+    let parent_cat = this.parentCatFilter$.getValue();
+    let main_cat = this.mainCatFilter$.getValue();
+    let sub_cat = this.subCatFilter$.getValue();
+
+    if (parent_cat){
+      filter = {type:'parent', key: parent_cat, name:this.masterData.getCatName(parent_cat, 'parent') };
+      filters.push(filter);
+    }
+
+    if (main_cat){
+      filter = {type:'main', key: main_cat, name:this.masterData.getCatName(main_cat, 'main') };
+      filters.push(filter);
+    }
+
+    if (sub_cat){
+      filter = {type:'sub', key: sub_cat, name:this.masterData.getCatName(sub_cat, 'sub') };
+      filters.push(filter);
+    }
+
+    this.SaveProductSearchFilter(filters);
+
+    return of( filters);
+
+  }
+
+  SaveProductSearchFilter(filters){
+    localStorage.removeItem('productSearchFilter');
+
+    if (filters.length>0){
+      localStorage.setItem('productSearchFilter',JSON.stringify(filters));
+    }
+    
+  }
+
+  removeProductFilter(filter){
+    this.runQuery(false);
+
+    switch (filter.type){
+      case 'parent': {
+        this.parentCatFilter$.next(null); 
+        this.mainCatFilter$.next(null);
+        this.subCatFilter$.next(null);
+      } 
+      case 'main': {
+        this.mainCatFilter$.next(null);
+        this.subCatFilter$.next(null);
+      }
+      case 'sub': this.subCatFilter$.next(null);
+    }
+
+    this.runQuery(true);
+  }
+
+  clearProductFilter(){
+    this.mainCatFilter$.next(null);
+    this.subCatFilter$.next(null);
+    this.parentCatFilter$.next(null);
+  }
+
+  setProductFilter(filters:Array<any>){
+    this.runQuery(false);
+
+    this.clearProductFilter();
+
+    console.log('filter',filters)
+
+    filters.forEach(filter=>{
+      switch (filter.type){
+        case 'parent': {
+          this.parentCatFilter$.next(filter.key); 
+        } 
+        case 'main': {
+          this.mainCatFilter$.next(filter.key);
+        }
+        case 'sub': this.subCatFilter$.next(filter.key);
+      }
+    })
+    
+    this.runQuery(true);
+  }
+
+
 
 
 

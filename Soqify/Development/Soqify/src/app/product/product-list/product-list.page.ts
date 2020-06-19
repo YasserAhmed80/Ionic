@@ -12,6 +12,7 @@ import { MessagesService } from 'src/app/shared/services/messages.service';
 export class ProductListPage implements OnInit {
   
   productList:IProduct[]=[];
+  productFilter:any[]=[];
 
   parentCat= [];
   mainCat = [];
@@ -19,7 +20,7 @@ export class ProductListPage implements OnInit {
 
   dataLoaded:Boolean=false;
 
-  constructor(private productService:ProductService,
+  constructor(public productService:ProductService,
               public masterData: MasterDataService,
               private messagesService:MessagesService
     ) { }
@@ -29,16 +30,31 @@ export class ProductListPage implements OnInit {
     let loader = this.messagesService.showLoading('جاري تحميل البيانات')
     this.dataLoaded = false;
 
-    this.productList =await this.productService.getAllProduct();
-    //console.log(this.productList);
 
     this.masterData.getMasterData().then(()=>{
       this.parentCat = this.masterData.selectParentCat();
-      this.dataLoaded = true;
+
+
+      if (this.productService.savedProductFilter){
+        this.productService.setProductFilter(this.productService.savedProductFilter)
+      } 
+      this.productService.runQuery(true);
+      this.productService.productSearchReasult$.subscribe((results)=>{
+         this.productList = results[0];
+         this.productFilter = results[1]
+         this.dataLoaded = true;
+      })
+
+     
       loader.then((loading)=> loading.dismiss());
     });
 
    
+   
+  }
+
+  removeFilter(filter){
+    this.productService.removeProductFilter(filter)
   }
 
   
