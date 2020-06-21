@@ -4,6 +4,7 @@ import { IProduct } from 'src/app/model/product';
 import { MasterDataService } from 'src/app/shared/services/master-data.service';
 import { MessagesService } from 'src/app/shared/services/messages.service';
 import { MenuController } from '@ionic/angular';
+import { AuthService } from 'src/app/auth/services/auth.service';
 
 @Component({
   selector: 'app-product-list',
@@ -24,7 +25,8 @@ export class ProductListPage implements OnInit {
   constructor(public productService:ProductService,
               public masterData: MasterDataService,
               private messagesService:MessagesService,
-              public menuController : MenuController
+              public menuController : MenuController,
+              private authUSer: AuthService
     ) { }
 
   async ngOnInit() {
@@ -36,12 +38,15 @@ export class ProductListPage implements OnInit {
     this.masterData.getMasterData().then(()=>{
       this.parentCat = this.masterData.selectParentCat();
 
-       this.productService.runQuery(true);
+      this.productService.runQuery(false);
 
+      this.productService.supplierFilter$.next(this.authUSer.user.id);
       if (this.productService.savedProductFilter){
         console.log('saved search in local s', this.productService.savedProductFilter)
         this.productService.setProductFilter(this.productService.savedProductFilter)
       } 
+
+      this.productService.runQuery(true);
 
      
       this.productService.productSearchReasult$.subscribe((results)=>{
@@ -52,7 +57,6 @@ export class ProductListPage implements OnInit {
          this.dataLoaded = true;
       })
 
-      this.productService.runQuery(true);
 
      
       loader.then((loading)=> loading.dismiss());

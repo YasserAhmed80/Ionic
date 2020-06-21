@@ -5,7 +5,7 @@ import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/fire
 import { take, switchMap,tap, distinctUntilChanged } from 'rxjs/operators'
 import { BehaviorSubject, Observable, combineLatest,  EMPTY, of } from 'rxjs';
 import { MasterDataService } from 'src/app/shared/services/master-data.service';
-import * as firebase from 'firebase/app';
+import { UtilityService } from '../../shared/services/utility.service';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +25,7 @@ export class ProductService {
   parentCatFilter$ : BehaviorSubject<number|null>;
   mainCatFilter$ : BehaviorSubject<number|null>;
   subCatFilter$ : BehaviorSubject<number|null>;
+  supplierFilter$ : BehaviorSubject<string|null>;
 
   productSearchReasult$: Observable<any>;
 
@@ -34,7 +35,8 @@ export class ProductService {
 
 
   constructor(public fireStore: AngularFirestore,
-             private masterData:MasterDataService
+             private masterData:MasterDataService,
+             private utilityService:UtilityService
              ) 
   {
     
@@ -76,7 +78,7 @@ export class ProductService {
   // add new product
   async addProduct(product:IProduct) {
    // console.log  ('timestamp',  firebase.database.ServerValue.TIMESTAMP)
-    product.createdAt = this.timestamp
+    product.createdAt = this.utilityService.timestamp
     let newProduct = this.fireStore.collection('product').add(product);
     
     return await newProduct
@@ -160,6 +162,7 @@ export class ProductService {
     this.parentCatFilter$ = new BehaviorSubject(null);
     this.mainCatFilter$ = new BehaviorSubject(null);
     this.subCatFilter$ = new BehaviorSubject(null);
+    this.supplierFilter$ = new BehaviorSubject(null);
 
     this.runSearchQuery$ = new BehaviorSubject(false);
 
@@ -167,18 +170,20 @@ export class ProductService {
       this.runSearchQuery$,
       this.parentCatFilter$,
       this.mainCatFilter$,
-      this.subCatFilter$
+      this.subCatFilter$,
+      this.supplierFilter$
     ).pipe(
       // distinctUntilChanged((p,c)=> { console.log('p and c',p,c); return true }),
       // tap (value => console.log(value)),
-      switchMap(([runFlag, parent_cat, main_cat, sub_cat])=>{
+      switchMap(([runFlag, parent_cat, main_cat, sub_cat, sup_id])=>{
         
 
         if (runFlag){
-          console.log('filter run', runFlag, parent_cat, main_cat, sub_cat)
+          console.log('filter run', runFlag, parent_cat, main_cat, sub_cat, sup_id)
 
           let results =  <any>this.fireStore.collection("product", ref=>{
             let query: firebase.firestore.CollectionReference | firebase.firestore.Query = ref;
+            if (sup_id) {query = query.where('sup_id', '==', sup_id)};
             if (parent_cat) {query = query.where('p_cat', '==', parent_cat)};
             if (main_cat) {query = query.where('m_cat', '==', main_cat)};
             if (sub_cat) {query = query.where('s_cat', '==', sub_cat)};
@@ -313,8 +318,6 @@ export class ProductService {
 
   }
 
-  get timestamp() {
-    return firebase.firestore.FieldValue.serverTimestamp();
-  };
+  
   
 }

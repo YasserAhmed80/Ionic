@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
+import { UtilityService } from '../../shared/services/utility.service';
 
 import { IUser } from '../../model/identity'
 import { take } from 'rxjs/operators'
@@ -24,7 +25,8 @@ export class AuthService {
   public user: IUser={};
 
   constructor(public fireAuth:AngularFireAuth, 
-             public fireStore: AngularFirestore
+             public fireStore: AngularFirestore,
+             private utilityService:UtilityService
              ) 
   { 
     let user = localStorage.getItem('identity');
@@ -110,7 +112,7 @@ export class AuthService {
   }
 
   get user_id (){
-    return this.user.uid;
+    return this.user.id;
   }
 
   // Store user in localStorage
@@ -130,7 +132,7 @@ export class AuthService {
   async updateUserData(userData:IUser) {
     await this.fireStore
       .collection("identity")
-      .doc(userData.uid)
+      .doc(userData.id)
       .set(userData, { merge: true })
       .then((user) => {
         localStorage.setItem('identity', JSON.stringify(userData));
@@ -146,7 +148,7 @@ export class AuthService {
   async getUserData(auth_id:string){
     console.log('get user data:', auth_id)
     return await this.fireStore.collection('identity', (ref)=> ref.where ('auth_id', '==',auth_id))
-                 .valueChanges({idField: 'uid'})
+                 .valueChanges({idField: 'id'})
                  .pipe(
                    take(1)
                  ).toPromise()
@@ -205,7 +207,9 @@ export class AuthService {
             console.log('user not added to DB', user);
             let newUser: IUser ={
               auth_id: user.uid,
-              name: user.displayName
+              name: user.displayName,
+              active_ind:1,
+              createdAt: this.utilityService.timestamp
             };
 
             console.log('user to beadded to DB', newUser);

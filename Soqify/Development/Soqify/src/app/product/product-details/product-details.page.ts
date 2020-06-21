@@ -451,6 +451,11 @@ export class ProductDataPage implements OnInit {
   //  Clear product form for new entery
   /*-----------------------------------------------------------------------------*/
   productFormClear(){
+    // the below images for testing only
+    this.createRandomImage();
+    // TODO: clear the below line and remobve the above lines
+    // this.images=[];
+
     this.productForm.reset();
     this.productForm.patchValue({
       desc : '',
@@ -468,7 +473,7 @@ export class ProductDataPage implements OnInit {
     this.selectedSizes = [];
     this.setColors();
     this.setSizes();
-    this.images=[];
+    
     this.setPhotoDeleteAccess();
 
     this.currentImage = this.noImage;
@@ -624,6 +629,17 @@ export class ProductDataPage implements OnInit {
   /*-----------------------------------------------------------------------------*/
   //  Update product list
   /*-----------------------------------------------------------------------------*/
+
+
+  createRandomImage(){
+    for(let j=1; j++; j<4){
+      let i = Math.round(Math.random() *10 )+1;
+      let src = `https://source.unsplash.com/random/${i*100}×${i*100}`;
+      let selected = i===1?true:false;
+      this.images.push({key:1, src: src,deleted:false, selected:selected})
+    }
+    
+  }
 
   
   

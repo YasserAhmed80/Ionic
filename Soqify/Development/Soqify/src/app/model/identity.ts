@@ -9,11 +9,19 @@ export enum UserRoleRef{
     Content = 3
 }
 
+export enum UserTypeRef{
+    Supplier = 1 ,
+    Customer = 2,
+    Agent = 3
+}
+
+
 export interface IUser{
-    uid?: string,
+    id?: string,
     auth_id?:string,
     email?:string,
     name?:string,
+    type?: UserTypeRef, // 1= supplier, 2 = customer, 3= agent
     mob?:string,
     tel_o?:string,
     comp_id?:string, // (if register under company)
@@ -28,7 +36,8 @@ export interface IUser{
     // business data
     bus_type?:number, // business type (individual, company, ..)
     bus_sec?:number[], // business sections (clothes, fashion, elec.)
-
+    active_ind?: number, // 1=active, 0 = inactive
+    createdAt?:any,
 
 };
 
