@@ -631,10 +631,12 @@ export class ProductDataPage implements OnInit {
   /*-----------------------------------------------------------------------------*/
 
 
-  createRandomImage(){
-    for(let j=1; j++; j<4){
+  createRandomImage(){ 
+    this.images = []
+    for(var j=1; j<4; j++ ){
       let i = Math.round(Math.random() *10 )+1;
       let src = `https://source.unsplash.com/random/${i*100}×${i*100}`;
+      console.log(src)
       let selected = i===1?true:false;
       this.images.push({key:1, src: src,deleted:false, selected:selected})
     }

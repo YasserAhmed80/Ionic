@@ -20,7 +20,7 @@ export interface IProduct{
     status:ProductSatusRef,//status (new, active,inactive)
     sizes?:number[], // size attributes
     colors?:number[], //color attribute
-    imgs?:string[], // product images
+    imgs?:any[], // product images
     min_qty?:number, // min quantity
     max_qty?:number, //max quantity 
     createdAt?: any, 
