@@ -1,22 +1,55 @@
-<ion-card>
-  <ion-card-header>
-    <ion-card-title>
-      {{currentProduct.name}}
-    </ion-card-title>
-    <ion-card-subtitle>
-      {{currentProduct.desc}}
-    </ion-card-subtitle>
-  </ion-card-header>
-  
-</ion-card>
+<ion-card  detail button
+          class="card-item"
+          routerLink="product-details/{{product.id}}"   >
 
-<ion-list>
-  <ion-item>
-    <ion-avatar>
+       <ion-card-header>
+         <ion-card-title>
+           <ion-item lines="full" detail  >
+               <ion-label class= "card-header" color="primary" >{{product.name}}</ion-label>
+           </ion-item>
+         </ion-card-title>
+         <ion-card-subtitle no-wrap>
+             {{product.desc}} 
+        </ion-card-subtitle>
+       </ion-card-header>
 
-    </ion-avatar>
-    <ion-label>
-      {{currentProduct.name}}
-    </ion-label>
-  </ion-item>
-</ion-list>
+    <ion-card-content>
+      
+         <div class="content-data">
+            <p> 
+              السعر:
+              <ion-text color="dark" class="item-big-size">
+        
+                {{product.price | currency:" "}}
+                <ion-text color="medium">ج.م</ion-text> 
+                
+              </ion-text>
+            </p> 
+            <p> 
+              الكود:
+              <ion-text color="dark" >
+                {{product.code}}
+              </ion-text>
+            </p> 
+    
+            <p> 
+            
+            </p> 
+         </div>
+
+         <div class = "content-img">
+          <ion-img src="{{product.imgs[0]}}" (ionImgDidLoad) = "imageLoaded = true" >  </ion-img>
+          <ion-spinner  [hidden] = "imageLoaded" ></ion-spinner>
+          <ion-img src="assets/images/place-holder.png" [hidden] = "imageLoaded">  </ion-img>
+         </div>
+
+         <ion-card-subtitle>
+          تاريخ اضافة:
+          <ion-text color="medium" >
+            {{product.createdAt.seconds * 1000  | date:"short"}}
+          </ion-text>
+         </ion-card-subtitle>
+      
+    </ion-card-content>
+       
+</ion-card> 

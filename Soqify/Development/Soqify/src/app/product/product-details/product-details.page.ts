@@ -73,7 +73,6 @@ export class ProductDataPage implements OnInit {
               private photoService:PhotoService,
               private productService: ProductService,
               private messagesService:MessagesService,
-              private router:Router,
               private activedRroute:ActivatedRoute,
               private formBuilder: FormBuilder)
   { 
@@ -122,9 +121,7 @@ export class ProductDataPage implements OnInit {
       this.getParentCat();
       this.setColors();
       this.setSizes();
-      
-      
-                  
+              
       this.setCameraAccess();
       this.setPhotoDeleteAccess(); 
 

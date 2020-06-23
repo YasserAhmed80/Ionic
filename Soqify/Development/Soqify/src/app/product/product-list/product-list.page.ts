@@ -53,13 +53,6 @@ export class ProductListPage implements OnInit {
       this.productService.productSearchReasult$.subscribe((results)=>{
          this.productList = results[0];
          this.productList.sort((a,b)=>b.createdAt-a.createdAt)
-         this.productList.map((p)=>{
-           let x = p.imgs.map((img)=>{
-             return {src:img, loaded:false} // added loaded property for lazy loading
-           })
-           p.imgs=x;
-           return p;
-         })
          
          this.productFilter = results[1]
          this.dataLoaded = true;
@@ -82,11 +75,7 @@ export class ProductListPage implements OnInit {
     this.menuController.close();
   }
 
-  setImageLoaded(product){
-    console.log( 'image loaded')
-    product.imgs[0].loaded = true;
-  }
-  
+
 
   
 

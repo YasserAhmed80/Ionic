@@ -2,7 +2,7 @@
     font-size: 14px !important;
 }
 
-.filter-card{
+.filter-card, .card-count{
     position:sticky;
     padding: 1px 1px !important;
     margin: 0px 0px !important;
@@ -28,41 +28,3 @@ ion-avatar  {
     font-size: 12px !important;
 }
 
-.card-item{
-    ion-img{
-        width:100px;
-        height:100px;
-        border: 1px solid var(--ion-color-light);
-        border-radius: 5px;
-        overflow: hidden;
-    }
-
-    ion-card-content{
-        display: grid;
-        grid-template-columns: 2fr 1fr;
-
-    }
-}
-
-ion-card-subtitle {
-        white-space:nowrap !important;
-        overflow: hidden;
-        text-overflow: ellipsis;
-
-}
-
-.content-img{
-    display:grid;
-    justify-content: center;
-    align-items: center;
-    grid-template-areas: 'overlay';
-    grid-template-columns: 1fr;
-
-    ion-img{
-        grid-area: overlay;
-    }
-    ion-spinner{
-        grid-area: overlay;
-
-    }
-}

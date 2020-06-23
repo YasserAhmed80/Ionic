@@ -9,38 +9,21 @@
   <div class="page-layout">
 
     <div class="header">
-      <ion-segment color = "secondary" scrollable value="friends">
-        <ion-segment-button value="friends">
-          <ion-label>Friends</ion-label>
+      <ion-segment color = "secondary" [value] = "selectedParentCat" scrollable (ionChange) = "ParentCatClick($event)" >
+        <ion-segment-button *ngFor="let p_cat of parentCat" [value]="p_cat.key">
+          <ion-label>{{p_cat.name}}</ion-label>
           <ion-icon name = "home"></ion-icon>
         </ion-segment-button>
-        <ion-segment-button value="enemies">
-           <ion-icon name = "home"></ion-icon>
-          <ion-label>Enemies</ion-label>
-        </ion-segment-button>
-        <ion-segment-button value="friends2">
-          <ion-label>Friends</ion-label>
-          <ion-icon name = "home"></ion-icon>
-        </ion-segment-button>
-
-        <ion-segment-button value="enemies 4">
-          <ion-icon name = "home"></ion-icon>
-         <ion-label>Enemies</ion-label>
-       </ion-segment-button>
-       <ion-segment-button value="friends244">
-         <ion-label>Friends</ion-label>
-         <ion-icon name = "home"></ion-icon>
-       </ion-segment-button>
 
       </ion-segment>
     </div>
 
     <div class="side-menu">
-      <div *ngFor="let i of [1,2,7,8,6,6,6]" class="side-menu-item" 
-           (click) = "selectSubCat(i)"
-           [ngClass] = "selectedSubCat=== i?'selected-menu':'none'">
+      <div *ngFor="let m_cat of mainCat" class="side-menu-item" 
+           (click) = "mainCatClick(m_cat)"
+           [ngClass] = "selectedMainCat=== m_cat.key?'selected-menu':'none'">
         <ion-img src="assets/images/place-holder.png"></ion-img>
-        <ion-label>cloths {{i}}</ion-label>
+        <ion-label> {{m_cat.name}}</ion-label>
       </div>
     </div>
 
@@ -48,10 +31,10 @@
     <!-- menu display section -->
 
     <div class="menu-content">
-      <div *ngFor="let i of [1,2,3,4,4,6,7,8]" class="side-menu-item">
-        <ion-card>
+      <div *ngFor="let s_cat of subCat" class="side-menu-item">
+        <ion-card  button>
           <ion-card-header>
-            <ion-card-title>{{i}}</ion-card-title>
+            <ion-card-title>{{s_cat.name}}</ion-card-title>
           </ion-card-header>
         </ion-card>
       </div>

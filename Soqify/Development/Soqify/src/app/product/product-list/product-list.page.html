@@ -72,82 +72,21 @@
    <!-- End card filter -->
 
    <!-- Product List -->
-   <ion-card *ngIf="productList.length>0">
-     <ion-list-header>
-      <ion-label>قائمة الاصناف</ion-label>
+   <ion-list *ngIf="productList.length>0" color="secondary" class = "card-count">
+     <ion-item lines="none">
+      <ion-label>عدد الاصناف</ion-label>
       <ion-chip color="primary" fill="full"><ion-label>{{productList.length}}</ion-label></ion-chip>
-     </ion-list-header>
-
-     <ion-card  detail button
-                *ngFor="let product of productList"
-                class="card-item"
-                routerLink="product-details/{{product.id}}"  
-                >
-       <ion-card-header>
-         <ion-card-title>
-           <ion-item lines="full" detail  >
-             <ion-label color="primary" >{{product.name}}</ion-label>
-           </ion-item>
-           
-         </ion-card-title>
-         <ion-card-subtitle no-wrap>
-             {{product.desc}} 
-        </ion-card-subtitle>
-       </ion-card-header>
-
-       <ion-card-content>
-      
-
-         <div class="content-data">
-          <p> 
-            السعر:
-            <ion-text color="dark" class="item-big-size">
-      
-               {{product.price | currency:" "}}
-               <ion-text color="medium">ج.م</ion-text> 
-              
-            </ion-text>
-          </p> 
-          <p> 
-            الكود:
-            <ion-text color="dark" >
-              {{product.code}}
-            </ion-text>
-          </p> 
-  
-          <p> 
-           
-          </p> 
-         </div>
-
-         <div class = "content-img">
-          <ion-img src="{{product.imgs[0].src}}" (ionImgDidLoad) = "setImageLoaded(product)" >  </ion-img>
-          <ion-spinner  [hidden] = "product.imgs[0].loaded" color="primary"></ion-spinner>
-          <ion-img src="assets/images/place-holder.png" [hidden] = "product.imgs[0].loaded">  </ion-img>
-         </div>
-
-         <ion-card-subtitle>
-          تاريخ اضافة:
-          <ion-text color="medium" >
-            {{product.createdAt.seconds * 1000  | date:"short"}}
-          </ion-text>
-         </ion-card-subtitle>
-      
-       </ion-card-content>
-       
-
-
-     </ion-card> 
-
-   </ion-card>
+     </ion-item> 
+   </ion-list>
+   <app-product-item *ngFor="let product of productList" [product] = "product"></app-product-item>
    <!-- End Product List -->
 
    <!-- search return no data card -->
-     <ion-card  *ngIf="productList.length===0 && dataLoaded" color = 'light'>
+    <ion-card  *ngIf="productList.length===0 && dataLoaded" color = 'light'>
       <ion-card-content>
         <ion-label>لا توجد اصناف  لهذة التصفية</ion-label>
       </ion-card-content>
     </ion-card>
     <!-- End of search return no data card  -->
-   
+    
 </ion-content>

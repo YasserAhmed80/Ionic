@@ -6,7 +6,7 @@
     grid-gap:5px;
  
 
-    grid-template-columns: 2fr 7fr;
+    grid-template-columns: 2fr 6fr;
     grid-template-areas: 
             'header header'
             'side-menu menu-content';
@@ -39,8 +39,15 @@
         ion-img{
             border: 1px solid var(--ion-color-medium);
             border-radius: 50%;
+            width:50px;
+            height:50px;
             overflow: hidden;
             object-fit:  cover;
+        }
+
+        ion-label{
+            font-size: 12px;
+            text-align: center;
         }
 
         
@@ -53,8 +60,14 @@
 }
 
 
-
 .menu-content{
     grid-area: menu-content;
     overflow: auto;
+    ion-card{
+        margin: 5px 5px 5px 0px !important;
+        border-radius: 0%;
+        // border-right: 2px solid var(--ion-color-medium) ;
+        // border-top-right-radius: 15px;
+    }
+    
 }
