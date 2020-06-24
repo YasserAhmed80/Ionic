@@ -1,0 +1,18 @@
+<ion-header>
+
+  <ion-toolbar color= "primary">
+    <ion-title>تسوق مع ياسر</ion-title>
+
+    <ion-buttons slot= "start">
+      <ion-back-button text=" "  icon="chevron-back-outline"></ion-back-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <app-item-detail *ngFor="let product of productList" [product] = "product"></app-item-detail>
+
+
+</ion-content>

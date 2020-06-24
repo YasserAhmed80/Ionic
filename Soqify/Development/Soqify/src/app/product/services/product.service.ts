@@ -179,7 +179,7 @@ export class ProductService {
         
 
         if (runFlag){
-          console.log('filter run', runFlag, parent_cat, main_cat, sub_cat, sup_id)
+          // console.log('filter run', runFlag, parent_cat, main_cat, sub_cat, sup_id)
 
           let results =  <any>this.fireStore.collection("product", ref=>{
             let query: firebase.firestore.CollectionReference | firebase.firestore.Query = ref;
@@ -253,7 +253,7 @@ export class ProductService {
       filters.push(filter);
     }
 
-    console.log('saved search fileter', filters)
+    // console.log('saved search fileter', filters)
     this.SaveProductSearchFilter(filters);
 
     return of( filters);

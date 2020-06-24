@@ -28,7 +28,7 @@ import { AppComponent } from './app.component';
 import { AuthService } from './auth/services/auth.service'
 
 import { environment } from '../environments/environment';
-import { SharedModule } from './shared/shared.module';
+
 
 @NgModule({
   declarations: [AppComponent],

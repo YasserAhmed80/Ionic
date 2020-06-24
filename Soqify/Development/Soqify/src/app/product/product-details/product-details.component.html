@@ -229,22 +229,21 @@
         <ion-card-content class="image-card-content">
           <div class="image-section--">
             
-
-            <ion-img [src] = "currentImage.src" class="current-image"></ion-img>
+            <app-img-loader [src] = "currentImage.src" class="current-image"></app-img-loader>
 
           </div>
 
           <div class="image-thumb" *ngIf="images.length!==0; else empty"> 
 
             <ion-thumbnail *ngFor="let image of getImages()"  (click)="setCurrentImage(image)" class="{{image.selected? 'thumb-Selected' : 'none'}}">
-              <ion-img [src] = "image.src"></ion-img>
+              <app-img-loader [src] = "image.src"></app-img-loader>
             </ion-thumbnail>
           </div>
 
           <ng-template #empty  >  
             <div class="image-thumb">
               <ion-thumbnail *ngFor="let i of [1,2,3,4,5,6]" >
-                <ion-img src = "assets/images/camira-placeholder.png"></ion-img>
+                <app-img-loader src = "assets/images/camira-placeholder.png"></app-img-loader>
               </ion-thumbnail>
             </div>     
           </ng-template>
