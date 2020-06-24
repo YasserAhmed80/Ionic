@@ -8,10 +8,10 @@ import { AuthService } from 'src/app/auth/services/auth.service';
 
 @Component({
   selector: 'app-product-list',
-  templateUrl: './product-list.page.html',
-  styleUrls: ['./product-list.page.scss'],
+  templateUrl: './product-list.component.html',
+  styleUrls: ['./product-list.component.scss'],
 })
-export class ProductListPage implements OnInit {
+export class ProductListComponent implements OnInit {
   
   productList:IProduct[]=[];
   productFilter:any[]=[];
@@ -75,8 +75,5 @@ export class ProductListPage implements OnInit {
     this.menuController.close();
   }
 
-
-
-  
 
 }

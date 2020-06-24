@@ -9,7 +9,7 @@
   <div class="page-layout">
 
     <div class="header">
-      <ion-segment color = "secondary" [value] = "selectedParentCat" scrollable (ionChange) = "ParentCatClick($event)" >
+      <ion-segment color = "secondary" [value] = "selectedParentCat" scrollable="true" (ionChange) = "ParentCatClick($event)" >
         <ion-segment-button *ngFor="let p_cat of parentCat" [value]="p_cat.key">
           <ion-label>{{p_cat.name}}</ion-label>
           <ion-icon name = "home"></ion-icon>

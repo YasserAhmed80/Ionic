@@ -1,0 +1,27 @@
+:host{
+    display: block;
+    .content-img{
+        display:grid;
+        justify-items: center;
+        align-items: center;
+        grid-template-areas: 'overlay';
+        grid-template-columns: 1fr;
+
+        width:inherit;
+        height: inherit;
+        
+        ion-img{
+            grid-area: overlay;      
+            overflow: hidden !important;
+            object-fit: cover;
+            width:inherit;
+            height: inherit;
+            border: 1px solid var(--ion-color-light);
+            border-radius: 5px;
+        }
+        ion-spinner{
+            grid-area: overlay;
+            --color: var(--ion-color-secondary);
+        }
+    }
+}

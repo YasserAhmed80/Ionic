@@ -20,13 +20,16 @@
   </ion-toolbar>
 
 
+
 </ion-header>
+
+
 
 <!-- Filter menu -->
 <ion-menu side="start" menuId="main_menu" contentId="main" auto (click) = "menuClick()">
   <ion-header>
     <ion-toolbar color="">
-      <ion-title>الاقسام</ion-title>
+      <ion-title>تصقية حسب</ion-title>
     </ion-toolbar>
   </ion-header>
   <ion-content>
@@ -56,6 +59,8 @@
 
   </ion-content>
 </ion-menu>
+
+
 <!-- End filter menu -->
 
 <ion-content *ngIf="true" id="main">
@@ -78,6 +83,7 @@
       <ion-chip color="primary" fill="full"><ion-label>{{productList.length}}</ion-label></ion-chip>
      </ion-item> 
    </ion-list>
+   
    <app-product-item *ngFor="let product of productList" [product] = "product"></app-product-item>
    <!-- End Product List -->
 

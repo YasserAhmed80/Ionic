@@ -9,16 +9,16 @@ import { PhotoService, IImage } from 'src/app/shared/services/photo.service';
 import { IProduct, ProductSatusRef } from 'src/app/model/product';
 import { Validators ,FormBuilder, Form } from '@angular/forms';
 import { ProductService } from '../services/product.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 
 
 @Component({
   selector: 'app-product-details',
-  templateUrl: './product-details.page.html',
-  styleUrls: ['./product-details.page.scss'],
+  templateUrl: './product-details.component.html',
+  styleUrls: ['./product-details.component.scss'],
 })
-export class ProductDataPage implements OnInit {
+export class ProductDetailComponent implements OnInit {
   
   parentCat= [];
   mainCat = [];

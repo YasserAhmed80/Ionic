@@ -1,0 +1,5 @@
+<div class = "content-img">
+  <ion-img [src]="src" (ionImgDidLoad) = "imageLoaded = true" >  </ion-img>
+  <ion-spinner  [hidden] = "imageLoaded" ></ion-spinner>
+  <ion-img src="assets/images/place-holder.png" [hidden] = "imageLoaded">  </ion-img>
+ </div>
