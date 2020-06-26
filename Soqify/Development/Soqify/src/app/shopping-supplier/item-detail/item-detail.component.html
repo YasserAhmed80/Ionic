@@ -1,53 +1,17 @@
 <ion-card  detail button
-          class="card-item"
           routerLink="product-details/{{product.id}}"   >
 
-       <ion-card-header>
-         <ion-card-title>
-           <ion-item lines="full" detail  >
-               <ion-label class= "card-header" color="primary" >{{product.name}}</ion-label>
-           </ion-item>
-         </ion-card-title>
-         <ion-card-subtitle no-wrap>
-             {{product.desc}} 
-        </ion-card-subtitle>
-       </ion-card-header>
-
-    <ion-card-content>
-      
-         <div class="content-data">
-            <p> 
-              السعر:
-              <ion-text color="dark" class="item-big-size">
-        
-                {{product.price | currency:" "}}
-                <ion-text color="medium">ج.م</ion-text> 
-                
-              </ion-text>
-            </p> 
-            <p> 
-              الكود:
-              <ion-text color="dark" >
-                {{product.code}}
-              </ion-text>
-            </p> 
-    
-            <p> 
-            
-            </p> 
-         </div>
-
-
+    <ion-card-content class = "card-content" >
         <app-img-loader class = "content-img" src= "{{product.imgs[0]}}"></app-img-loader>
-
-
-         <ion-card-subtitle>
-          تاريخ اضافة:
-          <ion-text color="medium" >
-            {{product.createdAt.seconds * 1000  | date:"short"}}
-          </ion-text>
-         </ion-card-subtitle>
-      
     </ion-card-content>
+    <ion-card-header> 
+        <ion-label class= "item-name"  >{{product.name}}</ion-label>
+        <ion-text>
+          <ion-label class= "item-price" color="primary" >{{product.price |currency:" "}} </ion-label>
+          <ion-note>جم</ion-note>
+        </ion-text>
+        
+    </ion-card-header>
+    
        
 </ion-card> 

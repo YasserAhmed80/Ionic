@@ -1,6 +1,6 @@
 <ion-header>
 
-  <ion-toolbar color= "primary">
+  <ion-toolbar color="primary">
     <ion-title>تسوق مع ياسر</ion-title>
 
     <ion-buttons slot= "start">
@@ -8,11 +8,28 @@
     </ion-buttons>
 
   </ion-toolbar>
+
+  <ion-toolbar class="sort-filter">
+    <ion-buttons slot="end">
+      <ion-button>
+        <!-- <ion-label>ترتيب</ion-label> -->
+        <ion-icon name="cellular-outline"></ion-icon>
+      </ion-button>
+      <ion-button  (click) = "changeDisplay()">
+        <ion-icon [name]="display_icon"></ion-icon>
+      </ion-button>
+      
+    </ion-buttons>
+  </ion-toolbar>
+
 </ion-header>
 
+
 <ion-content>
-
-  <app-item-detail *ngFor="let product of productList" [product] = "product"></app-item-detail>
-
-
+  <div [ngClass]="'items-section-'+displayType">
+    <ng-container  *ngFor="let product of productList">
+      <app-item-detail *ngIf="displayType==='grid'" [product] = "product"></app-item-detail>
+      <app-item-detail-wide *ngIf="displayType==='list'" [product] = "product"></app-item-detail-wide>
+    </ng-container>
+  </div>
 </ion-content>

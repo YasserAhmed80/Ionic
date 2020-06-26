@@ -11,15 +11,12 @@ ion-card {
     line-height:140% !important;
     display: block !important;
 
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space:pre-wrap !important;
-    height: 35px;
-    font-weight: 200 !important;
 
+    font-weight: 200 !important;
 }
 
 .item-price{
+    margin: 1rem 0px;
     font-size: 1.1rem;
     font-weight: 700;
     color:black;
@@ -32,12 +29,13 @@ ion-card-header{
 
 
 .card-content{
-    padding: 0px 0px;
+    display:grid;
+    grid-template-columns: 120px auto;
 }
 
 app-img-loader{
-    height: 250px;
-    width:100%;
+    height: 150px;
+    width:100px;
     padding:2px 2px;
     margin:0px 0px !important;
   

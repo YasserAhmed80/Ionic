@@ -7,10 +7,11 @@ import { IonicModule } from '@ionic/angular';
 import { ShoppingComponent } from './shopping/shopping.component';
 import { SharedModule } from '../shared/shared.module';
 import { ItemDetailComponent } from './item-detail/item-detail.component';
+import { ItemDetailWideComponent } from './item-detail-wide/item-detail-wide.component';
 
 
 @NgModule({
-  declarations: [HomeComponent, ShoppingComponent, ItemDetailComponent],
+  declarations: [HomeComponent, ShoppingComponent, ItemDetailComponent,ItemDetailWideComponent],
   imports: [
     CommonModule,
     ShoppingSupplierRoutingModule,

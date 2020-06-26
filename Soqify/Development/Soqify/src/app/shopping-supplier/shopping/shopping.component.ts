@@ -13,6 +13,8 @@ import { IProduct } from 'src/app/model/product';
 export class ShoppingComponent implements OnInit {
   dataLoaded: boolean = false;
   productList: IProduct []= [];
+  display_icon: string = "list-outline";
+  displayType: string = "grid" 
 
   constructor( private messagesService:MessagesService,
                private masterData: MasterDataService,
@@ -51,6 +53,17 @@ export class ShoppingComponent implements OnInit {
       loader.then((loading)=> loading.dismiss());
     });
 
+  }
+
+  changeDisplay(){
+    if (this.displayType ==="grid"){
+      this.display_icon =  "grid-outline";
+      this.displayType="list";
+    }else{
+      this.display_icon =  "list-outline";
+      this.displayType="grid"
+    }
+    
   }
 
 }

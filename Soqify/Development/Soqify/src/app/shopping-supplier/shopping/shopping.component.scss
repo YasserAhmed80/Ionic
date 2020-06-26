@@ -1,0 +1,25 @@
+.items-section-grid{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap:5px;
+
+    grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+    
+}
+
+.items-section-list{
+    display:grid;
+    grid-template-columns: 1fr ;
+    grid-gap:5px;
+
+    // grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+    
+}
+
+ .sort-filter{
+    ion-icon{
+        font-size: 1.3rem !important;
+        color:var(--ion-color-medium);
+    }
+}
+
