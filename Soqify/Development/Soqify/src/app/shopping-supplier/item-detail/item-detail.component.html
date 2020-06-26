@@ -1,17 +1,49 @@
-<ion-card  detail button
-          routerLink="product-details/{{product.id}}"   >
+<ion-header>
+  <ion-toolbar >
+    <ion-title> بيانات الصنف </ion-title>
+
+    <ion-buttons slot= "start">
+      <ion-back-button text=" "  icon="chevron-back-outline"></ion-back-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content  *ngIf="currentProduct">
+  
+  <ion-card>
 
     <ion-card-content class = "card-content" >
-        <app-img-loader class = "content-img" src= "{{product.imgs[0]}}"></app-img-loader>
-    </ion-card-content>
-    <ion-card-header> 
-        <ion-label class= "item-name"  >{{product.name}}</ion-label>
-        <ion-text>
-          <ion-label class= "item-price" color="primary" >{{product.price |currency:" "}} </ion-label>
+      <div class="image-section">
+        <app-img-loader class = "content-img" src= "{{currentProduct.imgs[0]}}"></app-img-loader>
+      </div>
+
+      <div class="item-desc">
+        <ion-note>رقم الصنف:<ion-label>{{currentProduct.code}}</ion-label></ion-note> 
+        <ion-label class= "item-name"  >{{currentProduct.name}}</ion-label>
+        <ion-note>{{currentProduct.desc}}</ion-note>
+        <ion-text class="price">
+          <ion-label class= "item-price" color="primary" >{{currentProduct.price |currency:" "}} </ion-label>
           <ion-note>جم</ion-note>
         </ion-text>
-        
-    </ion-card-header>
-    
-       
-</ion-card> 
+
+      </div>  
+    </ion-card-content>
+  </ion-card> 
+
+  <ion-card color="light">
+    <ion-card-content class = "add-to-card">
+      
+      <div class="add-quantity">
+          <ion-button color="medium" fill="full" (click)= "updatedAmount(1)"><ion-icon name="add-outline"></ion-icon></ion-button>
+          <ion-label> {{amount}}</ion-label>
+          <ion-button  color="medium"  fill="full" (click)= "updatedAmount(-1)"><ion-icon name="remove-outline"></ion-icon></ion-button>
+      </div>
+      <div class="add-button">
+        <ion-button expand="block">Add to card</ion-button>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+
+</ion-content>

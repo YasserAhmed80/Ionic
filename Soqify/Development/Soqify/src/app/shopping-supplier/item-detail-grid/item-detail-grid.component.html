@@ -1,0 +1,18 @@
+
+<ion-card  detail button
+        routerLink="../item-detail/{{product.id}}"   >
+
+<ion-card-content class = "card-content" >
+    <app-img-loader class = "content-img" src= "{{product.imgs[0]}}"></app-img-loader>
+</ion-card-content>
+<ion-card-header> 
+    <ion-label class= "item-name"  >{{product.name}}</ion-label>
+    <ion-text>
+        <ion-label class= "item-price" color="primary" >{{product.price |currency:" "}} </ion-label>
+        <ion-note>جم</ion-note>
+    </ion-text>
+    
+</ion-card-header>
+
+</ion-card> 
+

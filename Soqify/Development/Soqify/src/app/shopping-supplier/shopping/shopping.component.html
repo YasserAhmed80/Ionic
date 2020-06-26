@@ -28,8 +28,8 @@
 <ion-content>
   <div [ngClass]="'items-section-'+displayType">
     <ng-container  *ngFor="let product of productList">
-      <app-item-detail *ngIf="displayType==='grid'" [product] = "product"></app-item-detail>
-      <app-item-detail-wide *ngIf="displayType==='list'" [product] = "product"></app-item-detail-wide>
+      <app-item-detail-grid *ngIf="displayType==='grid'" [product] = "product"></app-item-detail-grid>
+      <app-item-detail-list *ngIf="displayType==='list'" [product] = "product"></app-item-detail-list>
     </ng-container>
   </div>
 </ion-content>

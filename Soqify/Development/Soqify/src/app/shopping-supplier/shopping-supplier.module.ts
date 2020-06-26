@@ -6,12 +6,17 @@ import { HomeComponent } from './home/home.component';
 import { IonicModule } from '@ionic/angular';
 import { ShoppingComponent } from './shopping/shopping.component';
 import { SharedModule } from '../shared/shared.module';
+import { ItemDetailGridComponent } from './item-detail-grid/item-detail-grid.component';
+import { ItemDetailListComponent } from './item-detail-list/item-detail-list.component';
 import { ItemDetailComponent } from './item-detail/item-detail.component';
-import { ItemDetailWideComponent } from './item-detail-wide/item-detail-wide.component';
 
 
 @NgModule({
-  declarations: [HomeComponent, ShoppingComponent, ItemDetailComponent,ItemDetailWideComponent],
+  declarations: [HomeComponent, 
+                 ShoppingComponent, 
+                 ItemDetailGridComponent,
+                 ItemDetailComponent,
+                 ItemDetailListComponent],
   imports: [
     CommonModule,
     ShoppingSupplierRoutingModule,
