@@ -5,7 +5,7 @@ import { take } from 'rxjs/operators'
 
 
 import { main_cat, parent_cat,sub_cat, IParent_cat, IMain_cat, ISub_cat,IBusiness_type, 
-        business_type, IGovernate, ICity, governates,cities,Colors, Sizes } from '../../data/master-data';
+        business_type, IGovernate, ICity, governates,cities,Colors, Sizes, IColor, ISize } from '../../data/master-data';
 import { AuthService } from 'src/app/auth/services/auth.service';
 
 
@@ -20,7 +20,8 @@ export class MasterDataService {
   businessType:IBusiness_type[]=[];
   governates: IGovernate[]=[];
   cities: ICity[]=[];
-  colors=[];
+  colors:IColor[]=[];
+  sizes:ISize[]=[];
 
   constructor(private fireStore:AngularFirestore,
               private authUser: AuthService
@@ -65,7 +66,9 @@ export class MasterDataService {
     this.productSubCat = this.getFromLocalStorage('productSubCat');
     this.businessType = this.getFromLocalStorage('businessType');
     this.governates = this.getFromLocalStorage('governates');
-    this.cities = this.getFromLocalStorage('cities')
+    this.cities = this.getFromLocalStorage('cities');
+    this.colors = this.getColors();
+    this.sizes = this.getSizes();
 
     if (this.productParentCat.length===0) {
       console.log('master data reload!')

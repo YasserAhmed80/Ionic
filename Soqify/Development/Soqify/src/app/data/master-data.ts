@@ -1,6 +1,13 @@
 // colors
+export interface IColor{
+  key:number,
+  image: string,
+  name:string,
+  lang_cde:number,
+  seq:number
+}
 
-export const Colors=[
+export const Colors: IColor[]=[
   {key:1,image:'multicolour',name:'متعدد الألوان',lang_cde:1,seq:1},
   {key:2,image:'black',name:'اسود',lang_cde:1,seq:2},
   {key:3,image:'blue',name:'ازرق',lang_cde:1,seq:3},
@@ -20,7 +27,13 @@ export const Colors=[
 ]
 
 // product Sizes
-export const Sizes=[
+export interface ISize{
+  key:number,
+  name:string,
+  cat:number,
+  seq:number
+}
+export const Sizes:ISize[]=[
   {key:1,name:'2XS',cat:1,seq:1},
   {key:2,name:'XS',cat:1,seq:2},
   {key:3,name:'S',cat:1,seq:3},

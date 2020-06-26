@@ -3,6 +3,8 @@ import { IProduct } from 'src/app/model/product';
 import { MessagesService } from 'src/app/shared/services/messages.service';
 import { ActivatedRoute } from '@angular/router';
 import { ProductService } from 'src/app/product/services/product.service';
+import { MasterDataService } from 'src/app/shared/services/master-data.service';
+import { Sizes, IColor, ISize } from 'src/app/data/master-data';
 
 @Component({
   selector: 'app-item-detail',
@@ -15,11 +17,25 @@ export class ItemDetailComponent implements OnInit {
   maxAmount:number = 4;
   amount:number = 1;
 
+  colors:IColor[] = [];
+  sizes:ISize[] = [];
+  selectedColor: number = -1;
+  selectedSize: number = -1;
+
   dataLoaded:boolean=false;
+
+  slideOpts = {
+    slidesPerView: 1,
+    pagination: {
+      el: '.swiper-pagination',
+      type: 'progressbar',
+    }
+  }  
 
   constructor(private messagesService:MessagesService,
               private productService:ProductService,
               private activatedRoute: ActivatedRoute,
+              private masterData:MasterDataService,
 
   ) { }
 
@@ -46,9 +62,15 @@ export class ItemDetailComponent implements OnInit {
     }
     else {
       this.currentProduct = this.productService.currentProduct;
-    }   
+    }
+    
+    this.masterData.getMasterData().then(()=>{
 
-    loader.then((loading)=> loading.dismiss());
+      this.colors = this.productService.getColors(this.currentProduct);
+      this.sizes =this.productService.getsizes(this.currentProduct);
+      loader.then((loading)=> loading.dismiss());
+    });
+
   }
 
   updatedAmount(change:number){
@@ -56,6 +78,13 @@ export class ItemDetailComponent implements OnInit {
     if (this.amount<this.minAmount) {this.amount=this.minAmount};
 
     if (this.amount>this.maxAmount) {this.amount=this.maxAmount}
+  }
+
+  setSelectedColor(key:number){
+    this.selectedColor = key;
+  }
+  setSelectedSize(key:number){
+    this.selectedSize = key;
   }
 
 }

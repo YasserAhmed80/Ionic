@@ -14,7 +14,7 @@ ion-card {
 }
 
 .item-price{
-    font-size: 1.1rem;
+    font-size: 20px;
     font-weight: 700;
     color:black;
 }
@@ -42,12 +42,17 @@ ion-note{
     align-items: center !important;
     justify-items: center !important;
     grid-template-columns: 1fr ;
+    width:100%;
 }
 
 .image-section{
-    height: 300px;
-    width:90%;
-    
+    height: 350px;
+    width:90vw;
+
+    .image-slider{
+        height: inherit;
+        width: inherit;
+    }
 }
 app-img-loader{
     width:100%;
@@ -80,7 +85,7 @@ app-img-loader{
         }
     }
     ion-label  {
-        border:1px solid var(--ion-color-medium);
+        border:1px solid var(--ion-color-light);
         border-radius: 2px;
         font-size: 1.5rem;
         text-align: center !important;
@@ -96,3 +101,32 @@ app-img-loader{
     }
     
 }
+
+.color-card-content, .size-card-content{
+    padding: 1px 1px !important;
+    display:grid;
+
+
+  }
+  
+  .color-card-content{
+    grid-template-columns: 1.2fr 1fr 1fr;
+    border-bottom: 1px solid var(--ion-color-light);
+  }
+  
+  .size-card-content{
+    grid-template-columns: 1.2fr 1fr 1fr 1fr ;
+    border-top: 1px solid var(--ion-color-light);
+  }
+
+  .color-size{
+      display: grid;
+      grid-template-columns: 1fr;
+  }
+
+  ion-chip{
+    font-size:13px !important;
+    ion-label{
+      padding: 2px 2px !important;
+    }
+  }

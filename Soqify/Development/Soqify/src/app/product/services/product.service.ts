@@ -6,6 +6,7 @@ import { take, switchMap,tap, distinctUntilChanged } from 'rxjs/operators'
 import { BehaviorSubject, Observable, combineLatest,  EMPTY, of } from 'rxjs';
 import { MasterDataService } from 'src/app/shared/services/master-data.service';
 import { UtilityService } from '../../shared/services/utility.service';
+import { IColor, ISize } from 'src/app/data/master-data';
 
 @Injectable({
   providedIn: 'root'
@@ -28,9 +29,6 @@ export class ProductService {
   supplierFilter$ : BehaviorSubject<string|null>;
 
   productSearchReasult$: Observable<any>;
-
-
-
 
 
 
@@ -318,6 +316,24 @@ export class ProductService {
 
   }
 
-  
+  getColors(product:IProduct):IColor[]{
+    if (product.colors){
+      return product.colors.map((pro_color)=>{
+        let index = this.masterData.colors.map((cc)=> cc.key).indexOf(pro_color);
+        return this.masterData.colors[index];
+      })
+    }
+    
+  }
+  getsizes(product:IProduct):ISize[]{
+    if (product.sizes){
+      return product.sizes.map((pro_size)=>{
+        let index = this.masterData.sizes.map((cc)=> cc.key).indexOf(pro_size);
+        return this.masterData.sizes[index];
+      })
+    }
+    
+  }
+
   
 }
