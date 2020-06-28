@@ -5,6 +5,8 @@ import { ActivatedRoute } from '@angular/router';
 import { ProductService } from 'src/app/product/services/product.service';
 import { MasterDataService } from 'src/app/shared/services/master-data.service';
 import { Sizes, IColor, ISize } from 'src/app/data/master-data';
+import { CartService } from 'src/app/cart/service/cart.service';
+import { AuthService } from 'src/app/auth/services/auth.service';
 
 @Component({
   selector: 'app-item-detail',
@@ -36,6 +38,8 @@ export class ItemDetailComponent implements OnInit {
               private productService:ProductService,
               private activatedRoute: ActivatedRoute,
               private masterData:MasterDataService,
+              private cartService:CartService,
+              private authService:AuthService,
 
   ) { }
 
@@ -85,6 +89,10 @@ export class ItemDetailComponent implements OnInit {
   }
   setSelectedSize(key:number){
     this.selectedSize = key;
+  }
+
+  addToCart(){
+    this.cartService.addToCard(this.currentProduct,this.authService.user_id,this.amount,this.selectedColor,this.selectedSize)
   }
 
 }

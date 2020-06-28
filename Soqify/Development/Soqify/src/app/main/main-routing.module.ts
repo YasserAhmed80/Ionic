@@ -1,34 +1,38 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { TabsPage } from './tabs.page';
+import { MainComponent } from './main.component';
 
 const routes: Routes = [
   {
-    path: 'tabs',
-    component: TabsPage,
+    path: 'main',
+    component: MainComponent,
     children: [
       {
         path: 'login',
         loadChildren: () => import('../auth/auth.module').then(m => m.AuthModule)
       },
       {
-        path: 'tab2',
+        path: 'admin',
         loadChildren: () => import('../product/product.module').then(m => m.ProductModule)
       },
       {
-        path: 'tab3',
+        path: 'shopping-supplier',
         loadChildren: () => import('../shopping-supplier/shopping-supplier.module').then(m => m.ShoppingSupplierModule)
       },
       {
+        path: 'cart',
+        loadChildren: () => import('../cart/cart.module').then(m => m.CartModule)
+      },
+      {
         path: '',
-        redirectTo: '/tabs/login',
+        redirectTo: '/main/login',
         pathMatch: 'full'
       }
     ]
   },
   {
     path: '',
-    redirectTo: '/tabs/login',
+    redirectTo: '/main/login',
     pathMatch: 'full'
   }
 ];
@@ -37,4 +41,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class TabsPageRoutingModule {}
+export class MainRoutingModule {}

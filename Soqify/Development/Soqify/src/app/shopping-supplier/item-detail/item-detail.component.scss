@@ -122,11 +122,13 @@ app-img-loader{
   .color-size{
       display: grid;
       grid-template-columns: 1fr;
+    //   background-color: var(--ion-color-secondary);
   }
 
   ion-chip{
-    font-size:13px !important;
+    font-size:14px !important;
     ion-label{
       padding: 2px 2px !important;
     }
+    border: 1px solid var(--ion-color-medium);
   }
