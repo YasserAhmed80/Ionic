@@ -18,4 +18,8 @@ export class CartComponent implements OnInit {
     this.orders = this.cartService.orders;
   }
 
+  deleteItem(order,item){
+    this.cartService.deleteItem(order,item);
+  }
+
 }

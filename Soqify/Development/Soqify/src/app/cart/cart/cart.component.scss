@@ -32,13 +32,36 @@ ion-card{
 
 }
 
-ion-row{
-    border-bottom: 1px solid gray;
+.item-content{
+    width:100%;
+    border: 1px solid var(--ion-color-primary);
+    margin: 5px auto;
+    border-radius: 5px;
+    padding:5px 5px;
+    overflow: hidden;
 }
+.row-header{
+    ion-label{
+        font-size:12px;
+    }
+}
+
+.item-section{
+    display:grid;
+    grid-template-columns: 1fr 2fr;   
+
+}
+
 
 .item-line{
     .item-name{
-        color:red;
+        color:black;
+        background-color: var(--ion-color-light);
+        border-radius: 5px;
+    }
+
+    .item-qty, .item-price{
+        font-size: 16px;;
     }
     .item-qty{
         color:black;
