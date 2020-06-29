@@ -45,23 +45,25 @@
       <ion-card-content class="color-card-content" *ngIf="colors.length>0">
         <ion-chip *ngFor="let color of colors" 
                   color="{{color.key === selectedColor?'primary' : 'medium'}}"  
+                  class="{{color.key === selectedColor?'color-szie-selected' : 'none'}}" 
                   (click) = "setSelectedColor(color.key)"
                   outline="false">
           <ion-avatar>
             <ion-img src="assets/colors/{{color.image}}.svg"></ion-img>
           </ion-avatar>
           <ion-label >{{color.name}}</ion-label>
-          <ion-icon name="checkmark-circle" *ngIf="color.key === selectedColor"></ion-icon>
+          <!-- <ion-icon name="checkmark-circle" *ngIf="color.key === selectedColor"></ion-icon> -->
         </ion-chip>
     </ion-card-content>
-
+    
     <ion-card-content class="size-card-content" *ngIf="sizes.length>0">
       <ion-chip *ngFor="let size of sizes" 
                 color="{{size.key === selectedSize?'primary' : 'medium'}}"  
+                class="{{size.key === selectedSize?'color-szie-selected' : 'none'}}"  
                 (click) = "setSelectedSize(size.key)"
                 outline="false">
         <ion-label >{{size.name}}</ion-label>
-        <ion-icon name="checkmark-circle" *ngIf="size.key === selectedSize"></ion-icon>
+        <!-- <ion-icon name="checkmark-circle" *ngIf="size.key === selectedSize"></ion-icon> -->
       </ion-chip>
     </ion-card-content>
   </ion-card>

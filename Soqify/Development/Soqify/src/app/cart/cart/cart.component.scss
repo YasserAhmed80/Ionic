@@ -1,0 +1,50 @@
+.empty-cart{
+    padding-top: 30vh;
+    display: flex;
+    justify-items: center;
+    align-items: center;
+    width:100vw;
+    height: 100vh;
+    flex-direction: column;
+    padding: auto 20px;
+
+    ion-button{
+        margin-top:30px;
+        width:70vw;
+    }
+}
+
+
+ion-card{ 
+    margin: 5px 0px !important;
+    padding: 5px 0px !important;
+    border-radius: 0px !important;
+    width:100% !important;
+}
+
+.order-content{
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    grid-template-columns: 1fr;
+
+    padding: 5px 5px;
+
+}
+
+ion-row{
+    border-bottom: 1px solid gray;
+}
+
+.item-line{
+    .item-name{
+        color:red;
+    }
+    .item-qty{
+        color:black;
+    }
+    .item-price, .item-total{
+        color:red
+    }
+}
+

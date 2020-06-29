@@ -8,7 +8,16 @@ import { IProduct } from 'src/app/model/product';
 export class CartService {
 
   orders: IOrder[] = []; // order can include many sub orders for each supplier.
-  constructor() { }
+  constructor() { 
+    let ords = localStorage.getItem('orders');
+    if ( ords != 'undefined' &&  ords != null){
+      this.orders = JSON.parse(ords);
+      // console.log ('from localstorgae',this.orders)
+    }else{
+      this.orders=[];
+    }
+    // console.log (this.orders)
+  }
 
   addToCard(product:IProduct, cus_id:string, qty:number,color:number, size:number){
     let sup_id = product.sup_id;
@@ -25,6 +34,7 @@ export class CartService {
         cus_id:cus_id,
         sum:0,
         qty:0,
+        count:0,
         status:1,
         cdate:null,
         items:[]
@@ -45,22 +55,24 @@ export class CartService {
     order.items.push(item);
     let summary = this.OrderSummary(order);
 
-    order.qty = summary.count;
+    order.qty = summary.qty;
     order.sum = summary.sum;
+    order.count = summary.count;
 
 
 
-    console.log(order);
+    localStorage.setItem("orders",JSON.stringify( this.orders))
 
   }
 
   OrderSummary(order:IOrder){
     let items = order.items;
 
-    let count = items.map((i)=>i.qty).reduce((a, b) => a+b);
+    let count = items.length;
+    let qty = items.map((i)=>i.qty).reduce((a, b) => a+b);
     let sum = items.map((i)=>i.qty * i.price).reduce((a, b) => a+b);
 
-    return {count, sum}
+    return {count, sum, qty}
 
   }
 }

@@ -9,8 +9,10 @@
 
     <ion-tab-button tab="cart">
         <ion-icon name="cart"></ion-icon>
+        <ion-badge *ngIf="items_count>0">{{items_count}}</ion-badge>
         <ion-label>عربة مشتريات</ion-label>
     </ion-tab-button>
+ 
 
 
     <ion-tab-button tab="login">

@@ -1,3 +1,64 @@
-<p>
-  cart works!
-</p>
+<!-- Empty cart section -->
+<div class="empty-cart" *ngIf="orders.length===0">
+  <ion-label>
+      عربة المشتريات فارغة!
+  </ion-label>
+  <ion-button expand ="full" [routerLink]="['/main/shopping-supplier', 'shopping']">تسوق الان </ion-button>
+</div>
+
+
+<!-- orders section -->
+<ion-card *ngFor="let order of orders">
+
+    <ion-card-content class = "order-content">
+
+        <!-- Supplier data -->
+        <ion-card color="primary" class="supplier-section">
+            <ion-card-header>
+                <ion-card-title>
+                    {{order.sup_id}}
+                </ion-card-title>
+            </ion-card-header>
+        </ion-card>
+        <!-- order items -->
+        <ion-card color="" class="item-section">
+            <ion-card-header>
+                <ion-card-title>
+                    <ion-label>items</ion-label>
+                </ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+                <ion-grid class="item-line" *ngFor="let item of order.items">
+                    <ion-row class="item-name">
+                        <ion-label>{{item.pro_name}}</ion-label>
+                    </ion-row>
+        
+                    <ion-row>
+                        <ion-col size="4"> <ion-label class="item-qty">{{item.qty}}</ion-label></ion-col>
+                        <ion-col size="4"> <ion-label class="item-price">{{item.price}}</ion-label></ion-col>
+                        <ion-col size="4"> <ion-label class="item-total">{{item.qty * item.price}}</ion-label></ion-col>
+                    </ion-row>
+                </ion-grid>
+             
+            </ion-card-content>
+        </ion-card>
+
+        <ion-card color="" class="action-section">
+            <ion-card-header>
+                <ion-card-title>
+                    total
+                </ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+                <ion-grid class="item-line">
+                    <ion-row>
+                        <ion-col size="4"> <ion-label class="item-qty">{{order.count}}</ion-label></ion-col>
+                        <ion-col size="4"> <ion-label class="item-price">{{order.qty}}</ion-label></ion-col>
+                        <ion-col size="4"> <ion-label class="item-total">{{order.sum}}</ion-label></ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-card-content>
+        </ion-card>
+
+    </ion-card-content>
+  </ion-card> 

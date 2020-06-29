@@ -110,12 +110,12 @@ app-img-loader{
   }
   
   .color-card-content{
-    grid-template-columns: 1.2fr 1fr 1fr;
+    grid-template-columns: 1.2fr 1fr 1fr ;
     border-bottom: 1px solid var(--ion-color-light);
   }
   
   .size-card-content{
-    grid-template-columns: 1.2fr 1fr 1fr 1fr ;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
     border-top: 1px solid var(--ion-color-light);
   }
 
@@ -130,5 +130,11 @@ app-img-loader{
     ion-label{
       padding: 2px 2px !important;
     }
-    border: 1px solid var(--ion-color-medium);
+    border: 1px solid var(--ion-color-light);
+    border-radius: 1px;
+  }
+
+  .color-szie-selected{
+      border-color: var(--ion-color-primary);
+      font-weight: 800;
   }

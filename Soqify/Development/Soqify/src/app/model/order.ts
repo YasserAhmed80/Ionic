@@ -5,7 +5,8 @@ export interface IOrder{
     cdate: Date, // created date
     ddate?: Date, // delivery date,
     status:number, // order status,
-    qty: number, // count of items
+    qty: number, // sum of items
+    count:number, // number of items
     sum: number, // order sum (qty * price)
     items?: IOrderItem[]
 };
