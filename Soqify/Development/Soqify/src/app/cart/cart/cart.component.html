@@ -26,20 +26,22 @@
       <ion-card color="" class="item-main-section">
         <ion-card-header>
           <ion-card-title>
-            <ion-label>items</ion-label>
+            <ion-label>لقد قمت باختيار الاصناف الاتية</ion-label>
           </ion-card-title>
         </ion-card-header>
         <ion-card-content class="order-content">
           <div class="item-content" *ngFor="let item of order.items">
-            <ion-row class="item-name">
+
+
+            <ion-item routerLink="/main/shopping/item-detail/{{item.pro_id}}">
               <ion-label>{{ item.pro_name }}</ion-label>
-            </ion-row>
+            </ion-item>
 
             <div class="item-section">
               <div class="item-image">
-                <ion-img
-                  src="https://eg.jumia.is/unsafe/fit-in/680x680/filters:fill(white)/product/06/367581/1.jpg?0027"
-                ></ion-img>
+                <app-img-loader
+                  src="{{item.img}}"
+                ></app-img-loader>
               </div>
               <div class="item-data">
                 <ion-grid class="item-line">
@@ -73,14 +75,14 @@
                   </ion-row>
 
                   <ion-item lines="none">
-                    <ion-button
-                      slot="end"
-                      color="light"
-                      (click)="deleteItem(order, item)"
-                    >
-                      <ion-icon color="medium" name="close-outline"></ion-icon>
+                    <ion-button class="action-button"
+                            slot="end"
+                            color="primary"  fill="icon-only"
+                            (click)="deleteItem(order, item)">
+                            <ion-icon color="medium"  name="close-outline"></ion-icon>
                     </ion-button>
                   </ion-item>
+
                 </ion-grid>
               </div>
             </div>
@@ -88,30 +90,39 @@
         </ion-card-content>
       </ion-card>
 
-      <ion-card color="" class="action-section">
+      <ion-card color="primary" class="action-section">
         <ion-card-header>
-          <ion-card-title>
-            total
-          </ion-card-title>
+          <ion-card-subtitle>
+            اجمالي الفاتورة
+          </ion-card-subtitle>
         </ion-card-header>
         <ion-card-content>
-          <ion-grid class="item-line">
-            <ion-row>
-              <ion-col size="3">
-                <ion-label class="item-qty">{{ order.count }}</ion-label>
-              </ion-col>
-              <ion-col size="4">
-                <ion-label class="item-price">{{
-                  order.qty | currency: " "
-                }}</ion-label>
-              </ion-col>
-              <ion-col size="5">
-                <ion-label class="item-total">{{
-                  order.sum | currency: " "
-                }}</ion-label>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
+          <!-- heaer row -->
+          <ion-row class="row-header">
+            <ion-col size="3">
+              <ion-label class="row-h">عدد اصناف</ion-label>
+            </ion-col>
+            <ion-col size="4">
+              <ion-label class="row-h">كمية</ion-label>
+            </ion-col>
+            <ion-col size="5">
+              <ion-label class="row-h"> اجمالي القيمة</ion-label>
+            </ion-col>
+          </ion-row>
+          <!-- data row -->
+          <ion-row class="">
+            <ion-col size="3">
+              <ion-label class="order-qty">{{ order.count }}</ion-label>
+            </ion-col>
+            <ion-col size="4">
+              <ion-label class="order-qty">{{  order.qty }}</ion-label>
+            </ion-col>
+            <ion-col size="5">
+              <ion-label class="order-total">{{
+                order.sum | currency: " "
+              }}</ion-label>
+            </ion-col>
+          </ion-row>
         </ion-card-content>
       </ion-card>
     </ion-card-content>

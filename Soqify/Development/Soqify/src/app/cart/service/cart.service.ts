@@ -59,15 +59,12 @@ export class CartService {
         color:color,
         size:size,
         pro_name:product.name, // not saved in DB
+        img:product.imgs[0]
       };
 
       order.items.push(item);
     }
-    let summary = this.OrderSummary(order);
-
-    order.qty = summary.qty;
-    order.sum = summary.sum;
-    order.count = summary.count;
+    this.setOrderSummary(order);
 
     this.items_count = this.getItemsCount();
 
@@ -75,15 +72,19 @@ export class CartService {
 
   }
 
-  OrderSummary(order:IOrder){
-    let items = order.items;
+  setOrderSummary(order:IOrder){
 
-    let count = items.length;
-    let qty = items.map((i)=>i.qty).reduce((a, b) => a+b);
-    let sum = items.map((i)=>i.qty * i.price).reduce((a, b) => a+b);
+    if (order.items.length>0){
+      let items = order.items;
 
-    return {count, sum, qty}
+      let count = items.length;
+      let qty = items.map((i)=>i.qty).reduce((a, b) => a+b);
+      let sum = items.map((i)=>i.qty * i.price).reduce((a, b) => a+b);
 
+      order.qty = qty;
+      order.sum = sum;
+      order.count = count;
+    }
   }
 
   deleteItem(order:IOrder, item:IOrderItem){
@@ -98,12 +99,14 @@ export class CartService {
         this.orders.splice(this.orders.indexOf(order),1)
       }
 
+      this.setOrderSummary(order);
       this.items_count=this.getItemsCount();
       localStorage.setItem("orders",JSON.stringify( this.orders))
     }
   }
 
   getItemsCount(){
+    console.log(this.orders.length);
     if (this.orders.length>0){
       return this.orders.map(o=>o.count).reduce((a,b)=>a+b)
     }else{

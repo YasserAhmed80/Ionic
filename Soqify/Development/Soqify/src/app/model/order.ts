@@ -19,4 +19,5 @@ export interface IOrderItem{
     color:number,
     size:number,
     pro_name:string, // not saved in DB
+    img?:string,
 }
