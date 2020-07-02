@@ -5,6 +5,7 @@ import { MasterDataService } from 'src/app/shared/services/master-data.service';
 import { MessagesService } from 'src/app/shared/services/messages.service';
 import { MenuController } from '@ionic/angular';
 import { AuthService } from 'src/app/auth/services/auth.service';
+import { SupplierService } from 'src/app/shared/services/supplier.service';
 
 @Component({
   selector: 'app-product-list',
@@ -27,7 +28,8 @@ export class ProductListComponent implements OnInit {
               public masterData: MasterDataService,
               private messagesService:MessagesService,
               public menuController : MenuController,
-              private authUSer: AuthService
+              private authUSer: AuthService,
+              private supplierService:SupplierService,
     ) { }
 
   async ngOnInit() {
@@ -41,7 +43,7 @@ export class ProductListComponent implements OnInit {
 
       this.productService.runQuery(false);
 
-      this.productService.supplierFilter$.next(this.authUSer.user.id);
+      this.productService.supplierFilter$.next(this.supplierService.currentSupplier.id);
       if (this.productService.savedProductFilter){
         console.log('saved search in local s', this.productService.savedProductFilter)
         this.productService.setProductFilter(this.productService.savedProductFilter)

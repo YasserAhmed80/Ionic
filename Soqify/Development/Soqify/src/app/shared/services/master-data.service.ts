@@ -112,7 +112,7 @@ export class MasterDataService {
     // if business type not defined set it to 1 [clothes]
     var businessSections;
 
-    if (this.authUser.user){
+    if (this.authUser.user && this.authUser.user.bus_sec){
       businessSections = this.authUser.user.bus_sec
     }else{
       businessSections = [1] 

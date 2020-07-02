@@ -10,6 +10,7 @@ import { IProduct, ProductSatusRef } from 'src/app/model/product';
 import { Validators ,FormBuilder, Form } from '@angular/forms';
 import { ProductService } from '../services/product.service';
 import { ActivatedRoute } from '@angular/router';
+import { SupplierService } from 'src/app/shared/services/supplier.service';
 
 
 
@@ -69,6 +70,7 @@ export class ProductDetailComponent implements OnInit {
   //  Constructor function
   /*-----------------------------------------------------------------------------*/
   constructor(private authUser: AuthService,
+              private supplierService: SupplierService,
               private masterDataService:MasterDataService,
               private photoService:PhotoService,
               private productService: ProductService,
@@ -523,7 +525,7 @@ export class ProductDetailComponent implements OnInit {
       if (messages.length === 0){
         // set current product to new object using current values
         this.currentProduct = {
-          sup_id:this.authUser.user_id, // supplier ID
+          sup_id:this.supplierService.currentSupplier.id, // supplier ID
           name: this.productForm.value.name,
           code: this.productForm.value.code,
           desc: this.productForm.value.desc, //description

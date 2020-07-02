@@ -43,18 +43,22 @@ export interface IUser{
 
 
 export interface ISupplier{
-    id: string,
-    ord_tot: {c:number, s:number}, // count and sum of all orders
-    ord_del:  {c:number, s:number}, // count and sum of all deliverd orders
-    ord_pend:  {c:number, s:number}, // count and sum of all pending orders
-    ord_cancel:  {c:number, s:number}, // count and sum of all cancelled orders
+    id?: string,
+    user_id?:string,
+    ord_tot?: {c:number, s:number}, // count and sum of all orders
+    ord_del?:  {c:number, s:number}, // count and sum of all deliverd orders
+    ord_pend?:  {c:number, s:number}, // count and sum of all pending orders
+    ord_cancel?:  {c:number, s:number}, // count and sum of all cancelled orders
+    createdAt?:any,
 };
 
 export interface ICustomer{
-    id: string,
-    ord_tot: {c:number, s:number}, // count and sum of all orders
-    ord_del:  {c:number, s:number}, // count and sum of all deliverd orders
-    ord_pend:  {c:number, s:number}, // count and sum of all pending orders
-    ord_cancel:  {c:number, s:number}, // count and sum of all cancelled orders
+    id?: string,
+    user_id?:string,
+    ord_tot?: {c:number, s:number}, // count and sum of all orders
+    ord_del?:  {c:number, s:number}, // count and sum of all deliverd orders
+    ord_pend?:  {c:number, s:number}, // count and sum of all pending orders
+    ord_cancel?:  {c:number, s:number}, // count and sum of all cancelled orders
+    createdAt?:any,
 };
 

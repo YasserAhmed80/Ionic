@@ -4,13 +4,14 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 import { UtilityService } from '../../shared/services/utility.service';
 
-import { IUser } from '../../model/identity'
+import { IUser, ISupplier, UserTypeRef } from '../../model/user'
 import { take } from 'rxjs/operators'
 
 
 // Facebool blugin for auth for Android, iOS, Web
 import { Plugins } from '@capacitor/core';
 import { FacebookLoginResponse } from '@rdlabo/capacitor-facebook-login';
+import { SupplierService } from 'src/app/shared/services/supplier.service';
 
 
 const { FacebookLogin } = Plugins;
@@ -26,12 +27,14 @@ export class AuthService {
 
   constructor(public fireAuth:AngularFireAuth, 
              public fireStore: AngularFirestore,
-             private utilityService:UtilityService
+             private utilityService:UtilityService,
+             private supplierService:SupplierService,
              ) 
   { 
-    let user = localStorage.getItem('identity');
-    if ( user !== 'undefined'){
+    let user = localStorage.getItem('user');
+    if ( user !== 'undefined' && user){
       this.user = JSON.parse(user);
+      supplierService.getSupplier(this.user.id);
       
     }
     
@@ -61,7 +64,7 @@ export class AuthService {
 
           this.addUserData(user);
 
-          localStorage.setItem('identity', JSON.stringify(this.user));
+          localStorage.setItem('user', JSON.stringify(this.user));
           // send verification mail
           this.sendVerificationMail();
           return 'success';
@@ -80,7 +83,7 @@ export class AuthService {
        return 'verify';
       }else{
         // reterive user data after sign in
-        localStorage.setItem('identity', JSON.stringify(this.user));
+        localStorage.setItem('user', JSON.stringify(this.user));
         return 'success';
       }
      })
@@ -97,7 +100,7 @@ export class AuthService {
       })
     }else{
       return this.fireAuth.auth.signOut().then(() => {
-        localStorage.removeItem('identity');
+        localStorage.removeItem('user');
         // redirect to required page
       })
     }
@@ -107,7 +110,7 @@ export class AuthService {
 
   // Returns true when user is looged in
   get isLoggedIn(): boolean {
-    const user = JSON.parse(localStorage.getItem('identity'));
+    const user = JSON.parse(localStorage.getItem('user'));
     return (user !== null && user.emailVerified !== false) ? true : false;
   }
 
@@ -115,27 +118,45 @@ export class AuthService {
     return this.user.id;
   }
 
-  // Store user in localStorage
+  // Store user in DB
   async addUserData(userData:IUser) {
-      let newUSer = this.fireStore.collection('identity').add(userData);
+
+      let newUSer = this.fireStore.collection('user').add(userData);
       
-      await newUSer
-        .then((doc) => {
-          return doc;
-        })
-        .catch((err) => {
-          return false;
-        });
+      let userAdded =  await  newUSer;
+      userData.id = userAdded.id;
+
+      if (userData.type = UserTypeRef.Supplier){
+        console.log('new supplier added')
+        let supplier: ISupplier={
+          user_id: userAdded.id,
+          createdAt : this.utilityService.timestamp,
+          ord_cancel:{c:0,s:0},
+          ord_del:{c:0,s:0},
+          ord_pend:{c:0,s:0},
+          ord_tot:{c:0,s:0},
+
+        };       
+        let s=  await this.supplierService.saveSupplier (supplier);
+        console.log('new supplier added')
+      }else if (userData.type = UserTypeRef.Customer){
+        // customer data
+      }else if ( (userData.type = UserTypeRef.Agent)){
+        // agent data
+      }
+
+      return userData;
+
   }
 
   // Store user in localStorage
   async updateUserData(userData:IUser) {
     await this.fireStore
-      .collection("identity")
+      .collection("user")
       .doc(userData.id)
       .set(userData, { merge: true })
       .then((user) => {
-        localStorage.setItem('identity', JSON.stringify(userData));
+        localStorage.setItem('user', JSON.stringify(userData));
         return user;
       })
       .catch((err)=>{
@@ -147,7 +168,7 @@ export class AuthService {
   // get user data from database bu auth_id
   async getUserData(auth_id:string){
     console.log('get user data:', auth_id)
-    return await this.fireStore.collection('identity', (ref)=> ref.where ('auth_id', '==',auth_id))
+    return await this.fireStore.collection('user', (ref)=> ref.where ('auth_id', '==',auth_id))
                  .valueChanges({idField: 'id'})
                  .pipe(
                    take(1)
@@ -198,11 +219,12 @@ export class AuthService {
       if (user) {
         // get identiy data
         return this.getUserData(user.uid)
-        .then((identity)=>{
-          if (identity){
-            this.user = identity;
-            localStorage.setItem('identity', JSON.stringify(this.user));
-            return identity
+        .then((userData)=>{
+          if (userData){
+            this.user = userData;
+            localStorage.setItem('user', JSON.stringify(this.user));
+            // this.supplierService.getSupplier(userData.id)
+            return userData
           }else{
             console.log('user not added to DB', user);
             let newUser: IUser ={
@@ -212,10 +234,10 @@ export class AuthService {
               createdAt: this.utilityService.timestamp
             };
 
-            console.log('user to beadded to DB', newUser);
+            console.log('user to be added to DB', newUser);
             return this.addUserData(newUser).then((addedUser)=>{
-              console.log('user added to DB');
-              localStorage.setItem('identity', JSON.stringify(addedUser));
+              console.log('user added to DB', addedUser);
+              localStorage.setItem('user', JSON.stringify(addedUser));
               return newUser;
             })
             .catch((err)=>{
@@ -241,7 +263,7 @@ export class AuthService {
     FacebookLogin.logout( )
       .then(()=>{
         console.log(`Sign out successfully`);
-        localStorage.removeItem('identity');
+        localStorage.removeItem('user');
         return true;
       })
       .catch((err)=>{
@@ -281,7 +303,6 @@ export class AuthService {
     })
 
   }
-  // >> End of section: Sign in using Facebook---------------------------------
 
 
 }

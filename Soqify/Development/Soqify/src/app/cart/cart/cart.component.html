@@ -6,7 +6,7 @@
     </ion-label>
     <ion-button
       expand="full"
-      [routerLink]="['/main/shopping-supplier', 'shopping']"
+      [routerLink]="['/main/shopping', 'shopping']"
       >تسوق الان
     </ion-button>
   </div>
@@ -15,7 +15,7 @@
   <ion-card *ngFor="let order of orders">
     <ion-card-content class="order-content">
       <!-- Supplier data -->
-      <ion-card color="primary" class="supplier-section">
+      <ion-card color=" " class="supplier-section">
         <ion-card-header>
           <ion-card-title>
             {{ order.sup_id }}

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild , AfterViewInit, OnChanges} from '@angular/core';
 import { MasterDataService } from '../../shared/services/master-data.service'
 import { main_cat, parent_cat,sub_cat, IParent_cat, IMain_cat, ISub_cat,IBusiness_type, business_type, IGovernate, ICity } from '../../data/master-data';
-import { IUser, IGeoLocation } from 'src/app/model/identity';
+import { IUser, IGeoLocation } from 'src/app/model/user';
 import { AuthService } from '../services/auth.service';
 import { MessagesService } from 'src/app/shared/services/messages.service';
 import { LoadingController } from '@ionic/angular';

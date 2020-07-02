@@ -4,6 +4,7 @@ import { MasterDataService } from 'src/app/shared/services/master-data.service';
 import { ProductService } from 'src/app/product/services/product.service';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { IProduct } from 'src/app/model/product';
+import { SupplierService } from 'src/app/shared/services/supplier.service';
 
 @Component({
   selector: 'app-shopping',
@@ -20,6 +21,7 @@ export class ShoppingComponent implements OnInit {
                private masterData: MasterDataService,
                private productService: ProductService,
                private authUser: AuthService,
+               private supplierService:SupplierService,
 
 
   ) { }
@@ -34,7 +36,7 @@ export class ShoppingComponent implements OnInit {
 
       this.productService.runQuery(false);
 
-      this.productService.supplierFilter$.next(this.authUser.user.id);
+      this.productService.supplierFilter$.next(this.supplierService.currentSupplier.id);
       if (this.productService.savedProductFilter){
         this.productService.setProductFilter(this.productService.savedProductFilter)
       } 

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import { IUser, UserRoleRef} from '../../model/identity'
+import { IUser, UserRoleRef} from '../../model/user'
 
 
 
