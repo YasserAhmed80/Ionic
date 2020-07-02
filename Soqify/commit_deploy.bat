@@ -11,5 +11,5 @@ git push origin master
 
 ionic build
 
-firebase deploy
+firebase deploy --only hosting
 
