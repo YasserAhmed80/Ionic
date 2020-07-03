@@ -11,14 +11,15 @@
     </ion-button>
   </div>
 
+
   <!-- orders section -->
   <ion-card *ngFor="let order of orders">
     <ion-card-content class="order-content">
       <!-- Supplier data -->
-      <ion-card color=" " class="supplier-section">
+      <ion-card color="success" class="supplier-section">
         <ion-card-header>
           <ion-card-title>
-            {{ order.sup_id }}
+            {{ supplierName}}
           </ion-card-title>
         </ion-card-header>
       </ion-card>
@@ -30,14 +31,16 @@
           </ion-card-title>
         </ion-card-header>
         <ion-card-content class="order-content">
+
           <div class="item-content" *ngFor="let item of order.items">
 
 
             <ion-item routerLink="/main/shopping/item-detail/{{item.pro_id}}">
               <ion-label>{{ item.pro_name }}</ion-label>
+              
             </ion-item>
-
             <div class="item-section">
+              
               <div class="item-image">
                 <app-img-loader
                   src="{{item.img}}"
@@ -90,10 +93,13 @@
         </ion-card-content>
       </ion-card>
 
-      <ion-card color="primary" class="action-section">
+      <ion-card color="success" class="action-section">
         <ion-card-header>
           <ion-card-subtitle>
-            اجمالي الفاتورة
+            <ion-label>
+              اجمالي الفاتورة
+            </ion-label>
+            
           </ion-card-subtitle>
         </ion-card-header>
         <ion-card-content>
@@ -124,7 +130,31 @@
             </ion-col>
           </ion-row>
         </ion-card-content>
-      </ion-card>
+     
+          <ion-buttons >
+            <ion-button  fill = "outline" (click) = "saveOrdersToDB(order)" >
+              <ion-label> اتمام الطلب</ion-label>
+              <ion-icon name = "add-outline"></ion-icon>
+            </ion-button>
+
+            <ion-button  fill = "outline" (click) = "deleteOrderFromCart(order)" >
+              <ion-label> حذف الطلب </ion-label>
+              <ion-icon name = "close"></ion-icon>
+            </ion-button>
+
+          </ion-buttons>
+        </ion-card>
+
+    </ion-card-content>
+  </ion-card>
+  <!-- blank section -->
+  <ion-card>
+    <ion-card-content>
+      <br><br>
+
+      Thanks for your actions ...
+      <br>
+      <br>
     </ion-card-content>
   </ion-card>
 </ion-content>

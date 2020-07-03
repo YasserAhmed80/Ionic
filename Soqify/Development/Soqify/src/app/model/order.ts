@@ -2,13 +2,13 @@ export interface IOrder{
     id?:string,
     sup_id:string, // supplier ID
     cus_id:string, // customer ID
-    cdate: Date, // created date
-    ddate?: Date, // delivery date,
+    cdate?: any, // created date
+    ddate?: any, // delivery date,
     status:number, // order status,
     qty: number, // sum of items
     count:number, // number of items
     sum: number, // order sum (qty * price)
-    items?: IOrderItem[]
+    items?: IOrderItem[],
 };
 
 export interface IOrderItem{
