@@ -8,7 +8,7 @@ export interface IOrder{
     qty: number, // sum of items
     count:number, // number of items
     sum: number, // order sum (qty * price)
-    items?: IOrderItem[],
+    items?:IOrderItem[],
 };
 
 export interface IOrderItem{
@@ -20,4 +20,14 @@ export interface IOrderItem{
     size:number,
     pro_name:string, // not saved in DB
     img?:string,
+}
+
+export interface IOrderDetail extends IOrder{
+    sup_name?:string,
+    cus_name?:string,
+    items?: IOrderItemDetail[],
+}
+
+export interface IOrderItemDetail extends IOrderItem{
+    
 }

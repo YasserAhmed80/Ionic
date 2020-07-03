@@ -1,0 +1,26 @@
+ion-card-content, ion-card{
+    padding: 0px 0px;
+    margin: 6px 0px;
+}
+
+.item-list, .item-list-header{
+    display: grid;
+    grid-template-columns:0.4fr 3fr 1fr 1.5fr 1.5fr;
+    font-size: 14px;
+}
+
+.item-list-header{
+    border-top:1px solid var(--ion-color-light);
+    border-bottom:1px solid var(--ion-color-light);
+    background-color:var(--ion-color-warning); 
+    color: var(--ion-color-light); 
+ 
+}
+
+.odd-row{
+    background-color:  var(--ion-color-light);
+}
+
+.order-header{
+    background-color: red;
+}

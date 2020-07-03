@@ -1,3 +1,45 @@
-<p>
-  order works!
-</p>
+<ion-card >
+  <ion-card-header>
+    <ion-card-title  color="primary">
+      <ion-item> 
+        {{order.sup_name}}
+        <ion-button fill="outline" slot="end" (click) = "getOrderItems()">
+          details
+        </ion-button>
+      </ion-item>
+     
+    </ion-card-title>
+    <ion-card-subtitle class="order-header" color="primary">
+      <ion-item lines="none" >
+        <ion-label> عدد الاصناف </ion-label>
+        <ion-label>عدد القطع </ion-label>
+        <ion-label> الاجمالي </ion-label>
+      </ion-item>
+      <ion-item lines="none" >
+        <ion-label> {{order.count}} </ion-label>
+        <ion-label> {{order.qty}} </ion-label>
+        <ion-label> {{order.sum | currency:" "}} </ion-label>
+      </ion-item>
+    </ion-card-subtitle>
+
+    <ion-card-content *ngIf="items.length>0">
+ 
+        <div class="item-list-header" >
+          <div >#</div>
+          <div >الصنف</div>
+          <div >كمية</div>
+          <div >سعر</div>
+          <div >اجمالي</div>
+        </div>
+
+        <div class="item-list" *ngFor="let item of items; let seq = index; " [ngClass]="0=== seq%2?'odd-row':'none'">
+          <div >{{seq+1}}</div>
+          <div >{{item.pro_name}}</div>
+          <div >{{item.qty }}</div>
+          <div >{{item.price | currency:" "}}</div>
+          <div >{{item.price * item.qty | currency: " "}}</div>
+        </div>
+
+    </ion-card-content>
+  </ion-card-header>
+</ion-card>
