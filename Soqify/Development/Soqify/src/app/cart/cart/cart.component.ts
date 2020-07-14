@@ -4,6 +4,7 @@ import { IOrder } from 'src/app/model/order';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { AlertController } from '@ionic/angular';
 import { installations } from 'firebase';
+import { OrderService } from 'src/app/order/services/order.service';
 
 @Component({
   selector: 'app-cart',
@@ -17,6 +18,7 @@ export class CartComponent implements OnInit {
   constructor(private cartService:CartService,
               private authService:AuthService,
               public alertController:AlertController,
+              private orderService:OrderService
               
 
   ) { }
@@ -65,7 +67,7 @@ export class CartComponent implements OnInit {
           handler: () => {
             if (actionType===1) {
               // save order
-              this.cartService.saveOrderToDB(order);
+              this.orderService.saveOrderToDB(order);
               this.cartService.deleteOrderFromCart(order);
             } else if (actionType ===2){
               // delete order

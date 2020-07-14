@@ -76,7 +76,7 @@ export class ProductService {
   // add new product
   async addProduct(product:IProduct) {
    // console.log  ('timestamp',  firebase.database.ServerValue.TIMESTAMP)
-    product.createdAt = this.utilityService.timestamp
+    product.createdAt = this.utilityService.serverTimeStamp
     let newProduct = this.fireStore.collection('product').add(product);
     
     return await newProduct

@@ -9,7 +9,7 @@ export class UtilityService {
 
   constructor() { }
 
-  get timestamp() {
+  get serverTimeStamp() {
     return firebase.firestore.FieldValue.serverTimestamp();
   };
 }

@@ -31,3 +31,17 @@ export interface IOrderDetail extends IOrder{
 export interface IOrderItemDetail extends IOrderItem{
     
 }
+
+export interface IOrderStatusLog{
+    code:number,
+    date:any, // status date
+}
+
+export enum OrderStatus {
+    New = 1,
+    Processing = 2,
+    Shipping = 3,
+    Delivered = 4,
+    Onhold = 5,
+    Cancelled = 6
+}

@@ -3,7 +3,7 @@ ion-card-content, ion-card{
     margin: 6px 0px;
 }
 
-.item-list, .item-list-header{
+.item-list, .item-list-header, .item-list-footer{
     display: grid;
     grid-template-columns:0.4fr 3fr 1fr 1.5fr 1.5fr;
     font-size: 14px;
@@ -12,9 +12,14 @@ ion-card-content, ion-card{
 .item-list-header{
     border-top:1px solid var(--ion-color-light);
     border-bottom:1px solid var(--ion-color-light);
-    background-color:var(--ion-color-warning); 
+    background-color:var(--ion-color-success); 
     color: var(--ion-color-light); 
- 
+}
+ .item-list-footer{
+    border-top:1px solid var(--ion-color-light);
+    border-bottom:1px solid var(--ion-color-light);
+    background-color:var(--ion-color-success); 
+    color: var(--ion-color-light); 
 }
 
 .odd-row{
@@ -22,5 +27,14 @@ ion-card-content, ion-card{
 }
 
 .order-header{
-    background-color: red;
+
+    ion-label{
+        margin:0px 0px;
+    }
+
+    ion-item{
+        margin:0px 0px;
+        padding:0px 0px;
+    }
+   
 }

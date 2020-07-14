@@ -5,6 +5,7 @@ import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/fire
 import { UtilityService } from 'src/app/shared/services/utility.service';
 import { IonMenuToggle } from '@ionic/angular';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -43,8 +44,8 @@ export class CartService {
         sum:0,
         qty:0,
         count:0,
-        status:1,
-        cdate:null,
+        status:1,//new 
+        cdate: this.utilityService.serverTimeStamp,
         items:[]
       }
       this.orders.push(order);
@@ -127,47 +128,6 @@ export class CartService {
     localStorage.setItem("orders",JSON.stringify( this.orders));
   }
 
-  // ٍSave to firestore database 
-  async saveOrderToDB(order:IOrder){ 
-    let ord = {...order};
-    // remove unneed fields
-    delete ord.items;
-
-    ord.cdate = this.utilityService.timestamp
-    let newOrder = this.fireStore.collection('order').add(ord);
-    
-    let doc =  await newOrder;
-    // add items
-    ord.id = doc.id;
-
-    console.log('doc id',  doc.id);
-
-    
-    let promises = [];
-
-    order.items.forEach((item)=>{
-      promises.push(this.addItemToDB(doc.id,item))
-    });
-
-    var newItems;
-
-    if (promises.length> 0){
-      newItems = await Promise.all(promises)
-    }
-
-    console.log('added items', newItems)
-   
-  }
-
-  async addItemToDB(ord_id: string, item:IOrderItem){
-    let i = {...item};
-    delete i.pro_name;
-    delete i.img;
-
-    console.log('order id', ord_id);
-
-    return await  this.fireStore.collection(`order/`+ord_id+`/items`).add(i)
-  }
 
 
 }

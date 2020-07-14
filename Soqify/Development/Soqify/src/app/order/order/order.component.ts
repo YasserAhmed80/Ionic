@@ -10,6 +10,7 @@ import { OrderService } from '../services/order.service';
 export class OrderComponent implements OnInit {
   @Input ('order') order:IOrderDetail;
   items:IOrderItemDetail[]=[];
+  isLoading:boolean =true;
 
   constructor(private orderService:OrderService) { }
 
@@ -18,13 +19,15 @@ export class OrderComponent implements OnInit {
   }
 
   getOrderItems(){
-    // console.log(ord_id)
-    if (this.items.length=== 0){
+     console.log(this.order.id)
+    //this.items=[];
+    if (this.items.length=== 0 && this.isLoading){
       this.orderService.getOrderItems$ (this.order.id).subscribe(item=>{
         this.items.push(item);
-     
       })
     }
+
+    this.isLoading =false;
     
   }
 }

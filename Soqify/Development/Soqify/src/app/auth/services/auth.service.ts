@@ -130,7 +130,7 @@ export class AuthService {
         console.log('new supplier added')
         let supplier: ISupplier={
           user_id: userAdded.id,
-          createdAt : this.utilityService.timestamp,
+          createdAt : this.utilityService.serverTimeStamp,
           ord_cancel:{c:0,s:0},
           ord_del:{c:0,s:0},
           ord_pend:{c:0,s:0},
@@ -231,7 +231,7 @@ export class AuthService {
               auth_id: user.uid,
               name: user.displayName,
               active_ind:1,
-              createdAt: this.utilityService.timestamp
+              createdAt: this.utilityService.serverTimeStamp
             };
 
             console.log('user to be added to DB', newUser);
