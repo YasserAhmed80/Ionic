@@ -48,7 +48,7 @@ export class SupplierService {
 
   async addSupplier(supplier:ISupplier) {
     // console.log  ('timestamp',  firebase.database.ServerValue.TIMESTAMP)
-     supplier.createdAt = this.utilityService .timestamp
+     supplier.createdAt = this.utilityService .serverTimeStamp
      let newSupplier = this.fireStore.collection('supplier').add(supplier);
      
      return await newSupplier
