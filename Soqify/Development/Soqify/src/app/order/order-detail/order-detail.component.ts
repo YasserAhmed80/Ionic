@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { IOrderDetail, IOrderItemDetail } from 'src/app/model/order';
 import { OrderService } from '../services/order.service';
+import { SupplierCustomerService } from 'src/app/shared/services/supplier-customer.service';
 
 @Component({
   selector: 'app-order-detail',
@@ -12,10 +13,15 @@ export class OrderDetailComponent implements OnInit {
   items:IOrderItemDetail[]=[];
   isLoading:boolean =true;
 
-  constructor(private orderService:OrderService) { }
+  constructor(private orderService:OrderService,
+              private supplierService:SupplierCustomerService,
+    ) { }
 
   ngOnInit() {
-    // this.getOrderItems();
+    this.order = this.orderService.currentOrder;
+    this.getOrderItems();
+    this.supplierService.getSupplierById$(this.order.sup_id).subscribe(d=>console.log('supplier',d))
+
   }
 
   getOrderItems(){
@@ -26,6 +32,7 @@ export class OrderDetailComponent implements OnInit {
         this.items.push(item);
       })
     }
+    this.order.items = this.items;
 
     this.isLoading =false;
     

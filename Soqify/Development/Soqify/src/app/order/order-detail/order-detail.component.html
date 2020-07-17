@@ -1,7 +1,7 @@
 <ion-header>
 
   <ion-toolbar color=" ">
-    <ion-title>تسوق مع ياسر</ion-title>
+    <ion-title>بيانات الطلب  </ion-title>
 
     <ion-buttons slot= "start">
       <ion-back-button text=" "  icon="chevron-back-outline"></ion-back-button>
@@ -13,12 +13,13 @@
 </ion-header>
 
 <ion-content>
-  <!-- <ion-card >
+  <!-- identity information (customer or supplier) -->
+  <ion-card >
 
     <ion-card-header no-padding >
       <ion-card-subtitle >
         <ion-label>
-          cfsfsdfsdf fsfds
+         طلب من العميل 
         </ion-label>
       </ion-card-subtitle>
       <ion-card-title color="primary">
@@ -32,29 +33,67 @@
 
     <ion-card-content >
 
+       
+       
+    </ion-card-content>
+  </ion-card>
+
+
+  <!-- Order summary -->
+  <ion-card >
+
+    <ion-card-header no-padding >
+      <ion-card-subtitle >
+        <ion-label>
+          اجملي الطلب 
+        </ion-label>
+      </ion-card-subtitle>
+    </ion-card-header>  
+
+
+    <ion-card-content >
+
         <div class="order-detail" color="primary"> 
           <ion-list   lines="insite">
-            <ion-item    >
-              <ion-icon name="help-circle-outline"  ></ion-icon>
-              <ion-label> حاله الطلب </ion-label> 
-              <ion-note dir="ltr"> جديد</ion-note>        
-            </ion-item>
+
             <ion-item   >
               <ion-icon name="cash-outline"  ></ion-icon>
               <ion-label> اجمالي الطلب 
-                
               </ion-label> 
               <ion-note >  {{order.sum | currency:" "}}</ion-note>
-              
             </ion-item>
+
             <ion-item   >
               <ion-icon name="calendar-outline"  ></ion-icon>
               <ion-label> تاريخ الطلب </ion-label> 
               <ion-note dir="ltr">  {{order.cdate   | date:"short" }}</ion-note>
             </ion-item>
+
+            <ion-item    >
+              <ion-icon name="help-circle-outline"  ></ion-icon>
+              <ion-label> حاله الطلب </ion-label> 
+              <ion-note dir="ltr"> جديد</ion-note>        
+            </ion-item>
+
           </ion-list>
       
         </div>
+       
+    </ion-card-content>
+  </ion-card>
+
+  <!-- items list -->
+  <ion-card >
+
+    <ion-card-header no-padding >
+      <ion-card-subtitle >
+        <ion-label>
+          الاصناف اللي في الطلب
+        </ion-label>
+      </ion-card-subtitle>
+    </ion-card-header>  
+
+    <ion-card-content >
 
         <div *ngIf="items.length>0">
   
@@ -83,6 +122,5 @@
           </div>
         </div>
     </ion-card-content>
-    
-  </ion-card> -->
+  </ion-card>
 </ion-content>

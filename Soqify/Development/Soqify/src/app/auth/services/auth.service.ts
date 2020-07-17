@@ -34,7 +34,7 @@ export class AuthService {
     let user = localStorage.getItem('user');
     if ( user !== 'undefined' && user){
       this.user = JSON.parse(user);
-      supplierService.getSupplier(this.user.id);
+      supplierService.getSupplierByUser(this.user.id);
       
     }
     

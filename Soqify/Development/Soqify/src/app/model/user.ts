@@ -28,7 +28,7 @@ export interface IUser{
     role?: UserRoleRef, // Admin, operator, 
     provider?: string;
     // address
-    cntry?:number, //countery
+    cntry?:number, //country
     gov?:number, //governate
     cty?:number, // city
     addr?:string, // address
@@ -52,6 +52,12 @@ export interface ISupplier{
     createdAt?:any,
 };
 
+export interface ISupplierDetail extends ISupplier{
+    user_info?:IUser,
+    address?:string, // full address
+
+}
+
 export interface ICustomer{
     id?: string,
     user_id?:string,
@@ -62,3 +68,8 @@ export interface ICustomer{
     createdAt?:any,
 };
 
+export interface ICustomerDetail extends ICustomer{
+    user_info:IUser,
+    address:string, // full address
+
+}

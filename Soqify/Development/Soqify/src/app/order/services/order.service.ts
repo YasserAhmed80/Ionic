@@ -12,10 +12,16 @@ import { UtilityService } from 'src/app/shared/services/utility.service';
 export class OrderService {
 
   orders:IOrderDetail[];
+  currentOrder:IOrderDetail;
 
   constructor(public fireStore: AngularFirestore,
               private utilityService:UtilityService,
-    ) { }
+    ) {
+      let order = localStorage.getItem('currentOrder');
+      if ( order !== 'undefined'){
+        this.currentOrder = JSON.parse(order);
+      }
+  }
 
   getOrders$(sourceType:UserTypeRef, sourceId:string):Observable<IOrderDetail>{
     // sourceType: 1=supplier, 2=customer, 3=agent
@@ -107,5 +113,11 @@ export class OrderService {
       date:this.utilityService.serverTimeStamp
     }
     return await  this.fireStore.collection(`order/`+ord_id+`/log`).add(status)
+  }
+
+  setCurrentOrder(order){
+    this.currentOrder = order;
+    localStorage.setItem("currentOrder", JSON.stringify(order))
+    
   }
 }
