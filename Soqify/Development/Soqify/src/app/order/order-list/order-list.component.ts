@@ -3,6 +3,7 @@ import { OrderService } from '../services/order.service';
 import { IOrderItemDetail, IOrderDetail } from 'src/app/model/order';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { SupplierService } from 'src/app/shared/services/supplier.service';
+import { OrderStatus, IOrderStatus } from 'src/app/data/master-data';
 
 @Component({
   selector: 'app-order-list',
@@ -11,15 +12,19 @@ import { SupplierService } from 'src/app/shared/services/supplier.service';
 })
 export class OrderListComponent implements OnInit {
   orders:IOrderDetail[] = [];
+  orderStatus:IOrderStatus[];
+  selectedStatus:number =1; // status = new
 
   orderItems:IOrderItemDetail[]=[];
 
   constructor(public orderService:OrderService,
               private supplierService: SupplierService,
+
     ) { }
 
   ngOnInit() {
     this.getOrders();
+    this.orderStatus=OrderStatus;
   }
 
   getOrders(){
@@ -28,6 +33,8 @@ export class OrderListComponent implements OnInit {
     })
   }
 
-
+  setSelectedStatus(s){
+    this.selectedStatus=s;
+  }
 
 }

@@ -1,5 +1,38 @@
+<ion-header>
+  <ion-toolbar color= "primary">
+    <ion-title>ادارة الطلبات</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
 <ion-content>
 
-  <app-order *ngFor="let order of orders" [order]="order"></app-order>
+ 
+
+  <div class="page-layout">
+
+    <div class="header">
+      
+      <div>header will show here ...</div>
+    </div>
+
+    <div class="side-menu">
+      <div *ngFor="let s of orderStatus " class="side-menu-item" 
+           (click) = "setSelectedStatus(s.key)"
+           [ngClass] = "selectedStatus=== s.key?'selected-menu':'none'">
+        <div class="order-count"><ion-label>10000</ion-label></div>
+        <ion-label> {{s.name}}</ion-label>
+      </div>
+    </div>
+
+
+    <!-- menu display section -->
+
+    <div class="menu-content">
+      <app-order-item *ngFor="let order of orders" [order]="order" ></app-order-item>
+    </div>
+  </div>
+  
+
   
 </ion-content>

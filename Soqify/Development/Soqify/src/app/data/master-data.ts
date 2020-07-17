@@ -1,3 +1,21 @@
+export interface IOrderStatus{
+  key:number,
+  name:string,
+  lang_cde:number,
+  seq:number
+};
+
+
+
+export const OrderStatus:IOrderStatus[] = [
+  {key:1,      name: 'جديد', lang_cde:1,seq:1 },
+  {key:2,      name: 'جاري التنفيذ', lang_cde:1,seq:2 },
+  {key:3,      name: 'جاري التوصيل', lang_cde:1,seq:3 },
+  {key:4,      name: 'تم التوصيل', lang_cde:1,seq:4 },
+  {key:5,      name: 'مؤجل', lang_cde:1,seq:5 },
+  {key:6,      name: 'ملغي', lang_cde:1,seq:6 },
+];
+
 // colors
 export interface IColor{
   key:number,

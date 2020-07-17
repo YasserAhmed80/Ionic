@@ -3,12 +3,12 @@ import { IOrderDetail, IOrderItemDetail } from 'src/app/model/order';
 import { OrderService } from '../services/order.service';
 
 @Component({
-  selector: 'app-order',
-  templateUrl: './order.component.html',
-  styleUrls: ['./order.component.scss'],
+  selector: 'app-order-detail',
+  templateUrl: './order-detail.component.html',
+  styleUrls: ['./order-detail.component.scss'],
 })
-export class OrderComponent implements OnInit {
-  @Input ('order') order:IOrderDetail;
+export class OrderDetailComponent implements OnInit {
+  order:IOrderDetail;
   items:IOrderItemDetail[]=[];
   isLoading:boolean =true;
 

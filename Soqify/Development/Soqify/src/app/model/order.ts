@@ -26,6 +26,7 @@ export interface IOrderDetail extends IOrder{
     sup_name?:string,
     cus_name?:string,
     items?: IOrderItemDetail[],
+    age?:number,
 }
 
 export interface IOrderItemDetail extends IOrderItem{
@@ -45,3 +46,4 @@ export enum OrderStatus {
     Onhold = 5,
     Cancelled = 6
 }
+
