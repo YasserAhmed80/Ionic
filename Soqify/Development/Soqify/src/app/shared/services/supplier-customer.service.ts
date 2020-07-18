@@ -3,8 +3,6 @@ import { ISupplier, ISupplierDetail, ICustomer } from 'src/app/model/user';
 import { UtilityService } from './utility.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { take, switchMap, switchMapTo, tap, map } from 'rxjs/operators';
-import { AuthService } from 'src/app/auth/services/auth.service';
-import { interval } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'

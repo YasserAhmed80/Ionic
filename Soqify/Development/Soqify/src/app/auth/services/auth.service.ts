@@ -11,7 +11,7 @@ import { take } from 'rxjs/operators'
 // Facebool blugin for auth for Android, iOS, Web
 import { Plugins } from '@capacitor/core';
 import { FacebookLoginResponse } from '@rdlabo/capacitor-facebook-login';
-import { SupplierService } from 'src/app/shared/services/supplier.service';
+import { SupplierCustomerService } from 'src/app/shared/services/supplier-customer.service';
 
 
 const { FacebookLogin } = Plugins;
@@ -28,7 +28,7 @@ export class AuthService {
   constructor(public fireAuth:AngularFireAuth, 
              public fireStore: AngularFirestore,
              private utilityService:UtilityService,
-             private supplierService:SupplierService,
+             private supplierService:SupplierCustomerService,
              ) 
   { 
     let user = localStorage.getItem('user');
@@ -54,26 +54,30 @@ export class AuthService {
   }
 
 
-  // Register user into database
-  registerUser(user:IUser, password) {
-     return this.fireAuth.auth.createUserWithEmailAndPassword(user.email, password)
-     .then((auth)=>{
-          console.log ('Register successfully ', auth.user);
-          // Save user data into database
-          console.log('from register user',user);
-
-          this.addUserData(user);
-
-          localStorage.setItem('user', JSON.stringify(this.user));
-          // send verification mail
-          this.sendVerificationMail();
-          return 'success';
-    })
-    .catch((err)=>{
-      return err.code;
-    })
-    
-  }
+    // Register user into database
+    async registerUser(user:IUser, password) {
+      try {
+        let auth = await this.fireAuth.auth.createUserWithEmailAndPassword(user.email, password);
+  
+        let newUser: IUser ={
+          auth_id: auth.user.uid,
+          name: user.name,
+          email:user.email,
+          role:user.role,
+          active_ind:1,
+          createdAt: this.utilityService.serverTimeStamp
+        };
+  
+        newUser = await this.addUserData(user);
+        localStorage.setItem('user', JSON.stringify(newUser));
+        // send verification mail
+        this.sendVerificationMail();
+        return 'success';
+      } catch (err) {
+        return err.code;
+      }
+      
+    }
 
   // User login 
   signIn(email, password){

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { OrderService } from '../services/order.service';
 import { IOrderItemDetail, IOrderDetail } from 'src/app/model/order';
 import { AuthService } from 'src/app/auth/services/auth.service';
-import { SupplierService } from 'src/app/shared/services/supplier.service';
+import { SupplierCustomerService } from 'src/app/shared/services/supplier-customer.service';
 import { OrderStatus, IOrderStatus } from 'src/app/data/master-data';
 
 @Component({
@@ -18,7 +18,7 @@ export class OrderListComponent implements OnInit {
   orderItems:IOrderItemDetail[]=[];
 
   constructor(public orderService:OrderService,
-              private supplierService: SupplierService,
+              private supplierService: SupplierCustomerService,
 
     ) { }
 

@@ -10,7 +10,7 @@ import { IProduct, ProductSatusRef } from 'src/app/model/product';
 import { Validators ,FormBuilder, Form } from '@angular/forms';
 import { ProductService } from '../services/product.service';
 import { ActivatedRoute } from '@angular/router';
-import { SupplierService } from 'src/app/shared/services/supplier.service';
+import { SupplierCustomerService } from 'src/app/shared/services/supplier-customer.service';
 
 
 
@@ -70,7 +70,7 @@ export class ProductDetailComponent implements OnInit {
   //  Constructor function
   /*-----------------------------------------------------------------------------*/
   constructor(private authUser: AuthService,
-              private supplierService: SupplierService,
+              private supplierService: SupplierCustomerService,
               private masterDataService:MasterDataService,
               private photoService:PhotoService,
               private productService: ProductService,

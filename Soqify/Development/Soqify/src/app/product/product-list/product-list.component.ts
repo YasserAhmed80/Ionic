@@ -5,7 +5,7 @@ import { MasterDataService } from 'src/app/shared/services/master-data.service';
 import { MessagesService } from 'src/app/shared/services/messages.service';
 import { MenuController } from '@ionic/angular';
 import { AuthService } from 'src/app/auth/services/auth.service';
-import { SupplierService } from 'src/app/shared/services/supplier.service';
+import { SupplierCustomerService } from 'src/app/shared/services/supplier-customer.service';
 
 @Component({
   selector: 'app-product-list',
@@ -29,7 +29,7 @@ export class ProductListComponent implements OnInit {
               private messagesService:MessagesService,
               public menuController : MenuController,
               private authUSer: AuthService,
-              private supplierService:SupplierService,
+              private supplierService:SupplierCustomerService,
     ) { }
 
   async ngOnInit() {

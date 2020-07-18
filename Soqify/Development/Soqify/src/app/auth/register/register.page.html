@@ -5,6 +5,49 @@
 </ion-header>
 
 <ion-content *ngIf="user && dataLoaded">
+    <!--Loginc Info -->
+    <ion-card>
+     
+      <ion-card-header>
+        <ion-card-title>
+          <ion-label>
+            <ion-icon name = "person-sharp"  slot = "end" color = "primary"></ion-icon>
+              تسجيل بيانات الدخول
+          </ion-label> 
+        </ion-card-title>
+      </ion-card-header>
+  
+      <ion-card-content>
+        <form >
+  
+          <ion-list lines="none" > 
+            <ion-item>
+              <ion-label position="floating">اسم المستخدم</ion-label>
+              <ion-input [(ngModel)]="user.name"  clearInput="true" name="name" class="input-padding"></ion-input>
+            </ion-item>
+  
+            <ion-item>
+              <ion-label position="floating" > كلمه المرور</ion-label>
+              <ion-input [(ngModel)]="user.mob" clearInput name="mob" ></ion-input>
+            </ion-item>
+
+          </ion-list>
+          
+          
+         
+          <br>
+          <ion-button  expand = "block" color="secondary" fill="outline" (click)="saveUser()">
+            <ion-icon slot="end" name = "save-outline" ></ion-icon>
+            حفظ بياناتك المرور!
+          </ion-button>
+      
+  
+        </form>
+  
+      </ion-card-content>
+    </ion-card>
+    <!-- End personal info -->
+
     <!--Personal Info -->
     <ion-card>
      
