@@ -65,6 +65,34 @@ export class SupplierCustomerService {
     return savedData;
   }
 
+  async addNewSupplier(user_id: string){
+
+    let supplier: ISupplier={
+      user_id: user_id,
+      createdAt : this.utilityService.serverTimeStamp,
+      ord_cancel:{c:0,s:0},
+      ord_del:{c:0,s:0},
+      ord_pend:{c:0,s:0},
+      ord_tot:{c:0,s:0},
+    };
+    
+    return  await this.saveSupplier (supplier);
+        
+  }
+
+  async addNewCustomer(user_id: string){
+
+    let customer: ICustomer={
+      user_id: user_id,
+      createdAt : this.utilityService.serverTimeStamp,
+      ord_cancel:{c:0,s:0},
+      ord_del:{c:0,s:0},
+      ord_pend:{c:0,s:0},
+      ord_tot:{c:0,s:0},
+    };     
+    return  await this.saveCustomer (customer);
+        
+  }
 
   async add(data:ISupplier | ICustomer, source: number) {
     // console.log  ('timestamp',  firebase.database.ServerValue.TIMESTAMP)
@@ -110,6 +138,8 @@ export class SupplierCustomerService {
          return err;
        })
    }
+
+
 
 
   async  getSupplierByUser(userId) {

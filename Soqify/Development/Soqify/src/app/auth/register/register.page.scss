@@ -46,3 +46,20 @@ ion-input, ion-select {
     font-size: 14px !important;
     
   }
+
+  .register-message{
+      border:1px solid white;
+      display: grid;
+      height: 50px;
+      color:white;
+      border-radius: 5px;
+      align-items: center;
+      justify-items: center;
+  }
+
+.register-message-success{
+    background-color: var(--ion-color-success);
+}
+.register-message-warning{
+    background-color: var(--ion-color-warning);
+}

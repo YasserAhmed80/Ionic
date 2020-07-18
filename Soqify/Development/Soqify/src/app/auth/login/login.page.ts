@@ -22,25 +22,6 @@ export class LoginPage implements OnInit {
   ngOnInit() {
   }
 
-  registerUser(){
-    var user:IUser;
-
-    user = {
-      email: this.email,
-      name:'yasser',
-      mob:'01028787773',
-      role: UserRoleRef.Admin
-    }
-    this.authService.registerUser(user,this.password)
-    .then((x)=>{
-      if (x ==='sucess') {
-        console.log('x',x)
-      }else{
-        console.log('x',x)
-      }
-      
-    })
-  }
 
   
   loginUser (){

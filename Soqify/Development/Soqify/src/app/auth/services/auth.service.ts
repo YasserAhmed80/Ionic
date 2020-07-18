@@ -130,21 +130,13 @@ export class AuthService {
       let userAdded =  await  newUSer;
       userData.id = userAdded.id;
 
-      if (userData.type = UserTypeRef.Supplier){
-        console.log('new supplier added')
-        let supplier: ISupplier={
-          user_id: userAdded.id,
-          createdAt : this.utilityService.serverTimeStamp,
-          ord_cancel:{c:0,s:0},
-          ord_del:{c:0,s:0},
-          ord_pend:{c:0,s:0},
-          ord_tot:{c:0,s:0},
+      // for any new user we add new customer row in DB for order processing
+      let newCustomer=  await this.supplierService.addNewCustomer (userAdded.id);
+      console.log('new customer added')
 
-        };       
-        let s=  await this.supplierService.saveSupplier (supplier);
+      if (userData.type = UserTypeRef.Supplier){      
+        let s=  await this.supplierService.addNewSupplier (userAdded.id);
         console.log('new supplier added')
-      }else if (userData.type = UserTypeRef.Customer){
-        // customer data
       }else if ( (userData.type = UserTypeRef.Agent)){
         // agent data
       }

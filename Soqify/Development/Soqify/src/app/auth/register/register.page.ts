@@ -38,6 +38,11 @@ export class RegisterPage implements OnInit {
 
   currentLocation:IGeoLocation;
 
+  userMail:string='';
+  userPassword:string='';
+  userType:number;
+  regsiterError:string='';
+
 
 
   constructor(public masterDataService: MasterDataService, 
@@ -171,6 +176,24 @@ export class RegisterPage implements OnInit {
 
   centerLocation (){
     this.map.initMap({...this.currentLocation})
+  }
+
+  registerUser(){
+    this.regsiterError = '';
+    this.userType = 1; // supplier
+    if (this.userMail==='' || this.userPassword===''){
+      console.log('invalid')
+      this.regsiterError = 'Invalid user name/PWD';
+    }else{
+      let user:IUser={
+        email:this.userMail,
+        type:this.userType,
+
+      }
+      this.authServcie.registerUser(user,this.userPassword).then((x)=> {
+        this.regsiterError = x;
+      })
+    }
   }
 
 }
