@@ -10,11 +10,10 @@ import { IUser, UserRoleRef} from '../../model/user'
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
+  email: string='ysrahmed@gmail.com';
+  password:string = '';
+  loginError:string = '';
   
-  email : string = 'ysrahmed@gmail.com';
-  password: string = '123456';
-
-
   constructor(public authService:AuthService) {
     
    }
@@ -23,10 +22,12 @@ export class LoginPage implements OnInit {
   }
 
 
-  
-  loginUser (){
-    this.authService.signIn(this.email, this.password).then((res)=>{
-      console.log('sign in:', res)
+  loginUserByMail (){
+    this.authService.logInByMail(this.email, this.password).then((res)=>{
+      console.log('sign in:', res);
+      if (res.err){
+        this.loginError = res.err;
+      }
     })
   }
 

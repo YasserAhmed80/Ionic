@@ -54,46 +54,43 @@ export class AuthService {
   }
 
 
-    // Register user into database
-    async registerUser(user:IUser, password) {
+  // Register user into database by mail and password
+  async registerUserByMail(user:IUser, password) {
       try {
         let auth = await this.fireAuth.auth.createUserWithEmailAndPassword(user.email, password);
-  
-        let newUser: IUser ={
-          auth_id: auth.user.uid,
-          name: user.name,
-          email:user.email,
-          role:user.role,
-          active_ind:1,
-          createdAt: this.utilityService.serverTimeStamp
-        };
-  
-        newUser = await this.addUserData(user);
-        localStorage.setItem('user', JSON.stringify(newUser));
-        // send verification mail
-        this.sendVerificationMail();
-        return 'success';
-      } catch (err) {
-        return err.code;
-      }
-      
-    }
 
-  // User login 
-  signIn(email, password){
-    return this.fireAuth.auth.signInWithEmailAndPassword(email, password)
-    .then ((auth)=>{
-      if (!auth.user.emailVerified) {
-       return 'verify';
-      }else{
-        // reterive user data after sign in
-        localStorage.setItem('user', JSON.stringify(this.user));
-        return 'success';
+        user.auth_id =  auth.user.uid;
+        user.createdAt =  this.utilityService.serverTimeStamp;
+        user.provider = 'email';
+        user.active_ind =1;
+  
+         
+        let newUser = await this.addUserData(user);
+        this.sendVerificationMail();
+        return {user:newUser, err:null};
+      } catch (err) {
+        return {user:null, err:err.code};
       }
-     })
-     .catch ((err)=>{
-       return err.code;
-     })
+  }
+
+  // User login  by mail  
+  async logInByMail(email, password){
+    try {
+      let auth = await this.fireAuth.auth.signInWithEmailAndPassword(email, password);
+
+      // TODO: check for mail verifications
+      // if (!auth.user.emailVerified) {
+      //   return {user:null,err:'verify'};
+      //  }else{
+     
+      // get identiy data
+      let user =  await this.getUserData(auth.user.uid)
+      return {user:user,err:null};
+    
+    } catch (err) {
+      return {user:null,err:err.code};
+    }
+    
   }
 
   // User logout
@@ -130,16 +127,16 @@ export class AuthService {
       let userAdded =  await  newUSer;
       userData.id = userAdded.id;
 
-      // for any new user we add new customer row in DB for order processing
-      let newCustomer=  await this.supplierService.addNewCustomer (userAdded.id);
-      console.log('new customer added')
+      // // for any new user we add new customer row in DB for order processing
+      // let newCustomer=  await this.supplierService.addNewCustomer (userAdded.id);
+      // console.log('new customer added')
 
-      if (userData.type = UserTypeRef.Supplier){      
-        let s=  await this.supplierService.addNewSupplier (userAdded.id);
-        console.log('new supplier added')
-      }else if ( (userData.type = UserTypeRef.Agent)){
-        // agent data
-      }
+      // if (userData.type = UserTypeRef.Supplier){      
+      //   let s=  await this.supplierService.addNewSupplier (userAdded.id);
+      //   console.log('new supplier added')
+      // }else if ( (userData.type = UserTypeRef.Agent)){
+      //   // agent data
+      // }
 
       return userData;
 
@@ -164,20 +161,11 @@ export class AuthService {
   // get user data from database bu auth_id
   async getUserData(auth_id:string){
     console.log('get user data:', auth_id)
-    return await this.fireStore.collection('user', (ref)=> ref.where ('auth_id', '==',auth_id))
-                 .valueChanges({idField: 'id'})
-                 .pipe(
-                   take(1)
-                 ).toPromise()
-                 .then((user)=>{
-                   return user[0]
-                 })
-                 .catch((err)=>{
-                   return err
-                 })
-
+    let users =  await this.fireStore.collection('user', (ref)=> ref.where ('auth_id', '==',auth_id))
+                 .valueChanges({idField: 'id'}).pipe(take(1)).toPromise()
+                 
+    return users[0];
   }
-
 
   // Recover password
   resetPassword(passwordResetEmail) {
@@ -193,66 +181,101 @@ export class AuthService {
 
   // >> Sign in using Facebook <<----------------------------------------------
   async facebook_auth(){
-    return await FacebookLogin.login({ permissions: FACEBOOK_PERMISSIONS })
-      .then((result: FacebookLoginResponse) => {
-        console.log(`Facebook response`, result);
-        return this.getFB_userInfo().then((FB_user) => {
-          return this.firebase_FB_provider(result.accessToken.token).then(
-            (user) => {
-              console.log("facebook auth user:", user);
-              return user;
-            }
-          );
-        });
-      })
-      .catch((err) => {
-        console.log(`Facebook response: user cancelled`);
-      });
+    try {
+      let facebookResponse: FacebookLoginResponse = await FacebookLogin.login({ permissions: FACEBOOK_PERMISSIONS });
+      let FB_user = await this.getFB_userInfo();
+      let user =  await this.firebase_FB_provider(facebookResponse.accessToken.token);
+
+      return user;
+
+    } catch (error) {
+      console.log(`Facebook response: user cancelled`, error);
+    }
+    // return await FacebookLogin.login({ permissions: FACEBOOK_PERMISSIONS })
+    //   .then((result: FacebookLoginResponse) => {
+    //     console.log(`Facebook response`, result);
+    //     return this.getFB_userInfo().then((FB_user) => {
+    //       return this.firebase_FB_provider(result.accessToken.token).then(
+    //         (user) => {
+    //           console.log("facebook auth user:", user);
+    //           return user;
+    //         }
+    //       );
+    //     });
+    //   })
+    //   .catch((err) => {
+    //     console.log(`Facebook response: user cancelled`);
+    //   });
   }
 
   async facebook_SignIn(){
-    return await this.facebook_auth().then((user)=>{
-      if (user) {
-        // get identiy data
-        return this.getUserData(user.uid)
-        .then((userData)=>{
-          if (userData){
-            this.user = userData;
-            localStorage.setItem('user', JSON.stringify(this.user));
-            // this.supplierService.getSupplier(userData.id)
-            return userData
-          }else{
-            console.log('user not added to DB', user);
-            let newUser: IUser ={
-              auth_id: user.uid,
-              name: user.displayName,
-              active_ind:1,
-              createdAt: this.utilityService.serverTimeStamp
-            };
+    try {
+      let FB_user = await this.facebook_auth();
+      console.log('FB USer: ', FB_user);
+      let userData = await this.getUserData(FB_user.uid);
 
-            console.log('user to be added to DB', newUser);
-            return this.addUserData(newUser).then((addedUser)=>{
-              console.log('user added to DB', addedUser);
-              localStorage.setItem('user', JSON.stringify(addedUser));
-              return newUser;
-            })
-            .catch((err)=>{
-              console.log('FB sign in add user err:', err)
-            })
-            
-          }
-        })
-        .catch((err)=>{
-          return err
-        })
+      if (userData){
+        return userData
       }else{
-        console.log ('facebook auth provider user', user);
-      }
+        // add new user
+        
+        let newUser: IUser ={
+          auth_id: FB_user.uid,
+          name: FB_user.displayName,
+          active_ind:1,
+          createdAt: this.utilityService.serverTimeStamp
+        };
+
+        let addedUSer = await  this.addUserData(newUser);
+        return addedUSer;
+      } 
+    }  
+    catch (error) {
       
-    })
-    .catch((err)=>{
-      console.log ('facebook auth provider', err);
-    })
+    }
+    
+    // return await this.facebook_auth().then((user)=>{
+    //   if (user) {
+    //     // get identiy data
+    //     return this.getUserData(user.uid)
+    //     .then((userData)=>{
+    //       if (userData){
+    //         this.user = userData;
+    //         localStorage.setItem('user', JSON.stringify(this.user));
+    //         // this.supplierService.getSupplier(userData.id)
+    //         return userData
+    //       }else{
+    //         console.log('user not added to DB', user);
+    //         let newUser: IUser ={
+    //           auth_id: user.uid,
+    //           name: user.displayName,
+    //           active_ind:1,
+    //           createdAt: this.utilityService.serverTimeStamp
+    //         };
+
+    //         console.log('user to be added to DB', newUser);
+    //         return this.addUserData(newUser).then((addedUser)=>{
+    //           console.log('user added to DB', addedUser);
+    //           localStorage.setItem('user', JSON.stringify(addedUser));
+    //           return newUser;
+    //         })
+    //         .catch((err)=>{
+    //           console.log('FB sign in add user err:', err)
+    //         })
+            
+    //       }
+    //     })
+    //     .catch((err)=>{
+    //       return err
+    //     })
+    //   }else{
+    //     console.log ('facebook auth provider user', user);
+    //   }
+      
+    // })
+    // .catch((err)=>{
+    //   console.log ('facebook auth provider', err);
+    // })
   }
 
   async facebook_SignOut (){
@@ -267,36 +290,50 @@ export class AuthService {
         return false;
       })
   }
-  getFB_userInfo(){
-     return this.getCurrentAccessToken()
-      .then((result)=>{
-        let  {userId, token} = result.accessToken;
-          return fetch(`https://graph.facebook.com/${userId}?fields=id,name,gender,link,picture&type=large&access_token=${token}`)
-          .then((response)=>{
-              return response.json()
-              .then((FB_user)=>{
-                console.log('get inof:', FB_user);
-                return FB_user;
-              });
-          })
-      })
+  async getFB_userInfo(){
+    try {
+      let accessToken = await FacebookLogin.getCurrentAccessToken(); 
+      let  {userId, token} = accessToken.accessToken;
+
+      let FB_user = await  fetch(`https://graph.facebook.com/${userId}?fields=id,name,gender,link,picture&type=large&access_token=${token}`);
+
+      return  FB_user.json();
+    } catch (error) {
+      console.log(`getFB_userInfo`, error);
+    }
+    
+
+    //  return this.getCurrentAccessToken()
+    //   .then((result)=>{
+    //     let  {userId, token} = result.accessToken;
+    //       return fetch(`https://graph.facebook.com/${userId}?fields=id,name,gender,link,picture&type=large&access_token=${token}`)
+    //       .then((response)=>{
+    //           return response.json()
+    //           .then((FB_user)=>{
+    //             console.log('get inof:', FB_user);
+    //             return FB_user;
+    //           });
+    //       })
+    //   })
   }
 
-  getCurrentAccessToken(){
-    return FacebookLogin.getCurrentAccessToken();
-  }
 
-  firebase_FB_provider(FB_Token){
-  
-    const facebookCredential = firebase.auth.FacebookAuthProvider.credential(FB_Token);
-    return firebase.auth().signInWithCredential(facebookCredential)
-    .then ((auth)=>{
-      console.log('sign in with FB/firebase:', auth.user);
+  async firebase_FB_provider(FB_Token){
+    try {
+      const facebookCredential = firebase.auth.FacebookAuthProvider.credential(FB_Token);
+      let auth = await  firebase.auth().signInWithCredential(facebookCredential);
       return auth.user;
-    })
-    .catch((err)=>{
-      console.log ('firebase FB auth error', err)
-    })
+    } catch (error) {
+      console.log ('firebase FB auth error', error)
+    }
+
+    // .then ((auth)=>{
+    //   console.log('sign in with FB/firebase:', auth.user);
+    //   return auth.user;
+    // })
+    // .catch((err)=>{
+    //   console.log ('firebase FB auth error', err)
+    // })
 
   }
 

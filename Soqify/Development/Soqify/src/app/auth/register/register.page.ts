@@ -190,8 +190,8 @@ export class RegisterPage implements OnInit {
         type:this.userType,
 
       }
-      this.authServcie.registerUser(user,this.userPassword).then((x)=> {
-        this.regsiterError = x;
+      this.authServcie.registerUserByMail(user,this.userPassword).then((x)=> {
+        this.regsiterError = x.err;
       })
     }
   }
