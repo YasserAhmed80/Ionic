@@ -12,6 +12,7 @@ import { take } from 'rxjs/operators'
 import { Plugins } from '@capacitor/core';
 import { FacebookLoginResponse } from '@rdlabo/capacitor-facebook-login';
 import { SupplierCustomerService } from 'src/app/shared/services/supplier-customer.service';
+import { MyStorageService } from 'src/app/shared/services/mystorage.service';
 
 
 const { FacebookLogin } = Plugins;
@@ -23,20 +24,18 @@ const FACEBOOK_PERMISSIONS = ['email', 'user_birthday', 'user_photos', 'user_gen
 })
 export class AuthService {
  
-  public user: IUser={};
+  public user: IUser=null;
 
   constructor(public fireAuth:AngularFireAuth, 
              public fireStore: AngularFirestore,
              private utilityService:UtilityService,
              private supplierService:SupplierCustomerService,
+             private storage:MyStorageService,
              ) 
   { 
-    let user = localStorage.getItem('user');
-    if ( user !== 'undefined' && user){
-      this.user = JSON.parse(user);
-      supplierService.getSupplierByUser(this.user.id);
-      
-    }
+    this.storage.getItem('user').then((user)=>{
+        this.user = user;
+    });
     
   }
 
@@ -101,18 +100,18 @@ export class AuthService {
       })
     }else{
       return this.fireAuth.auth.signOut().then(() => {
-        localStorage.removeItem('user');
         // redirect to required page
       })
     }
+    this.storage.removeItem('user');
 
-   
   }
 
   // Returns true when user is looged in
-  get isLoggedIn(): boolean {
-    const user = JSON.parse(localStorage.getItem('user'));
-    return (user !== null && user.emailVerified !== false) ? true : false;
+  async  isLoggedIn() {
+     let user = await   this.storage.getItem('user');
+
+     return (user !== null && user.emailVerified !== false) ? true : false;
   }
 
   get user_id (){
@@ -222,6 +221,7 @@ export class AuthService {
         let newUser: IUser ={
           auth_id: FB_user.uid,
           name: FB_user.displayName,
+          provider:'FB',
           active_ind:1,
           createdAt: this.utilityService.serverTimeStamp
         };
@@ -231,7 +231,7 @@ export class AuthService {
       } 
     }  
     catch (error) {
-      
+      console.log('facebook_SignIn',error)
     }
     
     // return await this.facebook_auth().then((user)=>{

@@ -1,12 +1,14 @@
 import { Component, OnInit, ViewChild , AfterViewInit, OnChanges} from '@angular/core';
 import { MasterDataService } from '../../shared/services/master-data.service'
-import { main_cat, parent_cat,sub_cat, IParent_cat, IMain_cat, ISub_cat,IBusiness_type, business_type, IGovernate, ICity } from '../../data/master-data';
+import { main_cat, parent_cat,sub_cat, IParent_cat, IMain_cat, ISub_cat,
+         IBusiness_type, business_type, IGovernate, ICity } from '../../data/master-data';
 import { IUser, IGeoLocation } from 'src/app/model/user';
 import { AuthService } from '../services/auth.service';
 import { MessagesService } from 'src/app/shared/services/messages.service';
 import { LoadingController } from '@ionic/angular';
 import { Geolocation } from '@capacitor/core';
 import { GoogleMapComponent } from 'src/app/shared/google-map/google-map.component';
+import { MyStorageService } from 'src/app/shared/services/mystorage.service';
 
 
 
@@ -40,15 +42,18 @@ export class RegisterPage implements OnInit {
 
   userMail:string='';
   userPassword:string='';
-  userType:number;
-  regsiterError:string='';
+  userType:boolean = false;
+  username:string='';
+  registerMessage:string[]=[];
+  registerSuccessed: boolean=false;
 
 
 
   constructor(public masterDataService: MasterDataService, 
               public authServcie:AuthService,
               public messagesService:MessagesService,
-              public loadingController: LoadingController
+              public loadingController: LoadingController,
+              private myStorgae:MyStorageService,
              ) { 
 
   }
@@ -61,6 +66,15 @@ export class RegisterPage implements OnInit {
     this.currentLocation ={"latitude":30.167038399999996,"longitude":31.319837900000003};
 
     this.user = this.authServcie.user;
+    console.log('user logged', this.user)
+    if (this.user !=null){
+      this.loadData();
+    }
+   
+    
+  }
+
+  loadData(){
     this.selectedBusSec = this.user.bus_sec;
 
     console.log (this.user.loc)
@@ -93,7 +107,6 @@ export class RegisterPage implements OnInit {
       this.centerLocation();
     });
 
-    
   }
 
   saveUser(){
@@ -178,21 +191,53 @@ export class RegisterPage implements OnInit {
     this.map.initMap({...this.currentLocation})
   }
 
+  validateRegister(){
+    this.registerMessage = [];
+    if (this.username===''){
+      this.registerMessage.push('يجب ادخال الاسم')
+    }
+    if (this.userMail===''){
+      this.registerMessage.push('يجب ادخال الاميل')
+    }
+    if (this.userPassword===''){
+      this.registerMessage.push('يجب ادخال كلمة المرور')
+    }
+
+  }
+
+ 
   registerUser(){
-    this.regsiterError = '';
-    this.userType = 1; // supplier
-    if (this.userMail==='' || this.userPassword===''){
-      console.log('invalid')
-      this.regsiterError = 'Invalid user name/PWD';
+    console.log(this.userType)
+    this.validateRegister();
+    if (this.registerMessage.length>0){
+       return;
     }else{
       let user:IUser={
         email:this.userMail,
-        type:this.userType,
+        name:this.username,
+        type:this.userType===true?1:2,
 
       }
       this.authServcie.registerUserByMail(user,this.userPassword).then((x)=> {
-        this.regsiterError = x.err;
+        if (x.user){
+          this.myStorgae.setItem('user', x.user);
+          this.registerMessage.push( 'تم التسجيل بنجاح - منفضلك كمل ملفك!');
+          this.registerSuccessed=true;
+        }else{
+          this.registerMessage.push(this.loginErrorMessgae(x.err));
+        }
       })
+    }
+  }
+
+  loginErrorMessgae(err:string){
+    switch(err){
+      case 'dataerror': return 'يجب ادخال الاميل و كلمة المرور'
+      case 'Invalid user name/PWD': return 'الاميل او اسم المستخدم خطاء';
+      case 'auth/email-already-in-use': return 'هذا الاميل تم استخامة قبل ذلك';
+      case 'auth/invalid-email': return 'الاميل خطاء';
+      case 'auth/weak-password': return 'كلمة المرور يجب ان تكون 6 حروف او اكثر';
+      default : return err;
     }
   }
 

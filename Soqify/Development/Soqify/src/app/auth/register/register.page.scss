@@ -50,7 +50,7 @@ ion-input, ion-select {
   .register-message{
       border:1px solid white;
       display: grid;
-      height: 50px;
+      min-height: 50px;
       color:white;
       border-radius: 5px;
       align-items: center;
@@ -61,5 +61,5 @@ ion-input, ion-select {
     background-color: var(--ion-color-success);
 }
 .register-message-warning{
-    background-color: var(--ion-color-warning);
+    background-color: var(--ion-color-danger);
 }

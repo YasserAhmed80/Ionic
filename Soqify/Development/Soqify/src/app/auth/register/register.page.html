@@ -4,277 +4,279 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content *ngIf="user && dataLoaded">
-    <!--Loginc Info -->
-    <ion-card>
-     
-      <ion-card-header>
-        <ion-card-title>
-          <ion-label>
-            <ion-icon name = "person-sharp"  slot = "end" color = "primary"></ion-icon>
-              تسجيل بيانات الدخول
-          </ion-label> 
-        </ion-card-title>
-      </ion-card-header>
-  
-      <ion-card-content>
-
-          <div  *ngIf="regsiterError!=''" class="register-message" [ngClass]="'register-message-warning'">
-            <h2>{{ regsiterError}} </h2>
-           
-          </div>
-
-          <ion-list lines="none" > 
-            <ion-item>
-              <ion-label position="floating">البريد الشخصي </ion-label>
-              <ion-input [(ngModel)]="userMail"  clearInput="true" name="name" class="input-padding"></ion-input>
-            </ion-item>
-  
-            <ion-item>
-              <ion-label position="floating" > كلمه المرور</ion-label>
-              <ion-input [(ngModel)]="userPassword" clearInput name="mob" ></ion-input>
-            </ion-item>
-
-            <ion-item>
-              <ion-label > سجل كتاجر</ion-label>
-              <ion-toggle slot="end" [ngModel]="userType"></ion-toggle>
-            </ion-item>
-
-          </ion-list>
-          
-          
-         
-          <br>
-          <ion-button  expand = "block" color="secondary" fill="outline" (click)="registerUser()">
-            <ion-icon slot="end" name = "save-outline" ></ion-icon>
-            حفظ بياناتك المرور!
-          </ion-button>
+<ion-content >
+    <div class="login-section" *ngIf="user===null">
+      <!--Loginc Info -->
+      <ion-card>
       
-  
-   
-  
-      </ion-card-content>
-    </ion-card>
-    <!-- End personal info -->
+        <ion-card-header>
+          <ion-card-title>
+            <ion-label>
+              <ion-icon name = "person-sharp"  slot = "end" color = "primary"></ion-icon>
+                تسجيل بيانات الدخول
+            </ion-label> 
+          </ion-card-title>
+        </ion-card-header>
+    
+        <ion-card-content>
 
-    <!--Personal Info -->
-    <ion-card>
-     
-      <ion-card-header>
-        <ion-card-title>
-          <ion-label>
-            <ion-icon name = "person-sharp"  slot = "end" color = "primary"></ion-icon>
-             بياناتك الشخصية
-          </ion-label> 
-        </ion-card-title>
-      </ion-card-header>
-  
-      <ion-card-content>
-        <form >
-  
-          <ion-list lines="none" > 
-            <ion-item>
-              <ion-label position="floating">الاسم</ion-label>
-              <ion-input [(ngModel)]="user.name"  clearInput="true" name="name" class="input-padding"></ion-input>
-            </ion-item>
-  
-            <ion-item>
-              <ion-label position="floating" > موبيل</ion-label>
-              <ion-input [(ngModel)]="user.mob" clearInput name="mob" ></ion-input>
-            </ion-item>
+            <div  *ngIf="registerMessage.length>0" class="register-message" [ngClass]="registerSuccessed===true?'register-message-success':'register-message-warning'">
+              <h2 *ngFor="let msg of registerMessage">{{ msg}} </h2>
+            </div>
 
-            <ion-item>
-              <ion-label position="floating" > تليفونات اخري</ion-label>
-              <ion-input [(ngModel)]="user.tel_o"  clearInput name="tel_o" ></ion-input>
-            </ion-item>
-
-          </ion-list>
-          
-          
-         
-          <br>
-          <ion-button  expand = "block" color="secondary" fill="outline" (click)="saveUser()">
-            <ion-icon slot="end" name = "save-outline" ></ion-icon>
-            حفظ بياناتك الشخصية
-          </ion-button>
-      
-  
-        </form>
-  
-      </ion-card-content>
-    </ion-card>
-    <!-- End personal info -->
-
-    <!--Address Data -->
-    <ion-card>
-
-      <ion-card-header>
-        <ion-card-title>
-          <ion-label>
-            <ion-icon name = "home"  slot = "end" color = "primary"></ion-icon>
-             عنوان العمل
-          </ion-label> 
-        </ion-card-title>
-      </ion-card-header>
-  
-      <ion-card-content>
-  
-        <form>
-  
-          <ion-list lines="none" > 
-            <ion-item>
-              <ion-label position = "floating">المحافظه</ion-label>
-              <ion-select  name = "gov"  [(ngModel)] = "user.gov"  
-                           okText="موافق" cancelText="الغاء"
-                           (ionChange)="getSelectedCities(user.gov)"
-                           >
-                <ion-select-option  *ngFor="let gov of governates" value = "{{gov.key}}">{{gov.name}}</ion-select-option>
-              </ion-select>
-            </ion-item>
-
-            <ion-item>
-              <ion-label position = "floating">المدينة</ion-label>
-              <ion-select name = "cty"  [(ngModel)] = "user.cty"   okText="موافق" cancelText="الغاء">
-                <ion-select-option  *ngFor="let city of selectedCities"  value="{{city.key}}">{{city.name}}</ion-select-option>
-              </ion-select>
-            </ion-item>
-     
-         
-
-            <ion-item>
-              <ion-label position="floating" >العنوان</ion-label>
-              <ion-input [(ngModel)]="user.addr" name="addr" clearInput ></ion-input>
-            </ion-item>
-
-          </ion-list>
-          
-          
-         
-          <br>
-          <ion-button  expand = "block" color="secondary" fill="outline" (click) = "saveUser()">
-            <ion-icon slot="end" name = "save-outline" ></ion-icon>
-            حفظ العنوان
-          </ion-button>
-      
-  
-        </form>
-  
-      </ion-card-content>
-    </ion-card>
-    <!-- End Address data -->
-
-     <!--Geolocation Data -->
-     <ion-card>
-
-      <ion-card-header>
-        <ion-card-title>
-          <ion-label>
-            <ion-icon name = "location"  slot = "end" color = "primary"></ion-icon>
-            حدد عنوانك الجفرافي
-          </ion-label> 
-        </ion-card-title>
-      </ion-card-header>
-  
-      <ion-card-content class="card-map">
-  
-        <form>
             <ion-list lines="none" > 
               <ion-item>
-                <ion-button (click) = "getLocation()" clear fill="outline" color="secondary" slot="end">
-                  
-                  <ion-label> حدد مكانك الحالي</ion-label>
-                  <ion-icon name = "location" slot = "icon-only" size="xl"></ion-icon>
-                </ion-button>
-                <ion-button (click)="centerLocation()"  clear fill="outline" color="secondary" slot="start">
-                  <ion-label>مركز موقعك</ion-label>
-                  <ion-icon name = "locate" slot = "icon-only" size="xl"></ion-icon>
-                </ion-button>
-
-
+                <ion-label position="floating">الاسم </ion-label>
+                <ion-input [(ngModel)]="username"  clearInput="true" name="username" class="input-padding"></ion-input>
               </ion-item>
+              <ion-item>
+                <ion-label position="floating">البريد الشخصي </ion-label>
+                <ion-input [(ngModel)]="userMail"  clearInput="true" name="name" class="input-padding"></ion-input>
+              </ion-item>
+    
+              <ion-item>
+                <ion-label position="floating" > كلمه المرور</ion-label>
+                <ion-input [(ngModel)]="userPassword" clearInput name="mob" ></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-label > هل تريد التسجيل كتاجر؟</ion-label>
+                <ion-toggle slot="end"  [(ngModel)]="userType"></ion-toggle>
+              </ion-item>
+
             </ion-list>
 
-            <app-google-map #map [currentLocation] = "this.currentLocation"
-                              (locationChanged) = "changeLocation($event)">
+            <ion-card>
+               <ion-button  expand = "block" color="secondary" fill="outline" (click)="registerUser()">
+              سجل بياناتك المرور!
+              </ion-button>
+            </ion-card>
+           
+        
+        </ion-card-content>
+      </ion-card>
+      <!-- End login info -->
+    </div>
 
-            </app-google-map>
-
-         
-          <br>
-          <ion-button  expand = "block" color="secondary" fill="outline" (click) = "saveUserLocation()">
-            <ion-icon slot="end" name = "save-outline" ></ion-icon>
-            حفظ موقعك
-          </ion-button>
+    <div class="user-section" *ngIf="user && dataLoaded">
+      <!--Personal Info -->
+      <ion-card>
       
-  
-        </form>
-  
-      </ion-card-content>
-    </ion-card>
-    <!-- End Geolocation data -->
+        <ion-card-header>
+          <ion-card-title>
+            <ion-label>
+              <ion-icon name = "person-sharp"  slot = "end" color = "primary"></ion-icon>
+              بياناتك الشخصية
+            </ion-label> 
+          </ion-card-title>
+        </ion-card-header>
+    
+        <ion-card-content>
+          <form >
+    
+            <ion-list lines="none" > 
+              <ion-item>
+                <ion-label position="floating">الاسم</ion-label>
+                <ion-input [(ngModel)]="user.name"  clearInput="true" name="name" class="input-padding"></ion-input>
+              </ion-item>
+    
+              <ion-item>
+                <ion-label position="floating" > موبيل</ion-label>
+                <ion-input [(ngModel)]="user.mob" clearInput name="mob" ></ion-input>
+              </ion-item>
 
-    <!--Business type -->
-    <ion-card>
+              <ion-item>
+                <ion-label position="floating" > تليفونات اخري</ion-label>
+                <ion-input [(ngModel)]="user.tel_o"  clearInput name="tel_o" ></ion-input>
+              </ion-item>
 
-      <ion-card-header>
-        <ion-card-title>
-          <ion-label>
-            <ion-icon name = "business"  slot = "end" color = "primary"></ion-icon>
-             طبيعة العمل
-          </ion-label> 
-        </ion-card-title>
-      </ion-card-header>
-  
-      <ion-card-content>
-  
-        <form>
-            <div class="business-type">
-              <ion-label>نوع العمل</ion-label>
-              <ion-radio-group [(ngModel)]="user.bus_type" name="bus_type" >
-                <ion-grid>
-                  <!-- header row -->
-                  <ion-row class="row-title">
-                    <ion-col size="3" *ngFor = "let business of businessType">
-                        <ion-label>{{business.name}}</ion-label>
-                    </ion-col>
-                  </ion-row>
-                  <!-- data row -->
-                  <ion-row class="row-data">
-                    <ion-col size="3" *ngFor = "let business of businessType">
-                        <ion-radio value="{{business.key}}"></ion-radio>
-                    </ion-col>
-                  
-                  </ion-row>
-
-                </ion-grid>
-              </ion-radio-group>
-            </div>
+            </ion-list>
             
-            <div class="business-cat">
-              <ion-label>نوع النشاط</ion-label>
-              <!-- Toggles in a List -->
-              <ion-list>
-                <ion-item *ngFor="let cat of parentCat">
-                  <ion-label>{{cat.name}}</ion-label>
-                  <ion-toggle color="secondary" [checked]="setToggalCheck(cat.key)" value="{{cat.key}}"  (ionChange)="addBusinessSection($event,cat.key)"></ion-toggle>
-                </ion-item>
-                
-              </ion-list>
-            </div>
-                    
+            
+          
             <br>
-            <ion-button  expand = "block" color="secondary" fill="outline" (click) = "saveUser()" >
+            <ion-button  expand = "block" color="secondary" fill="outline" (click)="saveUser()">
               <ion-icon slot="end" name = "save-outline" ></ion-icon>
-              حفظ النشاط
+              حفظ بياناتك الشخصية
             </ion-button>
         
-  
-        </form>
+    
+          </form>
+    
+        </ion-card-content>
+      </ion-card>
+      <!-- End personal info -->
+
+      <!--Address Data -->
+      <ion-card>
+
+        <ion-card-header>
+          <ion-card-title>
+            <ion-label>
+              <ion-icon name = "home"  slot = "end" color = "primary"></ion-icon>
+              عنوان العمل
+            </ion-label> 
+          </ion-card-title>
+        </ion-card-header>
+    
+        <ion-card-content>
+    
+          <form>
+    
+            <ion-list lines="none" > 
+              <ion-item>
+                <ion-label position = "floating">المحافظه</ion-label>
+                <ion-select  name = "gov"  [(ngModel)] = "user.gov"  
+                            okText="موافق" cancelText="الغاء"
+                            (ionChange)="getSelectedCities(user.gov)"
+                            >
+                  <ion-select-option  *ngFor="let gov of governates" value = "{{gov.key}}">{{gov.name}}</ion-select-option>
+                </ion-select>
+              </ion-item>
+
+              <ion-item>
+                <ion-label position = "floating">المدينة</ion-label>
+                <ion-select name = "cty"  [(ngModel)] = "user.cty"   okText="موافق" cancelText="الغاء">
+                  <ion-select-option  *ngFor="let city of selectedCities"  value="{{city.key}}">{{city.name}}</ion-select-option>
+                </ion-select>
+              </ion-item>
+      
+          
+
+              <ion-item>
+                <ion-label position="floating" >العنوان</ion-label>
+                <ion-input [(ngModel)]="user.addr" name="addr" clearInput ></ion-input>
+              </ion-item>
+
+            </ion-list>
+            
+            
+          
+            <br>
+            <ion-button  expand = "block" color="secondary" fill="outline" (click) = "saveUser()">
+              <ion-icon slot="end" name = "save-outline" ></ion-icon>
+              حفظ العنوان
+            </ion-button>
         
+    
+          </form>
+    
+        </ion-card-content>
+      </ion-card>
+      <!-- End Address data -->
 
-      </ion-card-content>
-    </ion-card>
-    <!-- End business type -->
+      <!--Geolocation Data -->
+      <ion-card>
 
+        <ion-card-header>
+          <ion-card-title>
+            <ion-label>
+              <ion-icon name = "location"  slot = "end" color = "primary"></ion-icon>
+              حدد عنوانك الجفرافي
+            </ion-label> 
+          </ion-card-title>
+        </ion-card-header>
+    
+        <ion-card-content class="card-map">
+    
+          <form>
+              <ion-list lines="none" > 
+                <ion-item>
+                  <ion-button (click) = "getLocation()" clear fill="outline" color="secondary" slot="end">
+                    
+                    <ion-label> حدد مكانك الحالي</ion-label>
+                    <ion-icon name = "location" slot = "icon-only" size="xl"></ion-icon>
+                  </ion-button>
+                  <ion-button (click)="centerLocation()"  clear fill="outline" color="secondary" slot="start">
+                    <ion-label>مركز موقعك</ion-label>
+                    <ion-icon name = "locate" slot = "icon-only" size="xl"></ion-icon>
+                  </ion-button>
+
+
+                </ion-item>
+              </ion-list>
+
+              <app-google-map #map [currentLocation] = "this.currentLocation"
+                                (locationChanged) = "changeLocation($event)">
+
+              </app-google-map>
+
+          
+            <br>
+            <ion-button  expand = "block" color="secondary" fill="outline" (click) = "saveUserLocation()">
+              <ion-icon slot="end" name = "save-outline" ></ion-icon>
+              حفظ موقعك
+            </ion-button>
+        
+    
+          </form>
+    
+        </ion-card-content>
+      </ion-card>
+      <!-- End Geolocation data -->
+
+      <!--Business type -->
+      <ion-card>
+
+        <ion-card-header>
+          <ion-card-title>
+            <ion-label>
+              <ion-icon name = "business"  slot = "end" color = "primary"></ion-icon>
+              طبيعة العمل
+            </ion-label> 
+          </ion-card-title>
+        </ion-card-header>
+    
+        <ion-card-content>
+    
+          <form>
+              <div class="business-type">
+                <ion-label>نوع العمل</ion-label>
+                <ion-radio-group [(ngModel)]="user.bus_type" name="bus_type" >
+                  <ion-grid>
+                    <!-- header row -->
+                    <ion-row class="row-title">
+                      <ion-col size="3" *ngFor = "let business of businessType">
+                          <ion-label>{{business.name}}</ion-label>
+                      </ion-col>
+                    </ion-row>
+                    <!-- data row -->
+                    <ion-row class="row-data">
+                      <ion-col size="3" *ngFor = "let business of businessType">
+                          <ion-radio value="{{business.key}}"></ion-radio>
+                      </ion-col>
+                    
+                    </ion-row>
+
+                  </ion-grid>
+                </ion-radio-group>
+              </div>
+              
+              <div class="business-cat">
+                <ion-label>نوع النشاط</ion-label>
+                <!-- Toggles in a List -->
+                <ion-list>
+                  <ion-item *ngFor="let cat of parentCat">
+                    <ion-label>{{cat.name}}</ion-label>
+                    <ion-toggle color="secondary" [checked]="setToggalCheck(cat.key)" value="{{cat.key}}"  (ionChange)="addBusinessSection($event,cat.key)"></ion-toggle>
+                  </ion-item>
+                  
+                </ion-list>
+              </div>
+                      
+              <br>
+              <ion-button  expand = "block" color="secondary" fill="outline" (click) = "saveUser()" >
+                <ion-icon slot="end" name = "save-outline" ></ion-icon>
+                حفظ النشاط
+              </ion-button>
+          
+    
+          </form>
+          
+
+        </ion-card-content>
+      </ion-card>
+      <!-- End business type -->
+    </div>
 
 </ion-content>
