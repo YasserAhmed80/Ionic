@@ -10,6 +10,6 @@ export class UtilityService {
   constructor() { }
 
   get serverTimeStamp() {
-    return firebase.firestore.FieldValue.serverTimestamp();
+     return  firebase.firestore.FieldValue.serverTimestamp();
   };
 }

@@ -9,6 +9,7 @@ import { LoadingController } from '@ionic/angular';
 import { Geolocation } from '@capacitor/core';
 import { GoogleMapComponent } from 'src/app/shared/google-map/google-map.component';
 import { MyStorageService } from 'src/app/shared/services/mystorage.service';
+import { SupplierCustomerService } from 'src/app/shared/services/supplier-customer.service';
 
 
 
@@ -42,10 +43,11 @@ export class RegisterPage implements OnInit {
 
   userMail:string='';
   userPassword:string='';
-  userType:boolean = false;
+  isSupplier:boolean = false;
   username:string='';
   registerMessage:string[]=[];
   registerSuccessed: boolean=false;
+  showRegisterSpinner: boolean = false;
 
 
 
@@ -54,6 +56,7 @@ export class RegisterPage implements OnInit {
               public messagesService:MessagesService,
               public loadingController: LoadingController,
               private myStorgae:MyStorageService,
+              private supplierCustomerService:SupplierCustomerService
              ) { 
 
   }
@@ -206,8 +209,9 @@ export class RegisterPage implements OnInit {
   }
 
  
-  registerUser(){
-    console.log(this.userType)
+  async registerUser(){
+    
+    this.registerSuccessed=false;
     this.validateRegister();
     if (this.registerMessage.length>0){
        return;
@@ -215,18 +219,29 @@ export class RegisterPage implements OnInit {
       let user:IUser={
         email:this.userMail,
         name:this.username,
-        type:this.userType===true?1:2,
+        type:this.isSupplier===true?1:2,
 
       }
-      this.authServcie.registerUserByMail(user,this.userPassword).then((x)=> {
-        if (x.user){
-          this.myStorgae.setItem('user', x.user);
-          this.registerMessage.push( 'تم التسجيل بنجاح - منفضلك كمل ملفك!');
-          this.registerSuccessed=true;
-        }else{
-          this.registerMessage.push(this.loginErrorMessgae(x.err));
+      this.showRegisterSpinner = true;
+
+      let newUser = await  this.authServcie.registerUserByMail(user,this.userPassword);
+
+      if (newUser.user){
+        this.myStorgae.setItem('user', newUser.user);
+        let newCustomer = await this.supplierCustomerService.addNewCustomer(newUser.user.id);
+        await this.myStorgae.setItem('customer', newCustomer);
+        if (this.isSupplier){
+          let newSupplier = await this.supplierCustomerService.addNewSupplier(newUser.user.id);
+          await this.myStorgae.setItem('supplier', newSupplier);
         }
-      })
+        
+        this.registerMessage.push( 'تم التسجيل بنجاح - منفضلك كمل ملفك!');
+        this.registerSuccessed=true;
+      }else{
+        this.registerMessage.push(this.loginErrorMessgae(newUser.err));
+      }
+      this.showRegisterSpinner = false;
+ 
     }
   }
 

@@ -38,7 +38,6 @@ export class SupplierCustomerService {
     let data = await this.save (supplier,1);
     this.currentSupplier =supplier;
     this.currentSupplier.id=data.id;
-    localStorage.setItem('supplier',JSON.stringify(this.currentSupplier))
     return this.currentSupplier;
   }
 
@@ -46,7 +45,6 @@ export class SupplierCustomerService {
     let data = await this.save (customer,2);
     this.currentCustomer =customer;
     this.currentCustomer.id=data.id;
-    localStorage.setItem('supplier',JSON.stringify(this.currentCustomer))
     return this.currentCustomer;
   }
 
@@ -96,7 +94,7 @@ export class SupplierCustomerService {
 
   async add(data:ISupplier | ICustomer, source: number) {
     // console.log  ('timestamp',  firebase.database.ServerValue.TIMESTAMP)
-     data.createdAt = this.utilityService .serverTimeStamp
+     data.createdAt = this.utilityService .serverTimeStamp;
      var newData;
      if (source === 1 ){
       //  supplier
