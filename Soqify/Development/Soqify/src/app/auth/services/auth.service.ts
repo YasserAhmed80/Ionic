@@ -11,7 +11,6 @@ import { take } from 'rxjs/operators'
 // Facebool blugin for auth for Android, iOS, Web
 import { Plugins } from '@capacitor/core';
 import { FacebookLoginResponse } from '@rdlabo/capacitor-facebook-login';
-import { SupplierCustomerService } from 'src/app/shared/services/supplier-customer.service';
 import { MyStorageService } from 'src/app/shared/services/mystorage.service';
 
 
@@ -24,17 +23,16 @@ const FACEBOOK_PERMISSIONS = ['email', 'user_birthday', 'user_photos', 'user_gen
 })
 export class AuthService {
  
-  public user: IUser=null;
+  public currentUser: IUser=null;
 
   constructor(public fireAuth:AngularFireAuth, 
              public fireStore: AngularFirestore,
              private utilityService:UtilityService,
-             private supplierService:SupplierCustomerService,
-             private storage:MyStorageService,
+             private myStorgae:MyStorageService,
              ) 
   { 
-    this.storage.getItem('user').then((user)=>{
-        this.user = user;
+    this.myStorgae.getItem('user').then((user)=>{
+        this.currentUser = user;
     });
     
   }
@@ -56,7 +54,7 @@ export class AuthService {
   // Register user into database by mail and password
   async registerUserByMail(user:IUser, password) {
       try {
-        let auth = await this.fireAuth.auth.createUserWithEmailAndPassword(user.email, password);
+        let auth = await this.fireAuth.auth.createUserWithEmailAndPassword(user.email, password)
 
         user.auth_id =  auth.user.uid;
         user.createdAt =  this.utilityService.serverTimeStamp;
@@ -64,7 +62,8 @@ export class AuthService {
         user.active_ind =1;
   
          
-        let newUser = await this.addUserData(user);
+        let newUser:IUser = await this.addUserData(user);
+        newUser.createdAt =new Date (newUser.createdAt.seconds *1000);
         this.sendVerificationMail();
         return {user:newUser, err:null};
       } catch (err) {
@@ -94,7 +93,7 @@ export class AuthService {
 
   // User logout
   SignOut(){
-    if (this.user.provider=="FB"){
+    if (this.currentUser.provider=="FB"){
       this.facebook_SignOut().then(()=>{
         // redirect to required page
       })
@@ -103,19 +102,19 @@ export class AuthService {
         // redirect to required page
       })
     }
-    this.storage.removeItem('user');
+    this.myStorgae.removeItem('user');
 
   }
 
   // Returns true when user is looged in
   async  isLoggedIn() {
-     let user = await   this.storage.getItem('user');
+     let user = await   this.myStorgae.getItem('user');
 
      return (user !== null && user.emailVerified !== false) ? true : false;
   }
 
   get user_id (){
-    return this.user.id;
+    return this.currentUser.id;
   }
 
   // Store user in DB
@@ -123,21 +122,9 @@ export class AuthService {
 
       let newUSer = this.fireStore.collection('user').add(userData);
       
-      let userAdded =  await  newUSer;
-      userData.id = userAdded.id;
+      let userAdded =  (await (await newUSer).get()).data();
 
-      // // for any new user we add new customer row in DB for order processing
-      // let newCustomer=  await this.supplierService.addNewCustomer (userAdded.id);
-      // console.log('new customer added')
-
-      // if (userData.type = UserTypeRef.Supplier){      
-      //   let s=  await this.supplierService.addNewSupplier (userAdded.id);
-      //   console.log('new supplier added')
-      // }else if ( (userData.type = UserTypeRef.Agent)){
-      //   // agent data
-      // }
-
-      return userData;
+      return userAdded;
 
   }
 
@@ -190,21 +177,6 @@ export class AuthService {
     } catch (error) {
       console.log(`Facebook response: user cancelled`, error);
     }
-    // return await FacebookLogin.login({ permissions: FACEBOOK_PERMISSIONS })
-    //   .then((result: FacebookLoginResponse) => {
-    //     console.log(`Facebook response`, result);
-    //     return this.getFB_userInfo().then((FB_user) => {
-    //       return this.firebase_FB_provider(result.accessToken.token).then(
-    //         (user) => {
-    //           console.log("facebook auth user:", user);
-    //           return user;
-    //         }
-    //       );
-    //     });
-    //   })
-    //   .catch((err) => {
-    //     console.log(`Facebook response: user cancelled`);
-    //   });
   }
 
   async facebook_SignIn(){
@@ -234,48 +206,6 @@ export class AuthService {
       console.log('facebook_SignIn',error)
     }
     
-    // return await this.facebook_auth().then((user)=>{
-    //   if (user) {
-    //     // get identiy data
-    //     return this.getUserData(user.uid)
-    //     .then((userData)=>{
-    //       if (userData){
-    //         this.user = userData;
-    //         localStorage.setItem('user', JSON.stringify(this.user));
-    //         // this.supplierService.getSupplier(userData.id)
-    //         return userData
-    //       }else{
-    //         console.log('user not added to DB', user);
-    //         let newUser: IUser ={
-    //           auth_id: user.uid,
-    //           name: user.displayName,
-    //           active_ind:1,
-    //           createdAt: this.utilityService.serverTimeStamp
-    //         };
-
-    //         console.log('user to be added to DB', newUser);
-    //         return this.addUserData(newUser).then((addedUser)=>{
-    //           console.log('user added to DB', addedUser);
-    //           localStorage.setItem('user', JSON.stringify(addedUser));
-    //           return newUser;
-    //         })
-    //         .catch((err)=>{
-    //           console.log('FB sign in add user err:', err)
-    //         })
-            
-    //       }
-    //     })
-    //     .catch((err)=>{
-    //       return err
-    //     })
-    //   }else{
-    //     console.log ('facebook auth provider user', user);
-    //   }
-      
-    // })
-    // .catch((err)=>{
-    //   console.log ('facebook auth provider', err);
-    // })
   }
 
   async facebook_SignOut (){
@@ -302,19 +232,6 @@ export class AuthService {
       console.log(`getFB_userInfo`, error);
     }
     
-
-    //  return this.getCurrentAccessToken()
-    //   .then((result)=>{
-    //     let  {userId, token} = result.accessToken;
-    //       return fetch(`https://graph.facebook.com/${userId}?fields=id,name,gender,link,picture&type=large&access_token=${token}`)
-    //       .then((response)=>{
-    //           return response.json()
-    //           .then((FB_user)=>{
-    //             console.log('get inof:', FB_user);
-    //             return FB_user;
-    //           });
-    //       })
-    //   })
   }
 
 
@@ -327,13 +244,6 @@ export class AuthService {
       console.log ('firebase FB auth error', error)
     }
 
-    // .then ((auth)=>{
-    //   console.log('sign in with FB/firebase:', auth.user);
-    //   return auth.user;
-    // })
-    // .catch((err)=>{
-    //   console.log ('firebase FB auth error', err)
-    // })
 
   }
 

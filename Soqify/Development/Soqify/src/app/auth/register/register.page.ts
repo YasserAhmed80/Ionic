@@ -68,7 +68,7 @@ export class RegisterPage implements OnInit {
     //set the default location (my home)
     this.currentLocation ={"latitude":30.167038399999996,"longitude":31.319837900000003};
 
-    this.user = this.authServcie.user;
+    this.user = this.authServcie.currentUser;
     console.log('user logged', this.user)
     if (this.user !=null){
       this.loadData();
@@ -114,7 +114,7 @@ export class RegisterPage implements OnInit {
 
   saveUser(){
     console.log('updated user =>', this.user);
-    this.authServcie.user = this.user;
+    this.authServcie.currentUser = this.user;
     this.authServcie.updateUserData(this.user).then(()=>{
       this.messagesService.showToast('','تم حفظ بياناتك بنجاح!','success')
     })
@@ -122,7 +122,7 @@ export class RegisterPage implements OnInit {
 
   saveUserLocation(){
     this.user.loc=this.currentLocation;
-    this.authServcie.user = this.user;
+    this.authServcie.currentUser = this.user;
     this.authServcie.updateUserData(this.user).then(()=>{
       this.messagesService.showToast('','تم حفظ بياناتك بنجاح!','success')
     })
@@ -210,7 +210,6 @@ export class RegisterPage implements OnInit {
 
  
   async registerUser(){
-    
     this.registerSuccessed=false;
     this.validateRegister();
     if (this.registerMessage.length>0){
@@ -225,16 +224,10 @@ export class RegisterPage implements OnInit {
       this.showRegisterSpinner = true;
 
       let newUser = await  this.authServcie.registerUserByMail(user,this.userPassword);
+      console.log(newUser)
 
       if (newUser.user){
         this.myStorgae.setItem('user', newUser.user);
-        let newCustomer = await this.supplierCustomerService.addNewCustomer(newUser.user.id);
-        await this.myStorgae.setItem('customer', newCustomer);
-        if (this.isSupplier){
-          let newSupplier = await this.supplierCustomerService.addNewSupplier(newUser.user.id);
-          await this.myStorgae.setItem('supplier', newSupplier);
-        }
-        
         this.registerMessage.push( 'تم التسجيل بنجاح - منفضلك كمل ملفك!');
         this.registerSuccessed=true;
       }else{
