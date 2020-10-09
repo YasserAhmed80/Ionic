@@ -140,8 +140,8 @@ export class ProductDetailComponent implements OnInit {
     // if business type not defined set it to 1 [clothes]
     var businessSections;
 
-    if (this.authUser.user){
-      businessSections = this.authUser.user.bus_sec
+    if (this.authUser.currentUser){
+      businessSections = this.authUser.currentUser.bus_sec
     }else{
       businessSections = [1] 
     }

@@ -7,6 +7,7 @@ import { take } from 'rxjs/operators'
 import { main_cat, parent_cat,sub_cat, IParent_cat, IMain_cat, ISub_cat,IBusiness_type, 
         business_type, IGovernate, ICity, governates,cities,Colors, Sizes, IColor, ISize } from '../../data/master-data';
 import { AuthService } from 'src/app/auth/services/auth.service';
+import { MyStorageService } from './mystorage.service';
 
 
 @Injectable({
@@ -24,7 +25,8 @@ export class MasterDataService {
   sizes:ISize[]=[];
 
   constructor(private fireStore:AngularFirestore,
-              private authUser: AuthService
+              private authUser: AuthService,
+              private myStorage:MyStorageService,
              ) { 
     
     
@@ -61,12 +63,12 @@ export class MasterDataService {
   async getMasterData(){
 
     // get first from local strotage
-    this.productParentCat = this.getFromLocalStorage('productParentCat');
-    this.productMainCat = this.getFromLocalStorage('productMainCat');
-    this.productSubCat = this.getFromLocalStorage('productSubCat');
-    this.businessType = this.getFromLocalStorage('businessType');
-    this.governates = this.getFromLocalStorage('governates');
-    this.cities = this.getFromLocalStorage('cities');
+    this.productParentCat =await  this.getFromLocalStorage('productParentCat');
+    this.productMainCat =await this.getFromLocalStorage('productMainCat');
+    this.productSubCat =await this.getFromLocalStorage('productSubCat');
+    this.businessType =await this.getFromLocalStorage('businessType');
+    this.governates =await this.getFromLocalStorage('governates');
+    this.cities =await this.getFromLocalStorage('cities');
     this.colors = this.getColors();
     this.sizes = this.getSizes();
 
@@ -112,8 +114,8 @@ export class MasterDataService {
     // if business type not defined set it to 1 [clothes]
     var businessSections;
 
-    if (this.authUser.user && this.authUser.user.bus_sec){
-      businessSections = this.authUser.user.bus_sec
+    if (this.authUser.currentUser && this.authUser.currentUser.bus_sec){
+      businessSections = this.authUser.currentUser.bus_sec
     }else{
       businessSections = [1] 
     }
@@ -137,11 +139,11 @@ export class MasterDataService {
   }
 
   saveToLocalStorage(key, value){
-    localStorage.setItem(key,JSON.stringify(value))
+    this.myStorage.setItem(key,JSON.stringify(value))
   }
 
-  getFromLocalStorage(key){
-    let x=localStorage.getItem(key);
+   async getFromLocalStorage(key){
+    let x = await  this.myStorage.getItem(key);
     if (x!=='undefined' && x!==null){
       return JSON.parse(x);
     }else{

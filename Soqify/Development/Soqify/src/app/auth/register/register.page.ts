@@ -10,6 +10,7 @@ import { Geolocation } from '@capacitor/core';
 import { GoogleMapComponent } from 'src/app/shared/google-map/google-map.component';
 import { MyStorageService } from 'src/app/shared/services/mystorage.service';
 import { SupplierCustomerService } from 'src/app/shared/services/supplier-customer.service';
+import { interval } from 'rxjs';
 
 
 
@@ -48,6 +49,7 @@ export class RegisterPage implements OnInit {
   registerMessage:string[]=[];
   registerSuccessed: boolean=false;
   showRegisterSpinner: boolean = false;
+  showSuccessMessage:boolean=false;
 
 
 
@@ -63,18 +65,17 @@ export class RegisterPage implements OnInit {
 
  
 
-  ngOnInit() {
+  async ngOnInit() {
 
     //set the default location (my home)
     this.currentLocation ={"latitude":30.167038399999996,"longitude":31.319837900000003};
 
-    this.user = this.authServcie.currentUser;
+    this.user = await this.authServcie.getCurrentUser();
     console.log('user logged', this.user)
     if (this.user !=null){
       this.loadData();
     }
-   
-    
+
   }
 
   loadData(){
@@ -227,8 +228,15 @@ export class RegisterPage implements OnInit {
       console.log(newUser)
 
       if (newUser.user){
-        this.myStorgae.setItem('user', newUser.user);
+       
+        this.showSuccessMessage=true;
+        this.user = newUser.user;
         this.registerMessage.push( 'تم التسجيل بنجاح - منفضلك كمل ملفك!');
+        this.showRegisterSpinner = false;
+        setTimeout(()=>{
+          this.showSuccessMessage=false;
+          this.loadData();
+        }, 5000)
         this.registerSuccessed=true;
       }else{
         this.registerMessage.push(this.loginErrorMessgae(newUser.err));

@@ -39,11 +39,6 @@
                 <ion-input [(ngModel)]="userPassword" clearInput name="mob" ></ion-input>
               </ion-item>
 
-              <ion-item>
-                <ion-label > هل تريد التسجيل كتاجر؟</ion-label>
-                <ion-toggle slot="end"  [(ngModel)]="isSupplier"></ion-toggle>
-              </ion-item>
-
             </ion-list>
 
             <ion-card>
@@ -58,6 +53,30 @@
       </ion-card>
       <!-- End login info -->
     </div>
+
+    <!-- congratulation message -->
+    <div class="congratulation-sec" *ngIf="showSuccessMessage===true">
+      <ion-card>
+        <ion-card-header  color="success">
+          <ion-card-title>
+            <ion-label>مبروك 
+              <ion-icon name = "happy" slot="end"></ion-icon>
+            </ion-label>
+          </ion-card-title>
+          
+        </ion-card-header>
+
+        <ion-card-content>
+          <h1>{{username}} </h1>
+          <h5>تم التسجيل بنجاح  </h5>
+          <hr> <hr>
+          <h5>من فضلك انتظر ... سوف يتم تحميل ملفك حالا!</h5>
+        </ion-card-content>
+      </ion-card>
+      
+    </div>
+
+    <!-- End congrdulation message -->
 
     <div class="user-section" *ngIf="user && dataLoaded">
       <!--Personal Info -->

@@ -25,7 +25,7 @@ export class CartComponent implements OnInit {
 
   ngOnInit() {
     this.orders = this.cartService.orders;
-    this.supplierName = this.authService.user.name;
+    this.supplierName = this.authService.currentUser.name;
   }
 
   deleteItem(order,item){

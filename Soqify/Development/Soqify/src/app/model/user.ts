@@ -24,7 +24,7 @@ export interface IUser{
     type?: UserTypeRef, // 1= supplier, 2 = customer, 3= agent
     mob?:string,
     tel_o?:string,
-    comp_id?:string, // (if register under company)
+    comp_id?:string, // (if user registered under company --> it will be user ID - corress-reference relation)
     role?: UserRoleRef, // Admin, operator, 
     provider?: string;
     // address
@@ -38,7 +38,6 @@ export interface IUser{
     bus_sec?:number[], // business sections (clothes, fashion, elec.)
     active_ind?: number, // 1=active, 0 = inactive
     createdAt?:any,
-
 };
 
 
@@ -71,5 +70,4 @@ export interface ICustomer{
 export interface ICustomerDetail extends ICustomer{
     user_info:IUser,
     address:string, // full address
-
 }

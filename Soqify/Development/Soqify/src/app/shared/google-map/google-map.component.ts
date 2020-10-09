@@ -17,10 +17,10 @@ export class GoogleMapComponent implements  AfterViewInit {
   marker: google.maps.Marker []=[];
   positionMarker: google.maps.Marker;
   currentPosition: IGeoLocation;
-
+   
 
   constructor() { }
-
+ 
   ngAfterViewInit() {
      this.initMap(this.currentLocation);
   }

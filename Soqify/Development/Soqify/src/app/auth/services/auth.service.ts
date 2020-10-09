@@ -31,10 +31,15 @@ export class AuthService {
              private myStorgae:MyStorageService,
              ) 
   { 
-    this.myStorgae.getItem('user').then((user)=>{
-        this.currentUser = user;
-    });
     
+    
+  }
+
+  async getCurrentUser(){
+    if (this.currentUser=== null){
+      this.currentUser = await this.myStorgae.getItem('user')
+    }
+    return this.currentUser; 
   }
 
   // >> Sign in using mail and password <<-------------------------------------
@@ -64,6 +69,7 @@ export class AuthService {
          
         let newUser:IUser = await this.addUserData(user);
         newUser.createdAt =new Date (newUser.createdAt.seconds *1000);
+        this.myStorgae.setItem('user', newUser);
         this.sendVerificationMail();
         return {user:newUser, err:null};
       } catch (err) {
@@ -112,6 +118,7 @@ export class AuthService {
 
      return (user !== null && user.emailVerified !== false) ? true : false;
   }
+  hjh
 
   get user_id (){
     return this.currentUser.id;
@@ -120,28 +127,24 @@ export class AuthService {
   // Store user in DB
   async addUserData(userData:IUser) {
 
-      let newUSer = this.fireStore.collection('user').add(userData);
-      
-      let userAdded =  (await (await newUSer).get()).data();
-
+      let newUSer = await this.fireStore.collection('user').add(userData);
+      let userAdded =  (await ( newUSer).get()).data();
+      userAdded.id = newUSer.id;
       return userAdded;
 
   }
 
   // Store user in localStorage
   async updateUserData(userData:IUser) {
-    await this.fireStore
-      .collection("user")
-      .doc(userData.id)
-      .set(userData, { merge: true })
-      .then((user) => {
-        localStorage.setItem('user', JSON.stringify(userData));
-        return user;
-      })
-      .catch((err)=>{
-        console.log('update user error:', err)
-        return err;
-      })
+    try {
+      let updatedUSer = await this.fireStore.collection("user").doc(userData.id).set(userData, { merge: true })
+      this.myStorgae.setItem('user', userData);
+      return userData
+    } catch (err) {
+      console.log('update user error:', err)
+      return err;
+    }
+  
   }
 
   // get user data from database bu auth_id

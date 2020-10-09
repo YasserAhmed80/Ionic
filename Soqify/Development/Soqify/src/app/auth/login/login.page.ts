@@ -40,7 +40,7 @@ export class LoginPage implements OnInit {
   }
 
   resetPassword(){
-    this.authService.resetPassword(this.authService.user.email)
+    this.authService.resetPassword(this.authService.currentUser.email)
   }
 
   facebook_SignIn(){
